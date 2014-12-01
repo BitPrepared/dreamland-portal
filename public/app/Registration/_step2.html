@@ -1,0 +1,49 @@
+<form class="form-reg" role="form" name="registrationForm" ng-submit="setStep(3)">
+
+	<legend>Registrazione Gruppo - Step 2</legend>
+
+	<h4> Nome : <span class="label label-info">{{reg.nome}}</span> </h4>
+	<h4> Cognome : <span class="label label-info">{{reg.cognome}}</span> </h4>
+	<h4> Gruppo : <span class="label label-info">{{reg.gruppo}}</span> </h4>
+	<h4> Zona : <span class="label label-info">{{reg.zona}}</span> </h4>
+	<h4> Regione : <span class="label label-info">{{reg.regione}}</span> </h4>
+
+	<!-- Text input-->
+	<div class="form-group">
+		<label class="control-label" for="nomecaporeparto">Nome Capo Reparto</label>
+		<div class="controls">
+			<input id="nomecaporeparto" name="nomecaporeparto" placeholder="Aquile" class="form-control input-sm" ng-minlength="2" required type="text" ng-model="reg.nomecaporeparto">
+		</div>
+	</div>
+
+	<!-- Text input-->
+	<div class="form-group">
+		<label class="control-label" for="cognomecaporeparto">Cognome Capo Reparto</label>
+		<div class="controls">
+			<input id="cognomecaporeparto" name="cognomecaporeparto" placeholder="Aquile" class="form-control input-sm" ng-minlength="2" required type="text" ng-model="reg.cognomecaporeparto">
+		</div>
+	</div>
+
+	<!-- Text input-->
+	<div class="form-group">
+		<label class="control-label" for="codicecensimentocaporeparto">Codice Censimento Capo Reparto</label>
+		<div class="controls">
+			<input id="codicecensimentocaporeparto" name="codicecensimentocaporeparto" placeholder="lasciare vuoto se non si intende cambiare i dati del capo reparto" class="form-control input-sm" ng-minlength="5" required type="text" ng-model="reg.codicecenscaporeparto">
+		</div>
+	</div>
+
+	<!-- Email input-->
+	<div class="form-group">
+		<label class="control-label" for="emailcaporeparto">Email Capo Reparto</label>
+		<div class="controls">
+			<input id="emailcaporeparto" name="emailcaporeparto" placeholder="sample@example.it" class="form-control input-sm" ng-minlength=5 required type="email" ng-model="reg.emailcaporeparto">
+			<!-- <p class="help-block">Email</p> -->
+		</div>
+	</div>
+
+	
+
+	<button class="btn btn-lg btn-primary btn-block" type="submit">Next</button>
+	<button class="btn btn-lg btn-primary btn-block" ng-click="setStep(1)">Prev</button>
+
+</form>

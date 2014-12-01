@@ -1,0 +1,21 @@
+<div class="col-md-4" ng-controller="RegistrationController">
+
+   <div ng-switch="step">
+      <div ng-switch-when="1">
+         <div ng-include src="'app/Registration/_step1.html'"></div>
+      </div>
+      <div ng-switch-when="2">
+         <div ng-include src="'app/Registration/_step2.html'"></div>
+      </div>
+      <div ng-switch-when="3">
+         <div ng-include src="'app/Registration/_step3.html'"></div>
+      </div>
+   </div>
+
+</div>
+
+<div class="col-md-8">
+   <legend>Help in linea</legend>
+   <p>Inserisci/Modifica tutti i dati richiesti per completare la registrazione</p>
+   <p>In caso di problemi invia una mail al seguente indirizzo <a href="mail:iscrizioni.rtd@agesci.it">iscrizioni.rtd - at - agesci.it</a> </p>
+</div>

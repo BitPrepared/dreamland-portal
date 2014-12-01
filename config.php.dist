@@ -1,0 +1,54 @@
+<?php
+define('DEBUG',true);
+$config = array(
+    'enviroment' => 'production', //production
+    //'enviroment' => 'development'
+    'log' => array(
+        'filename' => '../resources/logs/'.date('Y-m-d').'.log',
+        'hipchat' => array(
+            'token' => '',
+            'room' => '',
+            'name' => '',
+            'notify' => false,
+            'bubble' => true, //Whether the messages that are handled can bubble up the stack or not
+            'useSSL' => true
+        ),
+        'level' => 'DEBUG'
+    ),
+    'db' => array(
+        'type' => 'mysql', //pgsql
+        'user' => '',
+        'password' => '',
+        'host' => '',
+        'database' => ''
+    ),
+    'smtp' => array(
+        'host' => '',
+        'port' => ,
+        'security' => 'ssl', //ssl,tls,null
+        'username' => '',
+        'password' => ''
+    ),
+    'email_sender' => array('x@x' => ''),
+    'title' => 'Return To Dreamland',
+    'template_dir' => '../resources/templates/',
+    'import' => array(
+        'upload_dir' => '../resources/uploads/'
+    ),
+    'wordpress' => array(
+        'url' => 'http://xx.xx.xx.xx:8080/wordpress/',
+        'username' => '',
+        'password' => ''
+    ),
+    'mailgun' => array(
+        'key' => '',
+        'pubkey' => '',
+        'domain' => ""
+    ),
+    'cookies.lifetime' => '20 minutes',
+    'cookies.encrypt' => true,
+    'cookies.secure' => true,
+    'cookies.secret_key' => 'VERYSECURE',
+    'security.salt' => ''
+);
+?>

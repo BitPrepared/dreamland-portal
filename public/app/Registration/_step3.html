@@ -1,0 +1,80 @@
+	
+	<form class="form-signin" name="registrationForm" action="sink.html" target="sink" method="post" ng-submit="registraSquadriglia()" form-autofill-fix>
+
+		<legend>Registrazione Squadriglia - Step 3</legend>
+		
+		<h4> Nome : <span class="label label-info">{{reg.nome}}</span> </h4>
+		<h4> Cognome : <span class="label label-info">{{reg.cognome}}</span> </h4>
+		<h4> Gruppo : <span class="label label-info">{{reg.gruppo}}</span> </h4>
+		<h4> Zona : <span class="label label-info">{{reg.zona}}</span> </h4>
+		<h4> Regione : <span class="label label-info">{{reg.regione}}</span> </h4>
+		<h4> Capo Reparto : <span class="label label-info">{{reg.cognomecaporeparto}} {{reg.nomecaporeparto}}</span> </h4>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="nomesq">Nome Squadriglia</label>
+			<div class="controls">
+				<input id="nomesq" name="nomesq" placeholder="Es: Aquile" class="form-control input-sm" ng-minlength="2" required type="text" ng-model="reg.nomesq">
+			</div>
+		</div>
+
+		<!-- Select input-->
+		<div class="form-group">
+			<label class="control-label" for="nomesq">Ruolo nella squadriglia</label>
+			<div class="controls">
+				<select ng-model="reg.ruolosq" required ng-options="r.desc for r in ruolisquadriglia"></select>
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="numerosquadriglieri">Numero componenti squadriglia</label>
+			<div class="controls">
+				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.numerosquadriglieri">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="specialitasquadriglieri">Numero specialit&agrave; possedute in squadriglia</label>
+			<div class="controls">
+				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.specialitasquadriglieri">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="brevettisquadriglieri">Numero brevetti posseduti in squadriglia</label>
+			<div class="controls">
+				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.brevettisquadriglieri">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="specialitadisquadriglia">Specialit&agrave; (anno scout precedente) di Squadriglia</label>
+			<div class="controls">
+				<input type="checkbox" ng-model="reg.specialitadisquadriglia" ng-change="update()">
+				
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="rinnovospecialitadisquadriglia">Rinnovato (anno scout precedente) specialit&agrave; di Squadriglia</label>
+			<div class="controls">
+				<input type="checkbox" ng-model="reg.rinnovospecialitadisquadriglia" ng-change="update()">
+			</div>
+		</div>
+
+		<h3>
+			Punteggio Totale: 
+			<span class="label label-info">
+	    		{{reg.punteggiosquadriglia}}
+			</span>
+		</h3>
+
+		<button class="btn btn-lg btn-success btn-block"  type="submit" ng-if="reg.punteggiosquadriglia > 0" class="animate-if">Conferma</button>
+		<button class="btn btn-lg btn-primary btn-block" ng-click="setStep(2)">Prev</button>
+
+	</form>

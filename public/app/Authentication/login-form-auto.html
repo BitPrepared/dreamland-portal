@@ -1,0 +1,33 @@
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+<div class="col-xs-12 col-sm-4" ng-controller="LoginController">
+	<form name="loginForm" action="sink.html" target="sink" method="post" ng-submit="login(credentials)" form-autofill-fix>
+
+		<p id="error-msg"></p>
+
+		<div cg-busy="{promise:loginPromise,minDuration:3000}"></div> <!-- andrebbe centrato -->
+
+		<!-- Email input-->
+		<div class="form-group">
+			<label class="control-label" for="email">Email</label>
+			<div class="controls">
+				<input id="email" name="email" placeholder="sample@example.it" class="form-control input-sm" ng-minlength=5 required type="email" ua-is-email ng-model="credentials.username">
+				<!-- <p class="help-block">Email</p> -->
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="password">Password</label>
+			<div class="controls">
+				<input id="password" name="password" placeholder="Password" class="form-control input-sm" ng-minlength=5 required type="password" ng-model="credentials.password">
+				<!-- <p class="help-block">Password</p> -->
+			</div>
+		</div>
+
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+
+	</form>
+</div>
+
+

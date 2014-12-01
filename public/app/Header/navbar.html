@@ -1,0 +1,68 @@
+<nav class="navbar navbar-default" role="navigation" ng-controller="HeaderController"> 
+      <!-- Brand and toggle get grouped for better mobile display -->   
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-init="navCollapsed = true" ng-click="navCollapsed = !navCollapsed">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"><?=$title?></a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->   
+      <div class="collapse navbar-collapse" id="navbar-principale" ng-class="!navCollapsed && 'in'">
+        
+        <ul class="nav navbar-nav navbar-right">
+
+          <li ng-show="!isAutenticated()">
+            <a href="http://returntodreamland.agesci.org/">Home</a>
+          </li>
+
+          <li ng-show="!isAutenticated()">
+            <a ui-sref="home.registration">Registrazione Utente</a>
+          </li>
+
+          <li ng-show="!isAutenticated()">
+            <a href="./login">Login Utente</a>
+          </li>
+
+          <li ng-show="isAutenticated()">
+            <a href="#/profilo">Profilo Utente</a>
+          </li>
+
+
+          <li class="dropdown" ng-class="{ active: isActive('/admin') }" ng-show="isAuthorized(userRoles.admin)">
+            <a href="#" class="dropdown-toggle"> Admin <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+
+              <li>
+                <a href="#/upload">Carica File</a>
+              </li>
+
+            </ul>
+          </li>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle"> Help <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              
+              <li>
+                <a href="http://returntodreamland.agesci.org/">Sito Principale</a>
+              </li>
+
+              <li class="divider"></li>
+
+              <li>
+                <a ng-href="http://returntodreamland.agesci.org/blog/faqs">Faq</a>
+              </li>
+
+            </ul>
+          </li>
+
+
+        </ul>
+
+      </div>
+      <!-- /.navbar-collapse -->    
+    </nav>

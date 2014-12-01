@@ -1,0 +1,26 @@
+
+	<form class="form-reg" role="form" name="registrationForm" ng-submit="setStep(2)">
+
+		<legend>Registrazione - Step 1</legend>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="nome">Nome</label>
+			<div class="controls">
+				<input id="nome" name="nome" placeholder="Pietro" class="form-control input-sm" required type="text" ng-model="reg.nome">
+				<!-- <p class="help-block">nome</p> -->
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="cognome">Cognome</label>
+			<div class="controls">
+				<input id="cognome" name="cognome" placeholder="Bianchi" class="form-control input-sm" required type="text" ng-model="reg.cognome">
+				<!-- <p class="help-block">cognome</p> -->
+			</div>
+		</div>
+
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Next</button>
+
+	</form>

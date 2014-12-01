@@ -1,0 +1,53 @@
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+<div class="col-md-4" ng-controller="RegistrationController">
+
+	<form class="form-signin" name="registrationForm" action="sink.html" target="sink" method="post" ng-submit="sendRegistrationRequest()" form-autofill-fix>
+
+		<legend>Registrazione</legend>
+		<p id="error-msg"></p>
+
+		<!-- Riparto per -->
+		<span class="">
+    		{{caller}}
+		</span>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="email">Email</label>
+			<div class="controls">
+				<input id="email" name="email" placeholder="sample@example.it" class="form-control input-sm" ng-minlength=5 required type="email" ng-model="email">
+				<p class="help-block">Email su cui si vuole essere contattati</p>
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="codcens">Codice Censimento</label>
+			<div class="controls">
+				<input id="codcens" name="codcens" placeholder="012345678" class="form-control input-sm" ng-minlength=5 required type="text" ng-model="codcens">
+				<p class="help-block">Codice Censimento Agesci</p>
+			</div>
+		</div>
+
+		<!-- Text input -->
+		<div class="form-group">
+			<label class="control-label" for="datan">Data Nascita</label>
+			<div class="controls">
+				<input id="datan" name="datan" type="date" class="form-control input-sm" required ng-model="datan">
+				<p class="help-block">Data di Nascita</p>
+			</div>
+		</div>
+
+		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" type="submit">Richiedi Registrazione</button>
+
+
+	</form>
+	<hr/>
+</div>
+
+<div class="col-md-8">
+	<legend>Help in linea</legend>
+	<p>Inserisci tutti i dati richiesti, riceverai sull'email gli step successivi per effettuare la registrazione</p>
+	<p>Il pulsante "Richiedi Registrazione" si attiva solo quando tutti i campi sono stati correttamente inseriti</p>
+</div>
