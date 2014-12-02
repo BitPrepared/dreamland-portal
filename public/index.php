@@ -8,8 +8,13 @@ date_default_timezone_set('Europe/Rome');
 session_cache_limiter(false);
 session_start();
 
-require '../vendor/autoload.php';
-require '../config.php';
+require '../../vendor/autoload.php';
+require '../../config.php';
+
+if ( defined('MAINTENANCE') ) {
+    echo '<h1>SISTEMA IN AGGIORNAMENTO</h1>';
+    exit;
+}
 
 // error reporting 
 if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
@@ -34,7 +39,7 @@ $app = new \Slim\Slim(array(
 	'mode' => $config['enviroment']
 ));
 
-require '../includes/configuration.php';
+require '../../includes/configuration.php';
 
 extract(configure_slim($config), EXTR_SKIP);
 
@@ -71,15 +76,15 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-require '../includes/mail.php';
-require '../includes/hooks.php';
-require '../includes/functions.php';
-require '../includes/routes.php';
-require '../includes/sfide.php';
-require '../includes/api.php';
+require '../../includes/mail.php';
+require '../../includes/hooks.php';
+require '../../includes/functions.php';
+require '../../includes/routes.php';
+require '../../includes/sfide.php';
+require '../../includes/api.php';
 
 if ( DEBUG ) {
-	require '../includes/development.php';
+	require '../../includes/development.php';
 }
 
 // run

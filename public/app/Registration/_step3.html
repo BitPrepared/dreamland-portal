@@ -1,4 +1,6 @@
-	
+
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
 	<form class="form-signin" name="registrationForm" action="sink.html" target="sink" method="post" ng-submit="registraSquadriglia()" form-autofill-fix>
 
 		<legend>Registrazione Squadriglia - Step 3</legend>
@@ -74,7 +76,7 @@
 			</span>
 		</h3>
 
-		<button class="btn btn-lg btn-success btn-block"  type="submit" ng-if="reg.punteggiosquadriglia > 0" class="animate-if">Conferma</button>
-		<button class="btn btn-lg btn-primary btn-block" ng-click="setStep(2)">Prev</button>
+		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-if="reg.punteggiosquadriglia > 0" class="animate-if">Conferma</button>
+		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" ng-click="setStep(2)">Prev</button>
 
 	</form>

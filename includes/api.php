@@ -5,7 +5,7 @@ use RedBean_Facade as R;
 use Dreamland\Errori;
 use Dreamland\Ruoli;
 use Mailgun\Mailgun;
-use Bitprepared\Wordpress\ApiClient;
+use BitPrepared\Wordpress\ApiClient;
 
 // OAUTH autentication 
 // API group (Es: GET /api/asa/user/:id )
@@ -54,19 +54,17 @@ $app->group('/api', function () use ($app) {
 				$info = new stdClass;
 				$info->nome = $findToken['nome'];
 				$info->cognome = $findToken['cognome'];
-				$gruppo = $findToken['gruppo'];
 
+				$gruppo = $findToken['gruppo'];
 				$findGruppo = R::findOne('asa_gruppi','ord = ?',array($gruppo));
 				$info->gruppoNome = trim($findGruppo['nome']);
 
 				$regione = $findToken['regione'];
-
 				$findRegione = R::findOne('asa_regioni','cregione = ?',array($regione));
 				$info->regioneNome = trim($findRegione['nome']);
 
 				$zona = $findToken['zona'];
-
-				$findZona = R::findOne('asa_zone','czona = ?',array($gruppo));
+				$findZona = R::findOne('asa_zone','czona = ?',array($zona));
 				$info->zonaNome = trim($findZona['nome']);
 
 				// VANNO PULITI I DATI
@@ -214,7 +212,7 @@ $app->group('/api', function () use ($app) {
 				$regioneNome = trim($findRegione['nome']);
 
 				$zona = $findToken['zona'];
-				$findZona = R::findOne('asa_zone','czona = ?',array($gruppo));
+				$findZona = R::findOne('asa_zone','czona = ?',array($zona));
 				$zonaNome = trim($findZona['nome']);
 				
 				$email = $findToken['email'];
@@ -248,12 +246,6 @@ $app->group('/api', function () use ($app) {
 				$app->log->info('Devo registrare un e/g con il ruolo di ' . Ruoli::fromValue($ruolosquadriglia));
 
 				validate_email($app,$ccemail);
-
-				$wordpress = $app->config('wordpress');
-
-				$url = $wordpress['url'].'wp-json';
-
-				$app->log->debug('Mi connettero a '.$url);
 
 				$newUser = null;
 				try {
@@ -310,6 +302,8 @@ $app->group('/api', function () use ($app) {
 						$app->log->info('Nuova richiesta di registrazione capo reparto');
 					}
 
+                    $wordpress = $app->config('wordpress');
+
 					$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
 
 					$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/api/registrazione/stepc/'.$token;
@@ -323,8 +317,12 @@ $app->group('/api', function () use ($app) {
 					$message .= 'Link pagine autorizzazioni : '.$urlAdminDreamers."\n";
 					
 					if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
+                        $app->log->error('Invio mail capo reparto fallita');
 						$app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
 					}
+
+                    $url = $wordpress['url'].'wp-json';
+                    $app->log->debug('Mi connettero a '.$url);
 
 					$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
                     $wapi->setRequestOption('timeout',30);
@@ -348,6 +346,9 @@ $app->group('/api', function () use ($app) {
 							'ruolocensimento' => 'eg'
 						)
 					) );
+
+                    $app->log->info('Creato utente in wordpress '.$newUser->ID);
+
 					// SE E' GIA CREATO DA 500... 
 					//echo 'creato '.$newUser->ID."\n";
 					// redirect

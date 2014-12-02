@@ -1,4 +1,6 @@
-<form class="form-reg" role="form" name="registrationForm" ng-submit="setStep(3)">
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+<form class="form-reg" role="form" name="registrationForm" ng-submit="setStep(3)" form-autofill-fix>
 
 	<legend>Registrazione Gruppo - Step 2</legend>
 
@@ -25,10 +27,10 @@
 	</div>
 
 	<!-- Text input-->
-	<div class="form-group">
+	<div class="form-group" ng-if="isRequiredCodiceCensimento()">
 		<label class="control-label" for="codicecensimentocaporeparto">Codice Censimento Capo Reparto</label>
 		<div class="controls">
-			<input id="codicecensimentocaporeparto" name="codicecensimentocaporeparto" placeholder="lasciare vuoto se non si intende cambiare i dati del capo reparto" class="form-control input-sm" ng-minlength="5" required type="text" ng-model="reg.codicecenscaporeparto">
+			<input id="codicecensimentocaporeparto" name="codicecensimentocaporeparto" placeholder="codice censiento del capo reparto" class="form-control input-sm" ng-minlength="5" required type="text" ng-model="reg.codicecenscaporeparto">
 		</div>
 	</div>
 
@@ -40,8 +42,6 @@
 			<!-- <p class="help-block">Email</p> -->
 		</div>
 	</div>
-
-	
 
 	<button class="btn btn-lg btn-primary btn-block" type="submit">Next</button>
 	<button class="btn btn-lg btn-primary btn-block" ng-click="setStep(1)">Prev</button>

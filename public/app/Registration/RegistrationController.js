@@ -4,6 +4,8 @@ authenticationModule.controller('RegistrationController', function ($scope, $roo
 
   $scope.caller = '';
 
+  $scope.orig = {};
+
   $scope.reg = {
     'token' : null,
     'datan' : null,
@@ -48,6 +50,10 @@ authenticationModule.controller('RegistrationController', function ($scope, $roo
 
         var cc = data.cc[0];
 
+        $scope.orig.nomecaporeparto = cc.nome;
+        $scope.orig.cognomecaporeparto = cc.cognome;
+        $scope.orig.emailcaporeparto = cc.email;
+
         $scope.reg.nomecaporeparto = cc.nome;
         $scope.reg.cognomecaporeparto = cc.cognome;
         $scope.reg.emailcaporeparto = cc.email;
@@ -61,14 +67,19 @@ authenticationModule.controller('RegistrationController', function ($scope, $roo
 
   $scope.setStep = function(step){
     // $state.go('home.registration.wizard',{ 'code' : $stateParams.code , 'step' : step }); //<-- cosi perdo lo scope
-    $scope.step = step;
+      $scope.step = step;
     // debugger;
   }
 
+  $scope.isRequiredCodiceCensimento = function() {
+    if ( $scope.orig.nomecaporeparto != $scope.reg.nomecaporeparto ) return true;
+    if ( $scope.orig.cognomecaporeparto != $scope.reg.cognomecaporeparto ) return true;
+    if ( $scope.orig.emailcaporeparto != $scope.reg.emailcaporeparto ) return true;
+    return false;
+  }
+
   $scope.sendRegistrationRequest = function () {
-
       $scope.enableButton = false;
-
       var newRequest = {};
       newRequest.email = $scope.email;
       newRequest.codicecensimento = $scope.codcens;
@@ -101,7 +112,8 @@ authenticationModule.controller('RegistrationController', function ($scope, $roo
 
   $scope.registraSquadriglia = function() {
     var token = $scope.reg.token;
-    $scope.remoteLoad = $http.post('./api/registrazione/step2/'+token, $scope.reg).
+    $scope.enableButton = false;
+    $rootScope.remoteLoad = $http.post('./api/registrazione/step2/'+token, $scope.reg).
         success(function(data, status, headers, config) {
           $state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
         }).
