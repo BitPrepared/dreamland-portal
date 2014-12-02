@@ -5,3 +5,4 @@ public/assets/css
 public/assets/js/dist
 composer.lock
 config.php
+phpunit.xml

@@ -1,6 +1,6 @@
 <?php
 
-namespace Bitprepared\Security;
+namespace BitPrepared\Security;
 
 class IpIdentifier
 {

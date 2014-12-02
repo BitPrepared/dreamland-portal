@@ -5,6 +5,7 @@ use RedBean_Facade as R;
 use Dreamland\Errori;
 use Dreamland\Ruoli;
 use Mailgun\Mailgun;
+use Bitprepared\Wordpress\ApiClient;
 
 // OAUTH autentication 
 // API group (Es: GET /api/asa/user/:id )
@@ -325,7 +326,8 @@ $app->group('/api', function () use ($app) {
 						$app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
 					}
 
-					$wapi = new WPAPI($url, $wordpress['username'], $wordpress['password']);
+					$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                    $wapi->setRequestOption('timeout',30);
 					$newUser = $wapi->users->create( array( 
 						'username' => $email,
 						'password' => 'DA GENERARE RANDOM',
@@ -421,7 +423,8 @@ $app->group('/api', function () use ($app) {
 
 				$newUser = null;
 				try {
-					$wapi = new WPAPI($url, $wordpress['username'], $wordpress['password']);
+					$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                    $wapi->setRequestOption('timeout',30);
 					$newUser = $wapi->users->create( array( 
 						'username' => $email,
 						'password' => 'DA GENERARE RANDOM',

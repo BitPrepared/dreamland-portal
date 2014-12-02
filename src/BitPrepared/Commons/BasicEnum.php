@@ -1,6 +1,6 @@
 <?php 
 
-namespace Bitprepared\Commons;
+namespace BitPrepared\Commons;
 
 use \ReflectionClass;
 
