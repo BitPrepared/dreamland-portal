@@ -1,4 +1,4 @@
-authenticationModule.controller('CalculatorController', function ($scope, $rootScope, $http, $state, $stateParams) {
+dreamApp.controller('CalculatorController', function ($scope, $rootScope, $http, $state, $stateParams) {
 
   $scope.update = function() {
     debugger;

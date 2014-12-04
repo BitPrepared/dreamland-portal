@@ -45,6 +45,9 @@ $config = array(
         'pubkey' => '',
         'domain' => ""
     ),
+    'sfide' => array(
+        'secret' => ''
+    ),
     'cookies.lifetime' => '20 minutes',
     'cookies.encrypt' => true,
     'cookies.secure' => true,

@@ -56,7 +56,8 @@ $app->config(array(
     'mailgun' => $config['mailgun'],
     'wordpress' => $config['wordpress'],
     'email_sender' => $config['email_sender'],
-    'smtp' => $config['smtp']
+    'smtp' => $config['smtp'],
+    'sfide' => $config['sfide']
 ));
 
 // Only invoked if mode is "production"

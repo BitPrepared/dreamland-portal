@@ -16,6 +16,6 @@ abstract class Errori extends \BitPrepared\Commons\BasicEnum {
 	// WORDPRESS
 	const WORDPRESS_NOT_FOUND = 21;
 	const WORDPRESS_PROBLEMA_CREAZIONE_UTENTE = 22;
-	
+    const WORDPRESS_LOGIN_REQUIRED = 23;
 
 }

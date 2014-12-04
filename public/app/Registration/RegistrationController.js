@@ -1,4 +1,4 @@
-authenticationModule.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, $stateParams) {
+dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, $stateParams) {
 
   $scope.ruolisquadriglia = [ {'desc' : 'Altro' , 'code' : 3}, {'desc' : 'Capo Sq.', 'code' : 1}, {'desc' : 'Vice capo Sq.', 'code' : 2} ];
 

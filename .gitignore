@@ -6,3 +6,4 @@ public/assets/js/dist
 composer.lock
 config.php
 phpunit.xml
+.sass-cache
