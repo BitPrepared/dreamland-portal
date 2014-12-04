@@ -13,20 +13,22 @@ authenticationModule.factory('AuthService', function ($http, Session, USER_ROLES
     //FAKE
     Session.create(0, 'rtd@agesci.it', USER_ROLES.admin);
 
+    return $http
+      .post('/api/asa/user/current', credentials)
+      .then(function (res) {
+        console.log(res);
+        console.log(res.data);
+        //Session.create(res.data.id, res.data.user.id,res.data.user.role);
+        //return res.data.user;
+      });
+
     // return $http
-    //   .post('/login', credentials)
+    //   .get('/login', credentials)
     //   .then(function (res) {
+    //     // debugger;
     //     Session.create(res.data.id, res.data.user.id,res.data.user.role);
     //     return res.data.user;
     //   });
-
-    return $http
-      .get('/login', credentials)
-      .then(function (res) {
-        // debugger;
-        Session.create(res.data.id, res.data.user.id,res.data.user.role);
-        return res.data.user;
-      });
 
   };
  
