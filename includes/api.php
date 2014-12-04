@@ -14,6 +14,19 @@ $app->group('/api', function () use ($app) {
     // Library group
     $app->group('/asa', function () use ($app) {
 
+    	// Get user with ID
+        $app->get('/user/current', function () use ($app) {
+        	if ( !isset($_SESSION['wordpress']) ) {
+    			$app->response->setBody( json_encode('no') );
+    		} else {
+    			$data = array(
+    				'id' => $_SESSION['user_id'],
+    				'user_login' => $_SESSION['user_info']['user_login']
+    			);
+    			$app->response->setBody( json_encode( $data ) );
+    		}
+        });
+
         // Get user with ID
         $app->get('/user/:id', function ($id) use ($app) {
 
@@ -342,6 +355,9 @@ $app->group('/api', function () use ($app) {
 							'region' => $regione,
 							'regionDisplay' => $regioneNome,
 							'codicecensimento' => $codicecensimento,
+							'numerocomponenti' => $ncomponenti,
+							'nspecialita' => $nspecialita,
+							'nbrevetti' => $nbrevetti,
 							'punteggio' => $punteggiosquadriglia,
 							'ruolocensimento' => 'eg'
 						)
