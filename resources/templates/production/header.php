@@ -33,6 +33,9 @@
       o vai sul progetto: https://github.com/BitPrepared/dreamland-portal
 
     -->
+    <script>
+      var baseUrl = '<?=$baseUrl?>';
+    </script>
 
 </head>
 <body ng-controller="ApplicationController">

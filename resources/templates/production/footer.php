@@ -31,41 +31,43 @@
     </footer>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="<?=$baseUrl?>assets/js/ie10-viewport-bug-workaround.js"></script>
 
     <!-- external lib -->
-    <script src="assets/js/dist/underscore-min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/underscore-min.js"  type="text/javascript"></script>
 
     <!-- angularjs -->
-    <script src="assets/js/dist/angular.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/angular-ui-router.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/angular-locale_it-it.js"></script>
-    <!-- <script src="assets/js/dist/angular-route.min.js"  type="text/javascript"></script> -->
-    <script src="assets/js/dist/angular-sanitize.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/angular-animate.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/angular-busy.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/ngDialog.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/angular.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/angular-ui-router.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/angular-locale_it-it.js"></script>
+    <!-- <script src="<?=$baseUrl?>assets/js/dist/angular-route.min.js"  type="text/javascript"></script> -->
+    <script src="<?=$baseUrl?>assets/js/dist/angular-sanitize.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/angular-animate.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/angular-busy.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/ngDialog.min.js"  type="text/javascript"></script>
 
-    <!-- angularjs bootstrap -->
-    <script src="assets/js/dist/ui-bootstrap.min.js"  type="text/javascript"></script>
-    <script src="assets/js/dist/ui-bootstrap-tpls.min.js"  type="text/javascript"></script>
+    <!-- angularj<?=$baseUrl?>s bootstrap -->
+    <script src="<?=$baseUrl?>assets/js/dist/ui-bootstrap.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/ui-bootstrap-tpls.min.js"  type="text/javascript"></script>
 
-    <script src="assets/js/dist/moment-with-locales.min.js"  type="text/javascript"></script>
+    <script src="<?=$baseUrl?>assets/js/dist/moment-with-locales.min.js"  type="text/javascript"></script>
 
     <!-- my app -->
-    <script src="app/app.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/app.js" type="text/javascript"></script>
 
-    <script src="app/ApplicationController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/ApplicationController.js" type="text/javascript"></script>
 
-    <script src="app/Authentication/AuthService.js" type="text/javascript"></script>
-    <script src="app/Authentication/SessionService.js" type="text/javascript"></script>
-    <script src="app/Authentication/AuthInterceptor.js" type="text/javascript"></script>
-    <script src="app/Authentication/LoginController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Authentication/AuthService.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Authentication/SessionService.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Portal/PortalService.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Authentication/AuthInterceptor.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Authentication/LoginController.js" type="text/javascript"></script>
 
-    <script src="app/Header/HeaderController.js" type="text/javascript"></script>
-    <script src="app/Registration/RegistrationController.js" type="text/javascript"></script>
-    <script src="app/Flash/FlashController.js" type="text/javascript"></script>
-    <script src="app/Registration/CalculatorController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Header/HeaderController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Registration/RegistrationController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Sfide/SfideController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Flash/FlashController.js" type="text/javascript"></script>
+    <script src="<?=$baseUrl?>app/Registration/CalculatorController.js" type="text/javascript"></script>
 
 </body>
 </html>

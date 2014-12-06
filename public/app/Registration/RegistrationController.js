@@ -1,4 +1,4 @@
-dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, $stateParams) {
+dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, $stateParams, $window) {
 
   $scope.ruolisquadriglia = [ {'desc' : 'Altro' , 'code' : 3}, {'desc' : 'Capo Sq.', 'code' : 1}, {'desc' : 'Vice capo Sq.', 'code' : 2} ];
 
@@ -115,7 +115,8 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
     $scope.enableButton = false;
     $rootScope.remoteLoad = $http.post('./api/registrazione/step2/'+token, $scope.reg).
         success(function(data, status, headers, config) {
-          $state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
+          $window.location.href = data;
+          //$state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
         }).
         error(function(data, status, headers, config) {
           $scope.currentError = data;

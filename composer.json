@@ -33,5 +33,8 @@
             "type": "git",
             "url": "https://github.com/yoghi/redbean-prefix.git"
         }
-    ]
+    ],
+    "archive": {
+        "exclude": ["vendor", ".DS_Store", "*.log"]
+    }
 }

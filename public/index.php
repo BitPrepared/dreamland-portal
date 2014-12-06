@@ -87,7 +87,6 @@ require BASE_DIR.'includes/mail.php';
 require BASE_DIR.'includes/hooks.php';
 require BASE_DIR.'includes/functions.php';
 require BASE_DIR.'includes/routes.php';
-require BASE_DIR.'includes/sfide.php';
 require BASE_DIR.'includes/api.php';
 
 if ( DEBUG ) {

@@ -1,0 +1,41 @@
+<div class="col-md-4" ng-controller="SfideController">
+
+	<div ng-if="isReady()">
+
+		<legend>Iscrizione Sfida</legend>
+		<h4>{{sfida.titolo}}</h4>
+
+		<div ng-if="!isSfidaSpeciale()">
+
+		   <div ng-switch="step">
+		      <div ng-switch-when="1">
+		         <div ng-include src="'app/Sfide/_step1.html'"></div>
+		      </div>
+		      <div ng-switch-when="2">
+		         <div ng-include src="'app/Sfide/_step2.html'"></div>
+		      </div>
+		   </div>
+
+		</div>
+		<div ng-if="isSfidaSpeciale()">
+			WORK IN PROGRESS
+		</div>
+
+	</div>
+
+	<div ng-if="!isReady()">
+		<div cg-busy="{promise:waitSfidaLoad}">&nbsp;</div>
+	</div>
+
+</div>
+
+<div class="col-md-8">
+   <legend>Help in linea</legend>
+   <p>Inserisci/Modifica tutti i dati richiesti per completare la registrazione</p>
+
+    <div class="alert alert-info" role="alert">
+        <p> IMPORTANTE </p>
+    </div>
+
+   <p>In caso di problemi invia una mail al seguente indirizzo <a href="mail:iscrizioni.rtd@agesci.it">iscrizioni.rtd - at - agesci.it</a> </p>
+</div>

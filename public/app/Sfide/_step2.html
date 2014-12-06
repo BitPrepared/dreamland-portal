@@ -1,0 +1,76 @@
+
+    <iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+	<form class="form-reg" role="form" name="iscrizioneForm" ng-submit="partecipa()" form-autofill-fix>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="numerosquadriglieri">Numero componenti squadriglia</label>
+			<div class="controls">
+				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="squadriglia.componenti">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="specialitasquadriglieri">Numero specialit&agrave; possedute</label>
+			<div class="controls">
+				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="squadriglia.specialita">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="brevettisquadriglieri">Numero brevetti possedute</label>
+			<div class="controls">
+				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="squadriglia.brevetti">
+			</div>
+		</div>
+
+		<div ng-if="!isMissione()">
+
+			<!-- Select input-->
+			<div class="form-group">
+				<label class="control-label" for="tipo">Cosa vogliamo fare</label>
+				<div class="controls">
+					<textarea class="form-control" ng-model="iscr.descrizione" placeholder="minimo 20 caratteri" ng-minlength="20" rows=6  required></textarea>
+				</div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+				<label class="control-label" for="specialitasquadriglierinuove">Numero specialit&agrave; che si vogliono conquistare</label>
+				<div class="controls">
+					<input id="specialitasquadriglierinuove" name="specialitasquadriglierinuove" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="iscr.specialitasquadriglierinuove">
+				</div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+				<label class="control-label" for="brevettisquadriglierinuove">Numero brevetti che si vogliono conquistare</label>
+				<div class="controls">
+					<input id="brevettisquadriglierinuove" name="brevettisquadriglierinuove" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="iscr.brevettisquadriglierinuove">
+				</div>
+			</div>
+
+		</div>
+
+		
+		<div class="form-group">
+			<label class="control-label" for="numeroprotagonisti">Pensiamo che saranno protagonisti questo numero di squadriglieri</label>
+			<div class="controls">
+				<input id="numeroprotagonisti" name="numeroprotagonisti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="iscr.numeroprotagonisti">
+			</div>
+		</div>
+
+		<h3>
+			Punteggio Totale: 
+			<span class="label label-info">
+	    		{{iscr.punteggiosquadriglia}}
+			</span>
+		</h3>
+
+		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-if="iscr.punteggiosquadriglia > 0" class="animate-if">Partecipa</button>
+		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" ng-click="setStep(1)">Prev</button>
+
+	</form>

@@ -2,6 +2,11 @@
 
 use RedBean_Facade as R;
 
+$app->notFound(function () use ($app) {
+	$app->log->warn('Url richiesto '.$app->request->getResourceUri());
+    $app->render('404.html');
+});
+
 // handle GET requests for /
 $app->get('/', 'authenticate', function () use ($app) {  
 
@@ -95,7 +100,9 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 		if ( $find != null ) {
 			$dati['nome'] = $find['nome'];
 			$dati['cognome'] = $find['cognome'];
-		} 
+		}  else {
+			$app->log->warn('Nome e Cognome non trovati per '.$codicecensimento);
+		}
 	}
 	$app->render($pagename.'.html', $dati);
 });

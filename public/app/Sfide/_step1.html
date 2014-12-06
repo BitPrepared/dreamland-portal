@@ -1,0 +1,21 @@
+
+    <iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+	<form class="form-reg" role="form" name="iscrizioneForm" ng-submit="setStep(2)" form-autofill-fix>
+
+		<!-- Select input-->
+		<div class="form-group">
+			<label class="control-label" for="tipo">Tipo</label>
+			<div class="controls">
+				<select ng-change="update()" ng-model="iscr.tipo" required ng-options="r for r in tipiSfida"></select>
+			</div>
+		</div>
+
+		<div ng-if="isMissione()">
+			<p>Per la missione sarà compito dei vostri capi reparto fornirvela adeguata alla categoria 
+				che avete scelto </p>
+		</div>
+
+		<button class="btn btn-lg btn-primary btn-block" type="submit">Next</button>
+
+	</form>
