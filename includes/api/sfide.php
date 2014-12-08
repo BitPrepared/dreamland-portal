@@ -112,7 +112,6 @@ function sfide($app) {
 				} else {
 					$app->log->info('Richiesta iscrizione '.$user_id.' alla sfida '.$idsfida.' gia esistente');
 					throw new Exception("Sfida gia esistente", Errori::SFIDA_GIA_ATTIVA);
-					
 				}    
 
 		    } catch ( Exception $e ) {
