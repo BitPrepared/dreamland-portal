@@ -124,6 +124,18 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     }
   });
 
+$stateProvider.state('home.registration.ko', {
+    url: '/reg/ko?msg',
+    abstract: false,
+    parent: 'home',
+    views: {
+        'container@root': { templateUrl : window.baseUrl+"app/Registration/_error.html" },
+    },
+    data: {
+        authorizedRoles: [USER_ROLES.all]
+    }
+});
+
   $stateProvider.state('home.registration.wizard', {
     url: '/wizard?step&code',
     abstract: false,

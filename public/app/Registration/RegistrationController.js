@@ -88,7 +88,7 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
 
       $rootScope.remoteLoad = $http.post('./api/registrazione/step1', newRequest).
         success(function(data, status, headers, config) {
-          $state.go('home.registration.ok',{ msg : 'riceverai in brevete tempo una mail per proseguire con la registrazione'},{reload : true});
+          $state.go('home.registration.ok',{ msg : 'riceverai in breve tempo una mail per proseguire con la registrazione'},{reload : true});
         }).
         error(function(data, status, headers, config) {
           $scope.currentError = data;

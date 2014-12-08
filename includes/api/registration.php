@@ -84,7 +84,7 @@ function registration($app){
 
 				} else {
 
-					//19990324
+					//19990324 - Ricerca ASA E/G
 					$find = R::findOne('asa_anagrafica_eg',' codicesocio = ? and datanascita = ?',array($codicecensimento,$datanascita));
 					if ( $find == null ) {
 						throw new Exception('Codice censimento '.$codicecensimento.' e Data Nascita : '.$datanascita .' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
@@ -104,8 +104,9 @@ function registration($app){
 							'o:tag'   => array('Registrazione','step1'))
 						);
 
+                    // RICERCA REGISTRAZIONE PRECEDENTE E/G
 					$token = '';
-					$findToken = R::findOne('registration',' codicecensimento = ?',array($find['codicesocio']));
+					$findToken = R::findOne('registration',' codicecensimento = ? and type = ?',array($find['codicesocio'],'EG'));
 					if ( $findToken != null ) {
 						$token = $findToken['token'];
 						if ( $findToken['completato'] ) {
@@ -114,12 +115,13 @@ function registration($app){
 						}
 					} else {
 						$token = generateToken(18);
-						$app->log->info('Generato token '.$token.' per '.$find['codicesocio']);
+						$app->log->info('Generato token '.$token.' per '.$find['codicesocio'].' tipo E/G');
 
 						$drm_registration = R::dispense('registration');
 						// $drm_registration->token = md5(uniqid(rand(), true));
 						$drm_registration->token = $token;
 						$drm_registration->codicecensimento = $find['codicesocio'];
+                        $drm_registration->type = 'EG';
 						$drm_registration->email = $email;
 						$drm_registration->nome = $find['nome'];
 						$drm_registration->cognome = $find['cognome'];
@@ -128,7 +130,7 @@ function registration($app){
 						$drm_registration->gruppo = $find['ord'];
 						$drm_registration_id = R::store($drm_registration);
 
-						$app->log->info('Nuova richiesta di registrazione');
+						$app->log->info('Nuova richiesta di registrazione '.$drm_registration_id.' tipo E/G');
 					}
 
 					$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/wizard?step=1&code='.$token;
@@ -167,10 +169,10 @@ function registration($app){
 			try{
 
 				// devo cercare $token nel db e recuperare le varie informazioni
-				$findToken = R::findOne('registration',' token = ?',array($token));
+				$findToken = R::findOne('registration',' token = ? and completato = ?',array($token,0));
 				if ( null == $findToken ){
 					throw new Exception('Token '.$token.' non valido', Errori::PORTAL_INVALID_TOKEN_STEP);
-				}
+				} 
 
 				$nome = $findToken['nome'];
 				$cognome = $findToken['cognome'];
@@ -198,7 +200,6 @@ function registration($app){
 				$ccnome = $obj_request->nomecaporeparto;
 				$cccognome = $obj_request->cognomecaporeparto;
 				$ccemail = $obj_request->emailcaporeparto;
-				$cccodcens = $obj_request->codicecenscaporeparto;
 
 				// CENSIMENTO SQ
 				$nomesquadriglia = $obj_request->nomesq;
@@ -229,7 +230,6 @@ function registration($app){
 				// $ccemail
 
 				$datiCapoReparto = findDatiCapoReparto($regione,$gruppo);
-				$codicecensimentoCR = $datiCapoReparto[0]->codicecensimento;
 				$emailCapoReparto = $datiCapoReparto[0]->email;
 				$nomeCapoReparto = $datiCapoReparto[0]->nome;
 				$cognomeCapoReparto = $datiCapoReparto[0]->cognome;
@@ -239,38 +239,36 @@ function registration($app){
 					|| strcmp($datiCapoReparto[0]->cognome, $cccognome) != 0 ) 
 				{
 					$app->log->info('Capo Reparto cambiato nuovo :'.$ccnome.' '.$cccognome. ' ' .$ccemail);
-					$codicecensimentoCR = $cccodcens;
 					$emailCapoReparto = $ccemail;
 					$cognomeCapoReparto = $cccognome;
 					$nomeCapoReparto = $ccnome;
 				}
 
-
 				$token = '';
-				$findTokenRegistrationCC = R::findOne('registration',' codicecensimento = ?',array($codicecensimentoCR));
+				$findTokenRegistrationCC = R::findOne('registration',' email = ? and type = ?',array($emailCapoReparto,'CC'));
 				if ( $findTokenRegistrationCC != null ) {
 					$token = $findTokenRegistrationCC['token'];
-					if ( $findTokenRegistrationCC['completato'] ) {
-						$app->log->info('Utente gia registrato');
-						$app->redirect('/error');
-					}
+					// OK CAPO GIA CENSITO
 				} else {
 					$token = generateToken(18);
-					$app->log->info('Generato token '.$token.' per '.$codicecensimentoCR);
+					$app->log->info('Generato token '.$token.' per '.$emailCapoReparto);
 
 					$drm_registration = R::dispense('registration');
 					// $drm_registration->token = md5(uniqid(rand(), true));
 					$drm_registration->token = $token;
-					$drm_registration->codicecensimento = $codicecensimentoCR;
+
+					// VA RIMOSSO CODICE CENSIMENTO DA DB
+
 					$drm_registration->email = $emailCapoReparto;
 					$drm_registration->nome = $nomeCapoReparto;
+                    $drm_registration->type = 'CC';
 					$drm_registration->cognome = $cognomeCapoReparto;
 					$drm_registration->regione = $regione;
 					$drm_registration->zona = $zona;
 					$drm_registration->gruppo = $gruppo;
 					$drm_registration_id = R::store($drm_registration);
 
-					$app->log->info('Nuova richiesta di registrazione capo reparto');
+					$app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
 				}
 
                 $wordpress = $app->config('wordpress');
@@ -283,9 +281,9 @@ function registration($app){
 				$message =  'Ciao '.$nomeCapoReparto.",\n";
 				$message .= 'Una tua squadriglia ha richiesto di partecipare a Return To Dreamland'."\n";
 				$message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: '."\n";
-				$message .= 'Link: '.$urlWithToken."\n";
-				$message .= 'Una volta completata la registraizone potrai autorizzare le tue squadriglie a partecipare.'."\n";
-				$message .= 'Link pagine autorizzazioni : '.$urlAdminDreamers."\n";
+				$message .= 'Link: '."\n".$urlWithToken."\n";
+				$message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.'."\n";
+				$message .= 'Link pagine autorizzazioni : '."\n".$urlAdminDreamers."\n";
 				
 				if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
                     $app->log->error('Invio mail capo reparto fallita');
@@ -330,10 +328,13 @@ function registration($app){
 				// 	$app->log->error($e->getTraceAsString());
 				// 	// throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
 
-                $findToken->completato = true;
-				R::store($findToken);
 				$_SESSION['portal'] = array();
 				$_SESSION['portal']['request'] = $newUserRequest;
+
+                $findToken->completato = true;
+				R::store($findToken);
+				
+				$app->log->info('Completata registrazione token '.$token);
 
 				// } catch ( Requests_Exception_HTTP_404 $e2 ) {
 				// 	$app->log->error('Wordpress code : '.$e2->getCode());
@@ -367,6 +368,9 @@ function registration($app){
 
 			try{
 				
+
+				// QUI BISOGNEREBBE CHIEDERE IL CODICE CENSIMENTO
+
 				// devo cercare $token nel db e recuperare le varie informazioni
 				$findToken = R::findOne('registration',' token = ?',array($token));
 				if ( null == $findToken ){
@@ -395,7 +399,8 @@ function registration($app){
 				
 				$email = $findToken['email'];
 
-				$codicecensimento = $findToken['codicecensimento'];
+				// AVENDO RIOMOSSO IL CODICE CENSIMENTO VA TROVATA UNA ALTERNATIVA PER OTTENERLO
+				$codicecensimento = 000000; //$findToken['codicecensimento'];
 
 				$app->log->info('Devo registrare un cc');
 
@@ -451,10 +456,13 @@ function registration($app){
 				// 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
 				// } 
 
-				$findToken->completato = true;
-				R::store($findToken);
 				$_SESSION['portal'] = array();
 				$_SESSION['portal']['request'] = $newUserRequest;
+
+				$findToken->completato = true;
+				R::store($findToken);
+				$app->log->info('Completata registrazione token '.$token);
+				
 
 				// $utenteCreato = $wapi->users->get($newUser->ID,true);
 
