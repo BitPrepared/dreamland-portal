@@ -128,6 +128,7 @@ function registration($app){
 						$drm_registration->regione = $find['creg'];
 						$drm_registration->zona = $find['czona'];
 						$drm_registration->gruppo = $find['ord'];
+                        $drm_registration->completato = false;
 						$drm_registration_id = R::store($drm_registration);
 
 						$app->log->info('Nuova richiesta di registrazione '.$drm_registration_id.' tipo E/G');
@@ -248,7 +249,6 @@ function registration($app){
 				$findTokenRegistrationCC = R::findOne('registration',' email = ? and type = ?',array($emailCapoReparto,'CC'));
 				if ( $findTokenRegistrationCC != null ) {
 					$token = $findTokenRegistrationCC['token'];
-					// OK CAPO GIA CENSITO
 				} else {
 					$token = generateToken(18);
 					$app->log->info('Generato token '.$token.' per '.$emailCapoReparto);
@@ -266,6 +266,7 @@ function registration($app){
 					$drm_registration->regione = $regione;
 					$drm_registration->zona = $zona;
 					$drm_registration->gruppo = $gruppo;
+                    $drm_registration->completato = false;
 					$drm_registration_id = R::store($drm_registration);
 
 					$app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);

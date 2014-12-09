@@ -12,7 +12,6 @@ sharedServicesModule.config(function ($httpProvider) {
                     // todo start the spinner here
                     $('#spinnerdiv').show();
                     counter++;
-                    console.log(counter);
                     return $q.when(config);
                 },
 
