@@ -23,6 +23,8 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
 
+    <script src="<?=$baseUrl?>assets/js/dist/jquery.min.js"  type="text/javascript"></script>
+
    <!--
 
       Hey, Stai cercando di fare Reverse Engineering?
@@ -40,12 +42,19 @@
 </head>
 <body ng-controller="ApplicationController">
 
+<!-- @see http://stackoverflow.com/questions/15033195/showing-spinner-gif-during-http-request-in-angular -->
+<!-- @see http://stackoverflow.com/questions/23804981/alternative-of-httpprovider-responseinterceptors -->
+<div id="spinnerdiv">
+    <img src="<?=$baseUrl?>assets/img/ajax_loader_blue_512.gif" class="ajax-loader"/>
+</div>
+
 <div class="container">
 
     <div ui-view="navbar"></div>
 
     <!-- Use the simple syntax https://github.com/cgross/angular-busy -->
-    <div cg-busy="{promise:remoteLoad}">&nbsp;</div>
+<!--    <div cg-busy="{promise:remoteLoad}">&nbsp;</div>-->
+
     <!-- Use the advanced syntax -->
     <!-- <div cg-busy="{promise:myPromise,message:'Loading Your Data',templateUrl:'mycustomtemplate.html'}"></div> -->
 

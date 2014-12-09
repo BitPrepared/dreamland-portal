@@ -63,11 +63,17 @@
     <script src="<?=$baseUrl?>app/Authentication/AuthInterceptor.js" type="text/javascript"></script>
     <script src="<?=$baseUrl?>app/Authentication/LoginController.js" type="text/javascript"></script>
 
+    <script src="<?=$baseUrl?>app/Spinner/SpinnerService.js" type="text/javascript"></script>
+
     <script src="<?=$baseUrl?>app/Header/HeaderController.js" type="text/javascript"></script>
     <script src="<?=$baseUrl?>app/Registration/RegistrationController.js" type="text/javascript"></script>
     <script src="<?=$baseUrl?>app/Sfide/SfideController.js" type="text/javascript"></script>
     <script src="<?=$baseUrl?>app/Flash/FlashController.js" type="text/javascript"></script>
     <script src="<?=$baseUrl?>app/Registration/CalculatorController.js" type="text/javascript"></script>
+
+    <script>
+        angular.element('#spinnerdiv').hide();
+    </script>
 
 </body>
 </html>

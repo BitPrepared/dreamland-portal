@@ -4,6 +4,7 @@
 // ====================================================================
 
 @import "partials/variables";
+@import "partials/functions";
 
 body {
   padding-top: 50px;
@@ -41,4 +42,27 @@ body {
 
 .footer > .container .text-muted {
   margin: 20px 0;
+}
+
+/* Spinner
+-------------------------------------------------- */
+
+#spinnerdiv {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:100%;
+  z-index:1000;
+  background-color:grey;
+  opacity: .8;
+}
+
+#spinnerdiv img {
+  width: 256px;
+}
+
+.ajax-loader {
+  @extend %vertical-align;
+  @extend %horizontal-align;
+  display: block;
 }
