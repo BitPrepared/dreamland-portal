@@ -6,6 +6,8 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
 
   $scope.orig = {};
 
+  $scope.completato = false;
+
   $scope.reg = {
     'token' : null,
     'datan' : null,
@@ -15,7 +17,6 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
     'nomecaporeparto': null,
     'cognomecaporeparto': null,
     'emailcaporeparto': null,
-    'codicecenscaporeparto': null,
     'email' : null,
     'codcens' : null,
     'nome' : null,
@@ -48,6 +49,8 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
         $scope.reg.gruppo = data.gruppoNome;
         $scope.reg.regione = data.regioneNome;
 
+        $scope.completato = data.completato;
+
         var cc = data.cc[0];
 
         $scope.orig.nomecaporeparto = cc.nome;
@@ -69,13 +72,6 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
     // $state.go('home.registration.wizard',{ 'code' : $stateParams.code , 'step' : step }); //<-- cosi perdo lo scope
       $scope.step = step;
     // debugger;
-  }
-
-  $scope.isRequiredCodiceCensimento = function() {
-    if ( $scope.orig.nomecaporeparto != $scope.reg.nomecaporeparto ) return true;
-    if ( $scope.orig.cognomecaporeparto != $scope.reg.cognomecaporeparto ) return true;
-    if ( $scope.orig.emailcaporeparto != $scope.reg.emailcaporeparto ) return true;
-    return false;
   }
 
   $scope.sendRegistrationRequest = function () {

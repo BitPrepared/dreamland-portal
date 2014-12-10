@@ -24,6 +24,7 @@ function registration($app){
 				}
 
 				$info = new stdClass;
+                $info->completato = (bool)$findToken['completato'];
 				$info->nome = $findToken['nome'];
 				$info->cognome = $findToken['cognome'];
 
