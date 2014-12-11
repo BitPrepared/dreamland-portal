@@ -3,9 +3,7 @@
 use \stdClass;
 use RedBean_Facade as R;
 use Dreamland\Errori;
-use Dreamland\Ruoli;
-use Mailgun\Mailgun;
-use BitPrepared\Wordpress\ApiClient;
+
 
 function squadriglia($app) {
 
@@ -22,16 +20,16 @@ function squadriglia($app) {
 			    }
 
 			    $wordpress = $_SESSION['wordpress'];
-				$user_id = $wordpress['user_id'];
+				$codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-			    $squadriglia = R::findOne('squadriglia','idutente = ?', array($user_id) );
+			    $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
 			    if ( null != $squadriglia ) {
 			    	$app->log->info('trovata squadriglia '.$squadriglia->id);
 
 			    	// {"id":"6","":"88",}
 
 			    	$x = array(
-			    		"idutente" => intval($squadriglia['idutente']),
+			    		"codicecensimento" => intval($squadriglia['codicecensimento']),
 			    		"componenti" => intval($squadriglia['componenti']),
 			    		"specialita" => intval($squadriglia['specialita']),
 			    		"brevetti" => intval($squadriglia['brevetti'])
@@ -65,10 +63,10 @@ function squadriglia($app) {
 			    }
 
 			    $wordpress = $_SESSION['wordpress'];
-				$user_id = $wordpress['user_id'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
 			    //CREO SQ
-			    $squadriglia = R::findOne('squadriglia','idutente = ?', array($user_id) );
+			    $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
 			    if ( null == $squadriglia ) {
 			    	
 					$obj_request = json_decode($body);
@@ -78,7 +76,7 @@ function squadriglia($app) {
 					$numero_brevetti = $obj_request->brevetti;
 
 				    $squadriglia = R::dispense('squadriglia');
-				    $squadriglia->idutente = $user_id;
+				    $squadriglia->codicecensimento = $codicecensimento;
 				    $squadriglia->componenti = $numero_componenti;
 				    $squadriglia->specialita = $numero_specialita;
 				    $squadriglia->brevetti = $numero_brevetti;
@@ -113,10 +111,10 @@ function squadriglia($app) {
 			    }
 
 			    $wordpress = $_SESSION['wordpress'];
-				$user_id = $wordpress['user_id'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
 			    //AGGIORNO SQ
-			    $squadriglia = R::findOne('squadriglia','idutente = ?', array($user_id) );
+			    $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
 			    if ( null != $squadriglia ) {
 
 			    	$sqversion = R::dispense('sqversion');

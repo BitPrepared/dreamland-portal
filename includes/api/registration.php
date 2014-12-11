@@ -95,12 +95,13 @@ function registration($app){
 					$mailgun_domain = $mailgun['domain'];
 					$mailgun_key = $mailgun['key'];
 					$mgClient = new Mailgun($mailgun_key);
-					$result = $mgClient->sendMessage("$mailgun_domain",
+//					$result =
+                    $mgClient->sendMessage($mailgun_domain,
 						array(
 							'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
-				        'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
-				        'subject' => 'Richiesta iscrizione',
-				        'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
+                            'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
+                            'subject' => 'Richiesta iscrizione',
+                            'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
 							'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
 							'o:tag'   => array('Registrazione','step1'))
 						);
@@ -159,6 +160,7 @@ function registration($app){
 				elseif ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN ) $testo = 'mail apparentemente non valida';
 				elseif ( $e->getCode() == Errori::CODICE_CENSIMENTO_NOT_FOUND ) $testo = 'codice censimento non valido';
 				else $app->log->error($e->getTraceAsString());
+                $app->log->info($body);
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
@@ -213,7 +215,17 @@ function registration($app){
 				$nbrevetti = $obj_request->brevettisquadriglieri;
 
 				$punteggiosquadriglia = $obj_request->punteggiosquadriglia;
-				
+
+                $squadriglia = R::findOne('squadriglia','idutente = ?', array($codicecensimento) );
+                if ( null == $squadriglia ) {
+                    $squadriglia = R::dispense('squadriglia');
+                    $squadriglia->codicecensimento = $codicecensimento;
+                    $squadriglia->componenti = intval($ncomponenti);
+                    $squadriglia->specialita = intval($nspecialita);
+                    $squadriglia->brevetti = intval($nbrevetti);
+                    R::store($squadriglia);
+                }
+
 				$ruolosquadriglia = $obj_request->ruolosq->code;
 				if ( !Ruoli::isValidValue($ruolosquadriglia) ) {
 					throw new Exception('Ruolo in squadriglia '.$ruolosquadriglia.' errato', Errori::RUOLO_IN_SQUADRIGLIA_ERRATO);
@@ -272,7 +284,7 @@ function registration($app){
 
                 $wordpress = $app->config('wordpress');
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/home/reg/cc?token='.$token;
+				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'#/home/reg/cc?code='.$token;
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
 
 				$message =  'Ciao '.$nomeCapoReparto.",\n";
