@@ -186,6 +186,7 @@ function registration($app){
 				$regione = $findToken['regione'];
 				$findRegione = R::findOne('asa_regioni','cregione = ?',array($regione));
 				$regioneNome = trim($findRegione['nome']);
+                $regioneNomeCorto = trim($findRegione['nome_corto']);
 
 				$zona = $findToken['zona'];
 				$findZona = R::findOne('asa_zone','czona = ? and cregione = ?',array($zona,$regione));
@@ -303,6 +304,7 @@ function registration($app){
 							'zoneDisplay' => $zonaNome,
 							'region' => $regione,
 							'regionDisplay' => $regioneNome,
+                            'regionShort' => $regioneNomeCorto,
 							'codicecensimento' => $codicecensimento,
 							'numerocomponenti' => $ncomponenti,
 							'nspecialita' => $nspecialita,
@@ -387,6 +389,7 @@ function registration($app){
 				$regione = $findToken['regione'];
 				$findRegione = R::findOne('asa_regioni','cregione = ?',array($regione));
 				$regioneNome = trim($findRegione['nome']);
+                $regioneNomeCorto = trim($findRegione['nome_corto']);
 
 				$zona = $findToken['zona'];
 				$findZona = R::findOne('asa_zone','czona = ? and cregione = ?',array($zona,$regione));
@@ -419,6 +422,7 @@ function registration($app){
 						'zoneDisplay' => $zonaNome,
 						'region' => $regione,
 						'regionDisplay' => $regioneNome,
+                        'regionShort' => $regioneNomeCorto,
 						'codicecensimento' => $codicecensimento,
 						'ruolocensimento' => 'cr'
 					)

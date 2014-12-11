@@ -27,21 +27,31 @@
 			</div>
 		</div>
 
-        <!-- Select input-->
-        <div class="form-group">
-            <label class="control-label" for="categoriaSfida">Categoria</label>
-            <div class="controls">
-                <select ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaDisponibili()"></select>
+        <div ng-if="isMissione()">
+            <!-- Select input-->
+            <div class="form-group">
+                <label class="control-label" for="categoriaSfida">Categoria</label>
+                <div class="controls">
+                    <select id="categoriaSfida" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>
+                </div>
             </div>
         </div>
 
 		<div ng-if="!isMissione()">
 
+            <!-- Select input-->
+            <div class="form-group">
+                <label class="control-label" for="categoriaSfidaImpr">Categoria</label>
+                <div class="controls">
+                    <select id="categoriaSfidaImpr" name="categoriaSfidaImpr" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaImpresa"></select>
+                </div>
+            </div>
+
 			<!-- Select input-->
 			<div class="form-group">
-				<label class="control-label" for="tipo">Cosa vogliamo fare</label>
+				<label class="control-label" for="descrizione">Cosa vogliamo fare</label>
 				<div class="controls">
-					<textarea class="form-control" ng-model="iscr.descrizione" placeholder="minimo 200 caratteri" ng-minlength="200" rows=6  required></textarea>
+					<textarea id="descrizione" name="descrizione" class="form-control" ng-model="iscr.descrizione" placeholder="minimo 200 caratteri" ng-minlength="200" rows=6 required></textarea>
 				</div>
 			</div>
 
@@ -78,7 +88,7 @@
 			</span>
 		</h3>
 
-		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-if="iscr.punteggiosquadriglia > 0" class="animate-if">Partecipa</button>
+		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-if="iscr.punteggiosquadriglia > 0 && iscr.descrizione != undefined" class="animate-if">Partecipa</button>
 		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" ng-click="setStep(1)">Prev</button>
 
 	</form>

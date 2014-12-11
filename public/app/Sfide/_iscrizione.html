@@ -18,7 +18,11 @@
 
 		</div>
 		<div ng-if="isSfidaSpeciale()">
-			WORK IN PROGRESS
+            <div ng-switch="step">
+                <div ng-switch-when="1">
+                    <div ng-include src="'app/Sfide/_stepSpeciale.html'"></div>
+                </div>
+            </div>
 		</div>
 
 	</div>

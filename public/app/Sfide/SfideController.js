@@ -7,9 +7,6 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
     return $scope.ready;
   }
 
-  var deferred = $q.defer();
-  $scope.waitSfidaLoad = deferred.promise;
-
   $scope.squadriglia = null;
   $scope.sfida = null;
 
@@ -24,7 +21,6 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       $scope.sfida = sfida;
       $scope.ready = true;
       $scope.update();
-      deferred.resolve('Oh look we\'re done already.');
     },function(errore){
       $scope.currentError = errore;
       ngDialog.open({template:'modalDialogId', scope: $scope });
@@ -38,10 +34,13 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
   });
 
   $scope.tipiSfida = ['missione','impresa'];
+  $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
+  $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
 
   $scope.iscr = {
     tipo : 'impresa',
-    'categoriaSfida': 'Avventura',
+    categoriaSfida: 'Avventura',
+    descrizione: null,
     numerosquadriglieri : 0,
     specialitasquadriglierinuove : 0,
     brevettisquadriglierinuove : 0,
@@ -59,21 +58,19 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
   $scope.partecipa = function(){
     $scope.enableButton = false;
 
-    deferred = $q.defer();
-    $scope.waitSfidaLoad = deferred.promise;
-
     Portal.updateSquadriglia($scope.squadriglia, function() {
       var newRequest = {};
       newRequest.specialitasquadriglierinuove = $scope.iscr.specialitasquadriglierinuove;
       newRequest.brevettisquadriglierinuove = $scope.iscr.brevettisquadriglierinuove;
       newRequest.obiettivopunteggio = $scope.iscr.punteggiosquadriglia;
+      newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
+      newRequest.descrizione = $scope.iscr.descrizione;
 
       $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
         success(function(data, status, headers, config) {
-          deferred.resolve('Oh look we\'re done already.');
           // DOVREI ANDARE SU WORDPRESS PER COMUNICARLO...
           // $state.go('home.registration.ok',{ msg : 'Iscrizione alla sfida completata con successo'},{reload : true});
-          $window.location.href = '/wordpress/wp-json/portal/cs';
+          $window.location.href = '/blog/wp-json/portal/cs';
         }).
         error(function(data, status, headers, config) {
           $scope.currentError = data;
@@ -104,24 +101,12 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
     }
   };
 
-  $scope.categoriaDisponibili = function() {
-
-      if ( $scope.iscr.tipo == $scope.tipiSfida[0] ){
-          // MISSIONE
-          return [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
-      } else {
-          // IMPRESA
-          return [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 2} ];
-      }
-
-  }
-
   $scope.isMissione = function(){
     return $scope.iscr.tipo == $scope.tipiSfida[0];
   }
 
   $scope.isSfidaSpeciale = function(){
-    return null != $scope.squadriglia ? $scope.sfida.speciale : false;
+    return $scope.sfida.sfidaspeciale;
   }
 
 })

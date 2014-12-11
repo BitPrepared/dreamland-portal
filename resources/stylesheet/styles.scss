@@ -66,3 +66,10 @@ body {
   @extend %horizontal-align;
   display: block;
 }
+
+/* Form Validation
+-------------------------------------------------- */
+.control > .ng-invalid {
+  background: $rosso_danger;
+  color: $white;
+}

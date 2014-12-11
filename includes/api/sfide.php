@@ -107,6 +107,7 @@ function sfide($app) {
 				    $drm_iscrizione_sfida->obiettivopunteggio = intval($sfide['punteggio_attuale']);
 				    $drm_iscrizione_sfida->endpunteggio = null;
 				    $drm_iscrizione_sfida->sfidaspeciale = (bool)$sfide['sfidaspeciale'];
+                    $drm_iscrizione_sfida->categoriasfida = 'UNKNOWN';
 				    R::store($drm_iscrizione_sfida);
 				    $app->log->info('Richiesta iscrizione '.$user_id.' alla sfida '.$idsfida);
 				} else {
@@ -154,6 +155,8 @@ function sfide($app) {
 					$drm_iscrizione_sfida->obiettivospecialita = $obj_request->specialitasquadriglierinuove;
 				    $drm_iscrizione_sfida->obiettivobrevetti = $obj_request->brevettisquadriglierinuove;
 				    $drm_iscrizione_sfida->obiettivopunteggio = $obj_request->obiettivopunteggio;
+                    $drm_iscrizione_sfida->descrizione = $obj_request->descrizione;
+                    $drm_iscrizione_sfida->categoriasfida = $obj_request->categoriaSfida->desc;
 
 					R::store($drm_iscrizione_sfida);
 
