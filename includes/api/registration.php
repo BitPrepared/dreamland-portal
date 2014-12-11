@@ -248,6 +248,7 @@ function registration($app){
 				if ( $findTokenRegistrationCC != null ) {
 					$token = $findTokenRegistrationCC['token'];
                     $drm_registration = R::load('registration',$findTokenRegistrationCC['id']);
+                    $app->log->info('Capo Reparto trovato :'.$drm_registration->nome.' '.$drm_registration->cognome. ' ' .$drm_registration->email);
 				} else {
                     $token = generateToken(18);
                     $app->log->info('Generato token ' . $token . ' per ' . $emailCapoReparto);
@@ -258,8 +259,8 @@ function registration($app){
 
                 $drm_registration->email = $emailCapoReparto;
                 $drm_registration->nome = $nomeCapoReparto;
-                $drm_registration->type = 'CC';
                 $drm_registration->cognome = $cognomeCapoReparto;
+                $drm_registration->type = 'CC';
                 $drm_registration->regione = $regione;
                 $drm_registration->zona = $zona;
                 $drm_registration->gruppo = $gruppo;
@@ -271,7 +272,7 @@ function registration($app){
 
                 $wordpress = $app->config('wordpress');
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/api/registrazione/stepc/'.$token;
+				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/home/reg/cc?token='.$token;
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
 
 				$message =  'Ciao '.$nomeCapoReparto.",\n";
@@ -361,12 +362,10 @@ function registration($app){
         });
 
 		// Step Registrazione Capi Reparto
-		$app->get('/stepc/:token', function ($token) use ($app) {
+		$app->post('/stepc/:token', function ($token) use ($app) {
 
+            $app->response->headers->set('Content-Type', 'application/json');
 			try{
-				
-
-				// QUI BISOGNEREBBE CHIEDERE IL CODICE CENSIMENTO
 
 				// devo cercare $token nel db e recuperare le varie informazioni
 				$findToken = R::findOne('registration',' token = ?',array($token));
@@ -378,6 +377,10 @@ function registration($app){
 					$app->log->warn('token gia usato');
 					throw new Exception('Token '.$token.' non valido', Errori::PORTAL_INVALID_TOKEN_STEP);
 				}
+
+                $body = $app->request->getBody();
+                $obj_request = json_decode($body);
+                $codicecensimento = $obj_request->codicecensimento;
 
 				$nome = $findToken['nome'];
 				$cognome = $findToken['cognome'];
@@ -397,8 +400,6 @@ function registration($app){
 				
 				$email = $findToken['email'];
 
-				// AVENDO RIOMOSSO IL CODICE CENSIMENTO VA TROVATA UNA ALTERNATIVA PER OTTENERLO
-				$codicecensimento = 000000; //$findToken['codicecensimento'];
 
 				$app->log->info('Devo registrare un cc');
 
@@ -409,7 +410,7 @@ function registration($app){
 				$app->log->debug('Mi connetto a '.$url);
 
 				$newUserRequest = array( 
-					'username' => $email,
+					'username' => $codicecensimento,
 					'password' => 'DA GENERARE RANDOM',
 					'first_name' => $nome,
 					'last_name' => $cognome,
@@ -458,6 +459,7 @@ function registration($app){
 				$_SESSION['portal'] = array();
 				$_SESSION['portal']['request'] = $newUserRequest;
 
+                $findToken->codicecensimento = $codicecensimento;
 				$findToken->completato = true;
 				R::store($findToken);
 				$app->log->info('Completata registrazione token '.$token);
@@ -474,7 +476,7 @@ function registration($app){
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
-			$app->redirect($url.'/portal/pk');
+            $app->response->setBody( json_encode($url.'/portal/pk') );
 
         });
 

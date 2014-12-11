@@ -1,0 +1,30 @@
+<iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+<div class="col-md-4" ng-controller="RegistrationController">
+
+    <form class="form-signin" name="registrationForm" action="sink.html" target="sink" method="post" ng-submit="sendRegistrationCC()" form-autofill-fix>
+
+        <legend>Registrazione Capo Reparto</legend>
+        <p id="error-msg"></p>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="control-label" for="codcens">Codice Censimento</label>
+            <div class="controls">
+                <input id="codcens" name="codcens" placeholder="012345678" class="form-control input-sm" ng-minlength=5 required type="text" ng-model="codcens">
+                <p class="help-block">Codice Censimento Agesci</p>
+            </div>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" type="submit">Completa Registrazione</button>
+
+
+    </form>
+    <hr/>
+</div>
+
+<div class="col-md-8">
+    <legend>Help in linea</legend>
+    <p>Ultimo step per completare la registrazione</p>
+
+</div>

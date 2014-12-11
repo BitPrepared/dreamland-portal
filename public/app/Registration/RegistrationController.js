@@ -94,6 +94,22 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
 
   };
 
+  $scope.sendRegistrationCC = function() {
+      $scope.enableButton = false;
+      var newRequest = {};
+      newRequest.codicecensimento = $scope.codcens;
+
+      $rootScope.remoteLoad = $http.post('./api/registrazione/stepc/'+$stateParams.code, newRequest).
+          success(function(data, status, headers, config) {
+              $window.location.href = data;
+          }).
+          error(function(data, status, headers, config) {
+              $scope.currentError = data;
+              ngDialog.open({template:'modalDialogId', scope: $scope });
+              $scope.enableButton = true;
+          });
+  }
+
   $scope.update = function() {
     $scope.reg.punteggiosquadriglia = $scope.reg.numerosquadriglieri + $scope.reg.specialitasquadriglieri + (4 * $scope.reg.brevettisquadriglieri);
 

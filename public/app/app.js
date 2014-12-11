@@ -46,7 +46,7 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     abstract: false,
     parent: 'root',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Home/empty.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Home/empty.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -57,7 +57,7 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     url: '/error/?errMsg',
     abstract: false,
     views: {
-      'container': { templateUrl : window.baseUrl+"app/Home/error.html" },
+      'container': { templateUrl : window.baseUrl+"app/Home/error.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -69,7 +69,7 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     abstract: false,
     parent: 'root',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Home/partial-home.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Home/partial-home.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -81,7 +81,7 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     abstract: false,
     parent: 'root',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Home/partial-home.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Home/partial-home.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -93,7 +93,7 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
     abstract: false,
     parent: 'sfide',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Sfide/_iscrizione.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Sfide/_iscrizione.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -101,23 +101,35 @@ dreamApp.config(function ($stateProvider, $urlRouterProvider, USER_ROLES) {
   });
 
   $stateProvider.state('home.registration', {
-    url: '/reg',
-    abstract: false,
-    parent: 'home',
-    views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Registration/_registration.html" },
-    },
-    data: {
-      authorizedRoles: [USER_ROLES.all]
-    }
-  });
+        url: '/reg',
+        abstract: false,
+        parent: 'home',
+        views: {
+            'container@root': { templateUrl : window.baseUrl+"app/Registration/_registration.html" }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.all]
+        }
+    });
+
+    $stateProvider.state('home.registrationcc', {
+        url: '/reg/cc?code',
+        abstract: false,
+        parent: 'home',
+        views: {
+            'container@root': { templateUrl : window.baseUrl+"app/Registration/_caporeparto.html" }
+        },
+        data: {
+            authorizedRoles: [USER_ROLES.all]
+        }
+    });
 
   $stateProvider.state('home.registration.ok', {
     url: '/reg/ok?msg',
     abstract: false,
     parent: 'home',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Registration/_success.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Registration/_success.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
@@ -129,7 +141,7 @@ $stateProvider.state('home.registration.ko', {
     abstract: false,
     parent: 'home',
     views: {
-        'container@root': { templateUrl : window.baseUrl+"app/Registration/_error.html" },
+        'container@root': { templateUrl : window.baseUrl+"app/Registration/_error.html" }
     },
     data: {
         authorizedRoles: [USER_ROLES.all]
@@ -141,7 +153,7 @@ $stateProvider.state('home.registration.ko', {
     abstract: false,
     parent: 'home',
     views: {
-      'container@root': { templateUrl : window.baseUrl+"app/Registration/_wizard.html" },
+      'container@root': { templateUrl : window.baseUrl+"app/Registration/_wizard.html" }
     },
     data: {
       authorizedRoles: [USER_ROLES.all]
