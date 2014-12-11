@@ -227,10 +227,6 @@ function registration($app){
 				$app->log->debug('Iscrizione capo reparto');
 
 				// CAPO REPARTO
-				// $ccnome
-				// $cccognome
-				// $ccemail
-
 				$datiCapoReparto = findDatiCapoReparto($regione,$gruppo);
 				$emailCapoReparto = $datiCapoReparto[0]->email;
 				$nomeCapoReparto = $datiCapoReparto[0]->nome;
@@ -250,33 +246,30 @@ function registration($app){
 				$findTokenRegistrationCC = R::findOne('registration',' email = ? and type = ?',array($emailCapoReparto,'CC'));
 				if ( $findTokenRegistrationCC != null ) {
 					$token = $findTokenRegistrationCC['token'];
+                    $drm_registration = R::load('registration',$findTokenRegistrationCC['id']);
 				} else {
-					$token = generateToken(18);
-					$app->log->info('Generato token '.$token.' per '.$emailCapoReparto);
+                    $token = generateToken(18);
+                    $app->log->info('Generato token ' . $token . ' per ' . $emailCapoReparto);
+                    $drm_registration = R::dispense('registration');
+                    // $drm_registration->token = md5(uniqid(rand(), true));
+                    $drm_registration->token = $token;
+                }
 
-					$drm_registration = R::dispense('registration');
-					// $drm_registration->token = md5(uniqid(rand(), true));
-					$drm_registration->token = $token;
+                $drm_registration->email = $emailCapoReparto;
+                $drm_registration->nome = $nomeCapoReparto;
+                $drm_registration->type = 'CC';
+                $drm_registration->cognome = $cognomeCapoReparto;
+                $drm_registration->regione = $regione;
+                $drm_registration->zona = $zona;
+                $drm_registration->gruppo = $gruppo;
+                $drm_registration->completato = false;
+                $drm_registration_id = R::store($drm_registration);
 
-					// VA RIMOSSO CODICE CENSIMENTO DA DB
+                $app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
 
-					$drm_registration->email = $emailCapoReparto;
-					$drm_registration->nome = $nomeCapoReparto;
-                    $drm_registration->type = 'CC';
-					$drm_registration->cognome = $cognomeCapoReparto;
-					$drm_registration->regione = $regione;
-					$drm_registration->zona = $zona;
-					$drm_registration->gruppo = $gruppo;
-                    $drm_registration->completato = false;
-					$drm_registration_id = R::store($drm_registration);
-
-					$app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
-				}
 
                 $wordpress = $app->config('wordpress');
-
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-
 				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/api/registrazione/stepc/'.$token;
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
 

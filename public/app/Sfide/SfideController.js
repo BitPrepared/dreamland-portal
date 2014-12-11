@@ -41,6 +41,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
 
   $scope.iscr = {
     tipo : 'impresa',
+    'categoriaSfida': 'Avventura',
     numerosquadriglieri : 0,
     specialitasquadriglierinuove : 0,
     brevettisquadriglierinuove : 0,
@@ -102,6 +103,18 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       }
     }
   };
+
+  $scope.categoriaDisponibili = function() {
+
+      if ( $scope.iscr.tipo == $scope.tipiSfida[0] ){
+          // MISSIONE
+          return [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
+      } else {
+          // IMPRESA
+          return [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 2} ];
+      }
+
+  }
 
   $scope.isMissione = function(){
     return $scope.iscr.tipo == $scope.tipiSfida[0];

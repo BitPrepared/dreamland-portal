@@ -27,15 +27,15 @@
 			</div>
 		</div>
 
-		<div ng-if="!isMissione()">
-
-            <!-- Select input-->
-            <div class="form-group">
-                <label class="control-label" for="categoria">Categoria</label>
-                <div class="controls">
-                    <select ng-model="iscr.categoria" required ng-options="r.desc for r in categoriaDisponibili()"></select>
-                </div>
+        <!-- Select input-->
+        <div class="form-group">
+            <label class="control-label" for="categoriaSfida">Categoria</label>
+            <div class="controls">
+                <select ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaDisponibili()"></select>
             </div>
+        </div>
+
+		<div ng-if="!isMissione()">
 
 			<!-- Select input-->
 			<div class="form-group">
