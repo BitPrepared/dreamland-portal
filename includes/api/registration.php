@@ -296,7 +296,7 @@ function registration($app){
                 $app->log->debug('Mi connettero a '.$url);
 
                 $newUserRequest = array( 
-						'username' => $email,
+						'username' => $codicecensimento,
 						'password' => 'DA GENERARE RANDOM',
 						'first_name' => 'Sq. '.$nomesquadriglia,
 						'last_name' => 'Gruppo '.$gruppoNome,
