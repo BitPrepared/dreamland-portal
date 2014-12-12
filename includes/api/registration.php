@@ -216,14 +216,23 @@ function registration($app){
 
 				$punteggiosquadriglia = $obj_request->punteggiosquadriglia;
 
-                $squadriglia = R::findOne('squadriglia','idutente = ?', array($codicecensimento) );
+                $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
                 if ( null == $squadriglia ) {
                     $squadriglia = R::dispense('squadriglia');
                     $squadriglia->codicecensimento = $codicecensimento;
                     $squadriglia->componenti = intval($ncomponenti);
                     $squadriglia->specialita = intval($nspecialita);
                     $squadriglia->brevetti = intval($nbrevetti);
+                    $squadriglia->nomesquadriglia = $nomesquadriglia;
+                    $squadriglia->gruppo = $gruppoNome;
                     R::store($squadriglia);
+                    $app->log->info('Salvata nuova squadriglia assegnata a '.$codicecensimento);
+                } else {
+                    $squadriglia->componenti = intval($ncomponenti);
+                    $squadriglia->specialita = intval($nspecialita);
+                    $squadriglia->brevetti = intval($nbrevetti);
+                    R::store($squadriglia);
+                    $app->log->info('Aggiornata squadriglia assegnata a '.$codicecensimento);
                 }
 
 				$ruolosquadriglia = $obj_request->ruolosq->code;
@@ -327,49 +336,47 @@ function registration($app){
 						)
 					);
 
-    //             try {
+                 try {
 					
-				// 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
-	   //              $wapi->setRequestOption('timeout',5);
-				// 	$newUser = $wapi->users->create(  );
+				 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                    $wapi->setRequestOption('timeout',30);
+				 	$newUser = $wapi->users->create( $newUserRequest );
 
-				// } catch( Requests_Exception_HTTP_500 $e) {
-				// 	$app->log->error('Wordpress code : '.$e->getCode());
-				// 	$app->log->error($e->getTraceAsString());
-				// 	// throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
+				 } catch( Requests_Exception_HTTP_500 $e) {
+				 	$app->log->error('Wordpress code : '.$e->getCode());
+				 	$app->log->error($e->getTraceAsString());
+                    $app->log->error(var_export($e->getData(),true));
+				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
 
-				$_SESSION['portal'] = array();
-				$_SESSION['portal']['request'] = $newUserRequest;
+				 } catch ( Requests_Exception_HTTP_404 $e2 ) {
+				 	$app->log->error('Wordpress code : '.$e2->getCode());
+				 	$app->log->error($e2->getTraceAsString());
+				 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+				 }
 
-                $findToken->completato = true;
-				R::store($findToken);
-				
-				$app->log->info('Completata registrazione token '.$token);
+				 $app->log->info('Creato utente in wordpress '.$newUser->ID);
+				 $findToken->completato = true;
+				 R::store($findToken);
+				 $app->response->setBody( json_encode('ok') );
 
-				// } catch ( Requests_Exception_HTTP_404 $e2 ) {
-				// 	$app->log->error('Wordpress code : '.$e2->getCode());
-				// 	$app->log->error($e2->getTraceAsString());
-				// 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
-				// } 
+//                $_SESSION['portal'] = array();
+//                $_SESSION['portal']['request'] = $newUserRequest;
+//                $findToken->completato = true;
+//                R::store($findToken);
 
-				// $_SESSION['wordpressUserId'] = $newUser->ID;
-
-				// $app->log->info('Creato utente in wordpress '.$newUser->ID);
-
-				// $findToken->completato = true;
-				// R::store($findToken);
-
-				// $app->response->setBody( json_encode('ok') );
+                $app->log->info('Completata registrazione token '.$token);
 
 			} catch(Exception $e) {
 				$app->log->error($e->getMessage());
 				$testo = 'Dati Non Validi';
 				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
+                if ( $e->getCode() == Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE ) $testo = 'errore creazione utente';
+                if ( $e->getCode() == Errori::WORDPRESS_NOT_FOUND ) $testo = 'Configurazione wordpress errata';
 				else $app->log->error($e->getTraceAsString());
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
-			$app->response->setBody( json_encode($url.'/portal/pk') );
+//			$app->response->setBody( json_encode($url.'/portal/pk') );
 
         });
 
@@ -441,43 +448,35 @@ function registration($app){
 					)
 				);
 
-				// $newUser = null;
-				// try {
-				// 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
-    //                 $wapi->setRequestOption('timeout',30);
-				// 	$newUser = $wapi->users->create( $newUserRequest );
-				// 	// SE E' GIA CREATO DA 500... 
-				// 	//echo 'creato '.$newUser->ID."\n";
-				// 	// redirect
-				// 	$_SESSION['wordpressUserId'] = $newUser->ID;
 
-				// 	$app->log->info('Creato utente in wordpress '.$newUser->ID);
+				 try {
+				 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                    $wapi->setRequestOption('timeout',30);
+				 	$newUser = $wapi->users->create( $newUserRequest );
 
-				// 	$findToken->completato = true;
-				// 	R::store($findToken);
-					
-				// 	$app->redirect($app->request->getRootUri().'/page/success_iscrizione'); 
+				 	$app->log->info('Creato utente in wordpress '.$newUser->ID);
 
-				// } catch( Requests_Exception_HTTP_500 $e) {
-				// 	$app->log->error('Wordpress code : '.$e->getCode());
-				// 	$app->log->error($e->getTraceAsString());
-				// 	throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
-				// } catch ( Requests_Exception_HTTP_404 $e2 ) {
-				// 	$app->log->error('Wordpress code : '.$e2->getCode());
-				// 	$app->log->error($e2->getTraceAsString());
-				// 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
-				// } 
+				 	$findToken->completato = true;
+                    $findToken->codicecensimento = $codicecensimento;
+				 	R::store($findToken);
 
-				$_SESSION['portal'] = array();
-				$_SESSION['portal']['request'] = $newUserRequest;
+				 } catch( Requests_Exception_HTTP_500 $e) {
+				 	$app->log->error('Wordpress code : '.$e->getCode());
+				 	$app->log->error($e->getTraceAsString());
+				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
+				 } catch ( Requests_Exception_HTTP_404 $e2 ) {
+				 	$app->log->error('Wordpress code : '.$e2->getCode());
+				 	$app->log->error($e2->getTraceAsString());
+				 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+				 }
 
-                $findToken->codicecensimento = $codicecensimento;
-				$findToken->completato = true;
-				R::store($findToken);
-				$app->log->info('Completata registrazione token '.$token);
-				
-
-				// $utenteCreato = $wapi->users->get($newUser->ID,true);
+//                $_SESSION['portal'] = array();
+//                $_SESSION['portal']['request'] = $newUserRequest;
+//
+//                $findToken->codicecensimento = $codicecensimento;
+//                $findToken->completato = true;
+//                R::store($findToken);
+//                $app->log->info('Completata registrazione token '.$token);
 
     		} catch(Exception $e) {
 				$app->log->error($e->getMessage());
@@ -488,7 +487,9 @@ function registration($app){
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
-            $app->response->setBody( json_encode($url.'/portal/pk') );
+//            $app->redirect($app->request->getRootUri().'/page/success_iscrizione');
+
+//            $app->response->setBody( json_encode($url.'/portal/pk') );
 
         });
 

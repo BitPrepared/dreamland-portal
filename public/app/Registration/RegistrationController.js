@@ -1,4 +1,4 @@
-dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, $stateParams, $window) {
+dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, Portal, $stateParams, $window) {
 
   $scope.ruolisquadriglia = [ {'desc' : 'Altro' , 'code' : 3}, {'desc' : 'Capo Sq.', 'code' : 1}, {'desc' : 'Vice capo Sq.', 'code' : 2} ];
 
@@ -61,6 +61,16 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
         $scope.reg.cognomecaporeparto = cc.cognome;
         $scope.reg.emailcaporeparto = cc.email;
 
+        //    PER AVERE LE SQ. QUI BISOGNA RENDERLE VISIBILI ESTERNAMENTE
+        //Portal.loadSquadriglia(function(squadriglia){
+        //    debugger;
+        //    //squadriglia.
+        //}, function(err){
+        //    debugger;
+        //    $rootScope.lastErrMsg = err;
+        //    $state.go('error',null, {reload: true});
+        //});
+
       }).
       error(function(data, status, headers, config) {
         $rootScope.lastErrMsg = 'impossibile trovare token registrazione';
@@ -101,7 +111,8 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
 
       $rootScope.remoteLoad = $http.post('./api/registrazione/stepc/'+$stateParams.code, newRequest).
           success(function(data, status, headers, config) {
-              $window.location.href = data;
+              //$window.location.href = data;
+              $state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
           }).
           error(function(data, status, headers, config) {
               $scope.currentError = data;
@@ -127,8 +138,8 @@ dreamApp.controller('RegistrationController', function ($scope, $rootScope, $htt
     $scope.enableButton = false;
     $rootScope.remoteLoad = $http.post('./api/registrazione/step2/'+token, $scope.reg).
         success(function(data, status, headers, config) {
-          $window.location.href = data;
-          //$state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
+          //$window.location.href = data;
+          $state.go('home.registration.ok',{ msg : 'Registrazione completata con successo. Riceverai una mail con le nuove credenziali.'},{reload : true});
         }).
         error(function(data, status, headers, config) {
           $scope.currentError = data;
