@@ -39,7 +39,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
 
   $scope.iscr = {
     tipo : 'impresa',
-    categoriaSfida: 'Avventura',
+    categoriaSfida: $scope.categoriaMissione[0],
     descrizione: null,
     numerosquadriglieri : 0,
     specialitasquadriglierinuove : 0,
@@ -66,11 +66,12 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
       newRequest.descrizione = $scope.iscr.descrizione;
 
+        debugger;
+
       $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
         success(function(data, status, headers, config) {
-          // DOVREI ANDARE SU WORDPRESS PER COMUNICARLO...
           // $state.go('home.registration.ok',{ msg : 'Iscrizione alla sfida completata con successo'},{reload : true});
-          $window.location.href = '/blog/wp-json/portal/cs';
+          $window.location.href = $scope.sfida.permalink+'?iscritto';
         }).
         error(function(data, status, headers, config) {
           $scope.currentError = data;

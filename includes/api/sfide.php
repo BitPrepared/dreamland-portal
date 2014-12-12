@@ -18,17 +18,17 @@ function sfide($app) {
 				    throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
 			    }
 
-			    $wordpress = $_SESSION['wordpress'];
-				$user_id = $wordpress['user_id'];
+                $wordpress = $_SESSION['wordpress'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','idutente = ? and idsfida = ?', array($user_id,$sfida_id) );
+				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
 				if ( null != $drm_iscrizione_sfida ) {
 
 					$x = array(
 						'idsfida' => intval($drm_iscrizione_sfida->idsfida),
 						'titolo' => $drm_iscrizione_sfida->titolo,
 						'permalink' => $drm_iscrizione_sfida->permalink,
-						'idutente' => intval($drm_iscrizione_sfida->idutente),
+						'codicecensimento' => intval($drm_iscrizione_sfida->codicecensimento),
 						'startpunteggio' => intval($drm_iscrizione_sfida->startpunteggio),
 						'obiettivopunteggio' => intval($drm_iscrizione_sfida->obiettivopunteggio),
 						'endpunteggio' => intval($drm_iscrizione_sfida->endpunteggio),
@@ -52,7 +52,6 @@ function sfide($app) {
 
 		});
 
-		// Get user with ID
 	    $app->get('/iscrizione/:id', function ($idsfida) use ($app) {
 
 		    try {
@@ -63,8 +62,8 @@ function sfide($app) {
 
 			    $sfide = $_SESSION['sfide'];
 			    $wordpress = $_SESSION['wordpress'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-				$user_id = $wordpress['user_id'];
 
 			    if ( intval($sfide['sfida_id']) != intval($idsfida) ) {
 				    $app->log->error('Sfida richiesta '.$idsfida.' sfida in sessione '.$sfide['sfida_id']);
@@ -84,10 +83,10 @@ function sfide($app) {
 					// )
 
 
-			    $squadriglia = R::findOne('squadriglia','idutente = ?', array($user_id) );
+			    $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
 			    if ( null == $squadriglia ) {
 				    $squadriglia = R::dispense('squadriglia');
-				    $squadriglia->idutente = $user_id;
+				    $squadriglia->codicecensimento = $codicecensimento;
 				    $squadriglia->componenti = intval($sfide['numero_componenti']);
 				    $squadriglia->specialita = intval($sfide['numero_specialita']);
 				    $squadriglia->brevetti = intval($sfide['numero_brevetti']);
@@ -96,22 +95,22 @@ function sfide($app) {
 
 			    $sfida_id = $sfide['sfida_id'];
 			    
-				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','idutente = ? and idsfida = ?', array($user_id,$sfide['sfida_id']) );
+				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfide['sfida_id']) );
 			    if ( null == $drm_iscrizione_sfida ) {
 				    $drm_iscrizione_sfida = R::dispense('iscrizionesfida');
 				    $drm_iscrizione_sfida->idsfida = intval($sfida_id);
 				    $drm_iscrizione_sfida->titolo = $sfide['sfida_titolo'];
 				    $drm_iscrizione_sfida->permalink = $sfide['sfida_url'];
-				    $drm_iscrizione_sfida->idutente = intval($user_id);
+				    $drm_iscrizione_sfida->codicecensimento = intval($codicecensimento);
 				    $drm_iscrizione_sfida->startpunteggio = intval($sfide['punteggio_attuale']);
 				    $drm_iscrizione_sfida->obiettivopunteggio = intval($sfide['punteggio_attuale']);
 				    $drm_iscrizione_sfida->endpunteggio = null;
 				    $drm_iscrizione_sfida->sfidaspeciale = (bool)$sfide['sfidaspeciale'];
                     $drm_iscrizione_sfida->categoriasfida = 'UNKNOWN';
 				    R::store($drm_iscrizione_sfida);
-				    $app->log->info('Richiesta iscrizione '.$user_id.' alla sfida '.$idsfida);
+				    $app->log->info('Richiesta iscrizione '.$codicecensimento.' alla sfida '.$idsfida);
 				} else {
-					$app->log->info('Richiesta iscrizione '.$user_id.' alla sfida '.$idsfida.' gia esistente');
+					$app->log->info('Richiesta iscrizione '.$codicecensimento.' alla sfida '.$idsfida.' gia esistente');
 					throw new Exception("Sfida gia esistente", Errori::SFIDA_GIA_ATTIVA);
 				}    
 
@@ -146,10 +145,10 @@ function sfide($app) {
 
 				$obj_request = json_decode($body);
 
-			    $wordpress = $_SESSION['wordpress'];
-				$user_id = $wordpress['user_id'];
+                $wordpress = $_SESSION['wordpress'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','idutente = ? and idsfida = ?', array($user_id,$sfida_id) );
+				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
 				if ( null != $drm_iscrizione_sfida ) {
 
 					$drm_iscrizione_sfida->obiettivospecialita = $obj_request->specialitasquadriglierinuove;
@@ -166,7 +165,8 @@ function sfide($app) {
 
 			    $_SESSION['portal'] = array();
 				$_SESSION['portal']['request'] = array(
-					'sfidaid' => $sfida_id
+					'sfidaid' => $sfida_id,
+                    'infosfida' => $drm_iscrizione_sfida
 				);
 
 			} catch ( Exception $e ) {

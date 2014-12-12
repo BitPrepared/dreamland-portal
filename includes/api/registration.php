@@ -493,49 +493,49 @@ function registration($app){
 
         });
 
-		// Step Registrazione Referente Regionale FAKE (http://10.143.90.74:8080/portal/api/registrazione/referenteregionale)
-		$app->get('/referenteregionale', function () use ($app) {
-
-			try{
-
-				$wordpress = $app->config('wordpress');
-
-				$url = $wordpress['url'].'wp-json';
-
-				$newUserRequest = array( 
-					'username' => 'referenteregionale',
-					'password' => 'DA GENERARE RANDOM',
-					'first_name' => 'referente',
-					'last_name' => 'regionale',
-					'nickname' => 'refreg',
-					'email' => 'orset.to@gmail.com',
-					'meta' => array(
-						'group' => 2241,
-						'groupDisplay' => 'BOLOGNA 13',
-						'zone' => '1',
-						'zoneDisplay' => 'BOLOGNA',
-						'region' => 'F',
-						'regionDisplay' => 'Emilia Romagna',
-						'codicecensimento' => '123098423',
-						'ruolocensimento' => 'rr'
-					)
-				);
-
-				$_SESSION['portal'] = array();
-				$_SESSION['portal']['request'] = $newUserRequest;
-
-			} catch(Exception $e) {
-				$app->log->error($e->getMessage());
-				$testo = 'Dati Non Validi';
-				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-				if ( $e->getCode() == Errori::PORTAL_INVALID_TOKEN_STEP ) $testo = 'Token non piu attivo.';
-				else $app->log->error($e->getTraceAsString());
-				$app->halt(412, json_encode($testo)); //Precondition Failed
-			}
-
-			$app->redirect($url.'/portal/pk');
-
-		});
+//		// Step Registrazione Referente Regionale FAKE (http://10.143.90.74:8080/portal/api/registrazione/referenteregionale)
+//		$app->get('/referenteregionale', function () use ($app) {
+//
+//			try{
+//
+//				$wordpress = $app->config('wordpress');
+//
+//				$url = $wordpress['url'].'wp-json';
+//
+//				$newUserRequest = array(
+//					'username' => 'referenteregionale',
+//					'password' => 'DA GENERARE RANDOM',
+//					'first_name' => 'referente',
+//					'last_name' => 'regionale',
+//					'nickname' => 'refreg',
+//					'email' => 'orset.to@gmail.com',
+//					'meta' => array(
+//						'group' => 2241,
+//						'groupDisplay' => 'BOLOGNA 13',
+//						'zone' => '1',
+//						'zoneDisplay' => 'BOLOGNA',
+//						'region' => 'F',
+//						'regionDisplay' => 'Emilia Romagna',
+//						'codicecensimento' => '123098423',
+//						'ruolocensimento' => 'rr'
+//					)
+//				);
+//
+//				$_SESSION['portal'] = array();
+//				$_SESSION['portal']['request'] = $newUserRequest;
+//
+//			} catch(Exception $e) {
+//				$app->log->error($e->getMessage());
+//				$testo = 'Dati Non Validi';
+//				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
+//				if ( $e->getCode() == Errori::PORTAL_INVALID_TOKEN_STEP ) $testo = 'Token non piu attivo.';
+//				else $app->log->error($e->getTraceAsString());
+//				$app->halt(412, json_encode($testo)); //Precondition Failed
+//			}
+//
+//			$app->redirect($url.'/portal/pk');
+//
+//		});
 
     });
 }
