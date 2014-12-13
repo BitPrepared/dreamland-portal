@@ -17,8 +17,10 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
     //   brevetti : parseInt(squadriglia.brevetti)
     // }
     $scope.squadriglia = squadriglia;
+
     Portal.loadSfida($scope.sfidaid,function(sfida){
       $scope.sfida = sfida;
+      $scope.iscr.categoriaSfida = sfida.categoria[0];
       $scope.ready = true;
       $scope.update();
     },function(errore){
@@ -39,7 +41,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
 
   $scope.iscr = {
     tipo : 'impresa',
-    categoriaSfida: $scope.categoriaMissione[0],
+    categoriaSfida: null,
     descrizione: null,
     numerosquadriglieri : 0,
     specialitasquadriglierinuove : 0,

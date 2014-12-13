@@ -35,13 +35,15 @@
         </div>
     </div>
 
-    <!-- Select input-->
-    <div class="form-group">
-        <label class="control-label" for="categoriaSfida">Categoria</label>
-        <div class="controls">
-            <select id="categoriaSfida" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>
-        </div>
-    </div>
+    <label>{{sfida.categoria}}</label>
+
+    <!--&lt;!&ndash; Select input&ndash;&gt;-->
+    <!--<div class="form-group">-->
+        <!--<label class="control-label" for="categoriaSfida">Categoria</label>-->
+        <!--<div class="controls">-->
+            <!--<select id="categoriaSfida" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div class="form-group">
         <label class="control-label" for="numeroprotagonisti">Pensiamo che durante la sfida saranno protagonisti questo numero di squadriglieri</label>

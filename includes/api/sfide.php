@@ -28,6 +28,7 @@ function sfide($app) {
 						'idsfida' => intval($drm_iscrizione_sfida->idsfida),
 						'titolo' => $drm_iscrizione_sfida->titolo,
 						'permalink' => $drm_iscrizione_sfida->permalink,
+                        'categoria' => $drm_iscrizione_sfida->categoriasfida,
 						'codicecensimento' => intval($drm_iscrizione_sfida->codicecensimento),
 						'startpunteggio' => intval($drm_iscrizione_sfida->startpunteggio),
 						'obiettivopunteggio' => intval($drm_iscrizione_sfida->obiettivopunteggio),
@@ -76,6 +77,7 @@ function sfide($app) {
 					//     [sfida_titolo] => ABC
 					//     [sfida_id] => 123
 					//     [sfidaspeciale] => 1
+                    //     [categoria] = ['a','b']
 					//     [punteggio_attuale] => 30
 					//     [numero_componenti] => 12
 					//     [numero_specialita] => 4
@@ -106,7 +108,7 @@ function sfide($app) {
 				    $drm_iscrizione_sfida->obiettivopunteggio = intval($sfide['punteggio_attuale']);
 				    $drm_iscrizione_sfida->endpunteggio = null;
 				    $drm_iscrizione_sfida->sfidaspeciale = (bool)$sfide['sfidaspeciale'];
-                    $drm_iscrizione_sfida->categoriasfida = 'UNKNOWN';
+                    $drm_iscrizione_sfida->categoriasfida = $sfide['categoria']; //array vuoto grande sfida
 				    R::store($drm_iscrizione_sfida);
 				    $app->log->info('Richiesta iscrizione '.$codicecensimento.' alla sfida '.$idsfida);
 				} else {

@@ -2,10 +2,10 @@
 
 	<div ng-if="isReady()">
 
-		<legend>Iscrizione Sfida</legend>
-		<h4>{{sfida.titolo}}</h4>
-
 		<div ng-if="!isSfidaSpeciale()">
+
+            <legend>Iscrizione Grande Sfida</legend>
+            <h4>{{sfida.titolo}}</h4>
 
 		   <div ng-switch="step">
 		      <div ng-switch-when="1">
@@ -18,6 +18,10 @@
 
 		</div>
 		<div ng-if="isSfidaSpeciale()">
+
+            <legend>Iscrizione Sfida Speciale</legend>
+            <h4>{{sfida.titolo}}</h4>
+
             <div ng-switch="step">
                 <div ng-switch-when="1">
                     <div ng-include src="'app/Sfide/_stepSpeciale.html'"></div>
