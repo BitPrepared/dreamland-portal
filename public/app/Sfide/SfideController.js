@@ -20,7 +20,15 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
 
     Portal.loadSfida($scope.sfidaid,function(sfida){
       $scope.sfida = sfida;
-      $scope.iscr.categoriaSfida = sfida.categoria[0];
+
+      //$scope.categoriaImpresa.forEach(function(val){
+      //    if ( sfida.categoria == val.desc ) {
+      //        $scope.iscr.categoriaSfida = val;
+      //    }
+      //});
+
+      $scope.iscr.categoriaSfida = sfida.categoria;
+
       $scope.ready = true;
       $scope.update();
     },function(errore){
@@ -36,8 +44,8 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
   });
 
   $scope.tipiSfida = ['missione','impresa'];
-  $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
-  $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
+  $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
+  $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
 
   $scope.iscr = {
     tipo : 'impresa',
@@ -67,8 +75,6 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       newRequest.obiettivopunteggio = $scope.iscr.punteggiosquadriglia;
       newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
       newRequest.descrizione = $scope.iscr.descrizione;
-
-        debugger;
 
       $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
         success(function(data, status, headers, config) {

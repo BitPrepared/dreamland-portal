@@ -24,11 +24,18 @@ function sfide($app) {
 				$drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
 				if ( null != $drm_iscrizione_sfida ) {
 
+                    $categoria_sfida = null;
+                    if ( $drm_iscrizione_sfida->categoriasfida != null) {
+                        $categoria_sfida = new \stdClass();
+                        $categoria_sfida->desc = $drm_iscrizione_sfida->categoriasfida;
+                        $categoria_sfida->code = -1;
+                    }
+
 					$x = array(
 						'idsfida' => intval($drm_iscrizione_sfida->idsfida),
 						'titolo' => $drm_iscrizione_sfida->titolo,
 						'permalink' => $drm_iscrizione_sfida->permalink,
-                        'categoria' => $drm_iscrizione_sfida->categoriasfida,
+                        'categoria' => $categoria_sfida,
 						'codicecensimento' => intval($drm_iscrizione_sfida->codicecensimento),
 						'startpunteggio' => intval($drm_iscrizione_sfida->startpunteggio),
 						'obiettivopunteggio' => intval($drm_iscrizione_sfida->obiettivopunteggio),
@@ -108,7 +115,7 @@ function sfide($app) {
 				    $drm_iscrizione_sfida->obiettivopunteggio = intval($sfide['punteggio_attuale']);
 				    $drm_iscrizione_sfida->endpunteggio = null;
 				    $drm_iscrizione_sfida->sfidaspeciale = (bool)$sfide['sfidaspeciale'];
-                    $drm_iscrizione_sfida->categoriasfida = $sfide['categoria']; //array vuoto grande sfida
+                    $drm_iscrizione_sfida->categoriasfida = count($sfide['categoria']) > 0 ? $sfide['categoria'][0] : null; //array vuoto grande sfida
 				    R::store($drm_iscrizione_sfida);
 				    $app->log->info('Richiesta iscrizione '.$codicecensimento.' alla sfida '.$idsfida);
 				} else {

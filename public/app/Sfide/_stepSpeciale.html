@@ -3,6 +3,8 @@
 
 <form class="form-reg" role="form" name="iscrizioneForm" ng-submit="partecipa()" form-autofill-fix>
 
+    <label>Categoria: {{sfida.categoria.desc}}</label>
+
     <!-- Select input-->
     <div class="form-group">
         <label class="control-label" for="tipo">Tipo : Missione</label>
@@ -34,8 +36,6 @@
             <input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="squadriglia.brevetti">
         </div>
     </div>
-
-    <label>{{sfida.categoria}}</label>
 
     <!--&lt;!&ndash; Select input&ndash;&gt;-->
     <!--<div class="form-group">-->
