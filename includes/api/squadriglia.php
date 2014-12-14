@@ -37,6 +37,7 @@ function squadriglia($app) {
 
 			    	$app->response->setBody( json_encode( $x ) );
 			    } else {
+                    $app->log->info('Squadriglia non trovata x codcens: '.$codicecensimento);
 			    	$app->halt(404, json_encode('Squadriglia non trovata x codcens: '.$codicecensimento));
 			    }
 
@@ -134,6 +135,7 @@ function squadriglia($app) {
 
 				    $app->log->info('Aggiornata squadriglia : '.'['.$squadriglia->id.'] -> '.$body);
 			    } else {
+                    $app->log->warn('Squadriglia non trovata x codcens: '.$codicecensimento);
 					$app->halt(404, json_encode('Squadriglia non trovata'));
 			    }
 
