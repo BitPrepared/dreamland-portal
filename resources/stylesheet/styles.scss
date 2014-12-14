@@ -69,7 +69,12 @@ body {
 
 /* Form Validation
 -------------------------------------------------- */
-.control > .ng-invalid {
-  background: $rosso_danger;
-  color: $white;
+
+.ng-invalid textarea,select,input {
+  border: 1px solid $rosso_danger !important;
 }
+
+.ng-valid textarea,select,input {
+  border: 1px solid $verde_agesci !important;
+}
+

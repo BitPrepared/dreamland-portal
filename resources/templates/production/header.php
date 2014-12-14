@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <title><?=$title?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-    <link href="<?=$baseUrl?>assets/css/bootstrap_base.css" rel="stylesheet"/>
     <!-- mystyle -->
     <link href="<?=$baseUrl?>assets/css/styles.css" rel="stylesheet"/>
+    <!-- Bootstrap -->
+    <link href="<?=$baseUrl?>assets/css/bootstrap_base.css" rel="stylesheet"/>
     <link href="<?=$baseUrl?>assets/css/dist/ngDialog.min.css" rel="stylesheet"/>
     <link href="<?=$baseUrl?>assets/css/dist/ngDialog-theme-plain.min.css" rel="stylesheet"/>
     <link href="<?=$baseUrl?>assets/css/dist/ngDialog-theme-default.min.css" rel="stylesheet"/>

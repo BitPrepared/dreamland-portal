@@ -52,12 +52,13 @@
 				<label class="control-label" for="descrizione">Cosa vogliamo fare</label>
 				<div class="controls">
 					<textarea id="descrizione" name="descrizione" class="form-control" ng-model="iscr.descrizione" placeholder="minimo 200 caratteri" ng-minlength="200" rows=6 required></textarea>
-				</div>
+                    <span class="e" ng-show="iscr.descrizione.$invalid">Testo corto, 200 caratteri minimo</span>
+                </div>
 			</div>
 
 			<!-- Text input-->
 			<div class="form-group">
-				<label class="control-label" for="specialitasquadriglierinuove">Numero specialit&agrave; che si vogliono conquistare</label>
+				<label class="control-label" for="specialitasquadriglierinuove">Numero specialit&agrave; che si vogliono conquistare in questa sfida</label>
 				<div class="controls">
 					<input id="specialitasquadriglierinuove" name="specialitasquadriglierinuove" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="iscr.specialitasquadriglierinuove">
 				</div>
@@ -65,7 +66,7 @@
 
 			<!-- Text input-->
 			<div class="form-group">
-				<label class="control-label" for="brevettisquadriglierinuove">Numero brevetti che si vogliono conquistare</label>
+				<label class="control-label" for="brevettisquadriglierinuove">Numero brevetti che si vogliono conquistare in questa sfida</label>
 				<div class="controls">
 					<input id="brevettisquadriglierinuove" name="brevettisquadriglierinuove" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="iscr.brevettisquadriglierinuove">
 				</div>

@@ -319,6 +319,8 @@ function registration($app){
 						'nickname' => 'Sq. '.$nomesquadriglia. ' Gruppo '.$gruppoNome,
 						'email' => $email,
 						'meta' => array(
+                            'nome' => $nome,
+                            'cognome' => $cognome,
 							'squadriglia' => $nomesquadriglia,
 							'group' => $gruppo,
 							'groupDisplay' => $gruppoNome,

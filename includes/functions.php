@@ -101,7 +101,6 @@ function generateToken($length){
     return $token;
 }
 
-
 function findDatiCapoReparto($regione,$gruppo) {
 	$findCCs = R::find('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
 	$info_cc = array();
