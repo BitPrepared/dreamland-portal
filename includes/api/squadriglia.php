@@ -29,7 +29,7 @@ function squadriglia($app) {
 			    	// {"id":"6","":"88",}
 
 			    	$x = array(
-			    		"codicecensimento" => intval($squadriglia['codicecensimento']),
+			    		"codicecensimento" => intval($codicecensimento),
 			    		"componenti" => intval($squadriglia['componenti']),
 			    		"specialita" => intval($squadriglia['specialita']),
 			    		"brevetti" => intval($squadriglia['brevetti'])
@@ -37,7 +37,7 @@ function squadriglia($app) {
 
 			    	$app->response->setBody( json_encode( $x ) );
 			    } else {
-			    	$app->halt(404, json_encode('Squadriglia non trovata'));
+			    	$app->halt(404, json_encode('Squadriglia non trovata x codcens: '.$codicecensimento));
 			    }
 
 		    } catch ( Exception $e ) {
