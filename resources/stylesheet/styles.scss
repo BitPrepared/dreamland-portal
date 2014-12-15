@@ -8,6 +8,7 @@
 
 body {
   padding-top: 50px;
+  height: 100% !important;
 }
 
 .starter-template {
@@ -28,6 +29,7 @@ body {
 
 .footer {
   position: absolute;
+  overflow: hidden;
   bottom: 0;
   width: 100%;
   height: $footer_height;
