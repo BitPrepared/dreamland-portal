@@ -138,7 +138,7 @@ function sfide($app) {
 		    }
 
 			//devo procedere a compilare il form (http://10.143.90.74:8080/portal/home#/sfide/iscr?id=123)
-		    $app->redirect('/portal/#/sfide/iscr?id='.$sfida_id);
+		    $app->redirect('/portal/home#/sfide/iscr?id='.$sfida_id);
 
 	    });
 

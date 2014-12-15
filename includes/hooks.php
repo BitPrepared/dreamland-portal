@@ -1,7 +1,7 @@
 <?php
 
 $app->hook('slim.before.router', function () use ($app) {
-    
+
 	$req = $app->request;
 	$allGetVars = $req->get();
 	$allPostVars = $req->post();
@@ -12,9 +12,13 @@ $app->hook('slim.before.router', function () use ($app) {
 
 	$srcParam = json_encode($vars);
 
-	//$req->getRootUri()
+	$srcUri = $req->getRootUri();
 	$srcUrl = $req->getResourceUri();
 	//Kint::dump( $srcUrl );
+//    $app->log->info('REQUEST : '.var_export($_REQUEST,true));
+//    $app->log->info('URI : '.$srcUri);
+//    $app->log->info('URL : '.$srcUrl);
+//    $app->log->info('Params : '.$srcParam);
 
 });
 
