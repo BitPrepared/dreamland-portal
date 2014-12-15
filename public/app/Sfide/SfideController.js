@@ -73,6 +73,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       newRequest.specialitasquadriglierinuove = $scope.iscr.specialitasquadriglierinuove;
       newRequest.brevettisquadriglierinuove = $scope.iscr.brevettisquadriglierinuove;
       newRequest.obiettivopunteggio = $scope.iscr.punteggiosquadriglia;
+      newRequest.numeroprotagonisti = $scope.iscr.numeroprotagonisti;
       newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
       newRequest.descrizione = $scope.iscr.descrizione;
 
