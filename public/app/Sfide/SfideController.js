@@ -48,7 +48,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
   $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
 
   $scope.iscr = {
-    tipo : 'impresa',
+    tipo : $scope.tipiSfida[1],
     categoriaSfida: null,
     descrizione: null,
     numerosquadriglieri : 0,
@@ -76,6 +76,7 @@ dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, 
       newRequest.numeroprotagonisti = $scope.iscr.numeroprotagonisti;
       newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
       newRequest.descrizione = $scope.iscr.descrizione;
+      newRequest.tipo = $scope.iscr.tipo;
 
       $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
         success(function(data, status, headers, config) {

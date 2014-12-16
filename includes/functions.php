@@ -101,28 +101,89 @@ function generateToken($length){
     return $token;
 }
 
-function findDatiCapoReparto($regione,$gruppo) {
-	$findCCs = R::find('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
-	$info_cc = array();
-	if ( $findCCs != null ){
-		$i = 0;
-		foreach ($findCCs as $findCC) {
-			$cc_codcens = $findCC['codicesocio'];
-			$cc_anagrafica = R::findOne('asa_anagrafica_capireparto','codicesocio = ?',array($cc_codcens));
-			$cc = new stdClass;
-			$cc->nome = $cc_anagrafica['nome'];
-			$cc->cognome = $cc_anagrafica['cognome'];
-			$cc->codicecensimento = $cc_codcens;
+function findDatiSquadriglia($codicecensimento) {
 
-			$findccEmail = R::findOne('asa_capireparto_email',' codicesocio = ? and tipo = ?',array($cc_codcens,'E'));
-			if ( null != $findccEmail ) {
-				$cc->email = $findccEmail['recapito'];
-			} else {
-				$cc->email = '';
-			}
-			$info_cc[$i] = $cc;
-			$i++;
-		}
-	}
+    $find = R::findOne('squadriglia',' codicecensimento = ?',array($codicecensimento));
+    if ( null != $find ) {
+
+        $cc = new stdClass;
+        $cc->nome = $find['nomesquadriglia'];
+        $cc->gruppo = $find['gruppo'];
+        $cc->componenti = $find['componenti'];
+        $cc->specialita = $find['specialita'];
+        $cc->brevetti = $find['brevetti'];
+
+        return $cc;
+    }
+
+    return null;
+
+}
+
+function findDatiRagazzo($codicecensimento) {
+
+    $find = R::findOne('asa_anagrafica_eg',' codicesocio = ?',array($codicecensimento));
+    if ( $find != null ) {
+        $cc = new stdClass;
+        $cc->nome = $find['nome'];
+        $cc->cognome = $find['cognome'];
+        $cc->datanascita = $find['datanascita'];
+        $cc->regione = $find['creg'];
+        $cc->zona = $find['czona'];
+        $cc->gruppo = $find['ord'];
+
+        $find = R::findOne('registration',' codicecensimento = ?',array($codicecensimento));
+        if ( null != $find ) {
+            $cc->email = $find['email'];
+            $cc->completato = $find['completato'];
+        }
+
+        return $cc;
+    }
+
+    return null;
+
+}
+
+function findDatiCapoReparto($regione,$gruppo,$legame = null) {
+    $info_cc = array();
+    if ( null != $legame ) {
+        $findMyCCs = R::find('registration','regione = ? and gruppo = ? and type = ? and legame = ?',array($regione,$gruppo,'CC',$legame));
+        if ( null != $findMyCCs ) {
+            $i = 0;
+            foreach ($findMyCCs as $findMyCC) {
+                $cc = new stdClass;
+                $cc->nome = $findMyCC['nome'];
+                $cc->cognome = $findMyCC['cognome'];
+                $cc->codicecensimento = $findMyCC['codicecensimento'];
+                $cc->email = $findMyCC['email'];
+                $info_cc[$i] = $cc;
+                $i++;
+            }
+        }
+    } else {
+        $findCCs = R::find('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
+
+        if ( $findCCs != null ){
+            $i = 0;
+            foreach ($findCCs as $findCC) {
+                $cc_codcens = $findCC['codicesocio'];
+                $cc_anagrafica = R::findOne('asa_anagrafica_capireparto','codicesocio = ?',array($cc_codcens));
+                $cc = new stdClass;
+                $cc->nome = $cc_anagrafica['nome'];
+                $cc->cognome = $cc_anagrafica['cognome'];
+                $cc->codicecensimento = $cc_codcens;
+
+                $findccEmail = R::findOne('asa_capireparto_email',' codicesocio = ? and tipo = ?',array($cc_codcens,'E'));
+                if ( null != $findccEmail ) {
+                    $cc->email = $findccEmail['recapito'];
+                } else {
+                    $cc->email = '';
+                }
+                $info_cc[$i] = $cc;
+                $i++;
+            }
+        }
+    }
 	return $info_cc;
 }

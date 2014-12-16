@@ -167,6 +167,7 @@ function sfide($app) {
                     $drm_iscrizione_sfida->descrizione = $obj_request->descrizione;
                     $drm_iscrizione_sfida->categoriasfida = $obj_request->categoriaSfida->desc;
                     $drm_iscrizione_sfida->numeroprotagonisti = $obj_request->numeroprotagonisti;
+                    $drm_iscrizione_sfida->tipo = $obj_request->tipo;
                     $drm_iscrizione_sfida->attiva = true;
 
 					R::store($drm_iscrizione_sfida);
@@ -175,45 +176,41 @@ function sfide($app) {
 			    	$app->halt(404, json_encode('Sfida non trovata'));
 			    }
 
-                // INVIO MAIL AL CAPO REPARTO CON IL RIASSUNTO. #81
-                // quando i ragazzi si iscrivono (bottone partecipa del portale) il capo reparto riceve una mail che notifica chi si è i
-                // scritto a che cosa
-                //ovvero SQ iscritta alla sfida - "titolo sfida"
-                //inoltre nel caso si tratti di Grande Sfida:
-                //mettere tutto quello che l'ultimo form
-                //
-                //categoria - tipo - brevetti ecc...
-                //
-                //nel caso grande sfida di tipo missione - ricordare ai capi che devono preparare loro
-                //la missione per la categoria scelta dai ragazzi (avventura, originalità, traccia nel mondo)
+                $squadriglia = findDatiSquadriglia($codicecensimento);
+
+                $ragazzo = findDatiRagazzo($codicecensimento);
+
+                $capoReparto = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento)[0];
+
+                $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
+
+                $message =  'Ciao '.$capoReparto->nome.",\n";
+                $message .= 'La tua squadriglia '. $squadriglia->nome .' ha richiesto di partecipare ad una sfida su Dreamland'."\n";
+                $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
+                if ( $drm_iscrizione_sfida->sfidaspeciale ) {
+                    $message .= 'Si tratta di una stida speciale'."\n";
+                } else {
+                    $message .= 'Si tratta di una grande impresa di tipo '.$drm_iscrizione_sfida->tipo."\n";
+                    $message .= 'Obiettivi Specialita : '.$drm_iscrizione_sfida->obiettivospecialita."\n";
+                    $message .= 'Obiettivi Brevetti : '.$drm_iscrizione_sfida->obiettivobrevetti."\n";
+                    $message .= 'Descrizione : '.$drm_iscrizione_sfida->descrizione."\n";
+                    $message .= 'Categoria Sfida : '.$drm_iscrizione_sfida->categoriasfida."\n";
+                }
+
+                $message .= 'Saranno protagonisti in : '.$drm_iscrizione_sfida->numeroprotagonisti."\n";
+                $message .= ''."\n";
+
+                if ( $drm_iscrizione_sfida->tipo == 'missione' ){
+                    $message .= 'La sfida sarà una missione, ricordati di fornigliela!'."\n";
+                }
+                $message .= ''."\n";
+
+                $message .= 'Ulteriori dettagli qui: '.$drm_iscrizione_sfida->permalink."\n";
 
 
-//                $codicecensimento
-//
-//                $capoReparto = findDatiCapoReparto($regione,$gruppo);
-//
-//                $to = array($capoReparto['email'] => $capoReparto['nome'].' '.strtoupper($capoReparto['cognome'][0]).'.');
-//
-//                $message =  'Ciao '.$nomeCapoReparto.",\n";
-//                $message .= 'Una tua squadriglia ha richiesto di partecipare a Return To Dreamland'."\n";
-//                $message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: '."\n";
-//                $message .= 'Link: '."\n".$urlWithToken."\n";
-//                $message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.'."\n";
-//                $message .= 'Link pagine autorizzazioni : '."\n".$urlAdminDreamers."\n";
-//
-//                if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
-//                    $app->log->error('Invio mail capo reparto fallita');
-//                    $app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
-//                }
-
-
-
-
-			    $_SESSION['portal'] = array();
-				$_SESSION['portal']['request'] = array(
-					'sfidaid' => $sfida_id,
-                    'infosfida' => $drm_iscrizione_sfida
-				);
+                if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
+                    $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
+                }
 
 			} catch ( Exception $e ) {
 		    	if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
@@ -229,6 +226,60 @@ function sfide($app) {
 		    $app->halt(201);
 
 		});
+
+        $app->delete('/iscrizione/:id' , function($sfida_id) use ($app){
+
+            $url = $app->config('wordpress')['url'];
+            $body = $app->request->getBody();
+
+            try {
+
+                if ( !isset($_SESSION['wordpress']) ) {
+                    throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
+                }
+
+                $wordpress = $_SESSION['wordpress'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
+
+                $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
+                if ( null != $drm_iscrizione_sfida ) {
+
+                    R::trash($drm_iscrizione_sfida);
+
+                } else {
+                    $app->halt(404, json_encode('Sfida non trovata'));
+                }
+
+                $squadriglia = findDatiSquadriglia($codicecensimento);
+
+                $ragazzo = findDatiRagazzo($codicecensimento);
+
+                $capoReparto = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento)[0];
+
+                $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
+
+                $message =  'Ciao '.$capoReparto->nome.",\n";
+                $message .= 'La tua squadriglia '. $squadriglia->nome .' ha rinunciato a partecipare ad una sfida su Dreamland'."\n";
+                $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
+
+                if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
+                    $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
+                }
+
+            } catch ( Exception $e ) {
+                if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
+                    $url_login = $url.'wp-login.php';
+                    $app->halt(403, json_encode('Wordpress login not found - '.$url_login));
+                }
+                $app->log->error($e->getMessage());
+                $app->log->error($e->getTraceAsString());
+                $app->log->error('Body richiesta : ' . $body);
+                $app->halt(500, json_encode('Internal error'));
+            }
+
+            $app->halt(201);
+
+        });
 
 	});
 

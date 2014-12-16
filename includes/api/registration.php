@@ -95,7 +95,6 @@ function registration($app){
 					$mailgun_domain = $mailgun['domain'];
 					$mailgun_key = $mailgun['key'];
 					$mgClient = new Mailgun($mailgun_key);
-//					$result =
                     $mgClient->sendMessage($mailgun_domain,
 						array(
 							'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
@@ -130,6 +129,7 @@ function registration($app){
 						$drm_registration->regione = $find['creg'];
 						$drm_registration->zona = $find['czona'];
 						$drm_registration->gruppo = $find['ord'];
+                        $drm_registration->legame = null;
                         $drm_registration->completato = false;
 						$drm_registration_id = R::store($drm_registration);
 
@@ -285,6 +285,7 @@ function registration($app){
                 $drm_registration->regione = $regione;
                 $drm_registration->zona = $zona;
                 $drm_registration->gruppo = $gruppo;
+                $drm_registration->legame = $codicecensimento;
                 $drm_registration->completato = false;
                 $drm_registration_id = R::store($drm_registration);
 

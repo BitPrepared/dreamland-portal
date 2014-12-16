@@ -32,8 +32,8 @@ cp bower_components/angular-sanitize/angular-sanitize.min.js public/assets/js/di
 cp bower_components/angular-sanitize/angular-sanitize.min.js.map public/assets/js/dist/
 cp bower_components/angular-i18n/*.js public/assets/js/dist/ 
 cp bower_components/ngDialog/js/ngDialog.min.js public/assets/js/dist/ 
-cp bower_components/angular-route/angular-route.min.js public/assets/js/dist/ 
-cp bower_components/angular-route/angular-route.min.js.map public/assets/js/dist/ 
+# cp bower_components/angular-route/angular-route.min.js public/assets/js/dist/
+# cp bower_components/angular-route/angular-route.min.js.map public/assets/js/dist/
 cp bower_components/angular-ui-router/release/angular-ui-router.min.js public/assets/js/dist/ 
 cp bower_components/angular-underscore/*.min.js public/assets/js/dist/ 
 cp bower_components/underscore/underscore-min.js public/assets/js/dist/ 
