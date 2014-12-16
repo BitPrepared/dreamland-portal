@@ -358,6 +358,7 @@ function registration($app){
                  } catch ( Requests_Exception_HTTP_403 $e2 ) {
                      $app->log->error('Wordpress code : '.$e2->getCode());
                      $app->log->error($e2->getTraceAsString());
+                     $app->log->error(var_export($e->getData(),true));
                      throw new Exception($e2->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
                  }
 
