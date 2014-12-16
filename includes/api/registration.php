@@ -348,18 +348,17 @@ function registration($app){
 				 } catch( Requests_Exception_HTTP_500 $e) {
 				 	$app->log->error('Wordpress code : '.$e->getCode());
 				 	$app->log->error($e->getTraceAsString());
-                    $app->log->error(var_export($e->getData(),true));
+                    $app->log->error(var_export($e->body,true));
 				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
-
-				 } catch ( Requests_Exception_HTTP_404 $e2 ) {
-				 	$app->log->error('Wordpress code : '.$e2->getCode());
-				 	$app->log->error($e2->getTraceAsString());
-				 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
-                 } catch ( Requests_Exception_HTTP_403 $e2 ) {
-                     $app->log->error('Wordpress code : '.$e2->getCode());
-                     $app->log->error($e2->getTraceAsString());
-                     $app->log->error(var_export($e2->getData(),true));
-                     throw new Exception($e2->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
+				 } catch ( Requests_Exception_HTTP_404 $e ) {
+				 	$app->log->error('Wordpress code : '.$e->getCode());
+				 	$app->log->error($e->getTraceAsString());
+				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+                 } catch ( Requests_Exception_HTTP_403 $e ) {
+                     $app->log->error('Wordpress code : '.$e->getCode());
+                     $app->log->error($e->getTraceAsString());
+                     $app->log->error(var_export($e->body,true));
+                     throw new Exception($e->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
                  }
 
 				 $app->log->info('Creato utente in wordpress '.$newUser->ID);
