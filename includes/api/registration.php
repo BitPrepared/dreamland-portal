@@ -355,7 +355,11 @@ function registration($app){
 				 	$app->log->error('Wordpress code : '.$e2->getCode());
 				 	$app->log->error($e2->getTraceAsString());
 				 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
-				 }
+                 } catch ( Requests_Exception_HTTP_403 $e2 ) {
+                     $app->log->error('Wordpress code : '.$e2->getCode());
+                     $app->log->error($e2->getTraceAsString());
+                     throw new Exception($e2->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
+                 }
 
 				 $app->log->info('Creato utente in wordpress '.$newUser->ID);
 				 $findToken->completato = true;
