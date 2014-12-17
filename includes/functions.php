@@ -148,7 +148,7 @@ function findDatiRagazzo($codicecensimento) {
 function findDatiCapoReparto($regione,$gruppo,$legame = null) {
     $info_cc = array();
     if ( null != $legame ) {
-        $findMyCCs = R::find('registration','regione = ? and gruppo = ? and type = ? and legame = ?',array($regione,$gruppo,'CC',$legame));
+        $findMyCCs = R::findAll('registration','regione = ? and gruppo = ? and type = ? and legame = ?',array($regione,$gruppo,'CC',$legame));
         if ( null != $findMyCCs ) {
             $i = 0;
             foreach ($findMyCCs as $findMyCC) {
@@ -162,7 +162,7 @@ function findDatiCapoReparto($regione,$gruppo,$legame = null) {
             }
         }
     } else {
-        $findCCs = R::find('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
+        $findCCs = R::findAll('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
 
         if ( $findCCs != null ){
             $i = 0;
