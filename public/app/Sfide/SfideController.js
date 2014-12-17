@@ -37,7 +37,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
     $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalità', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
 
     $scope.iscr = {
-      tipo : 'impresa',
+      tipo : $scope.tipiSfida[1],
       categoriaSfida: $scope.categoriaMissione[0],
       descrizione: null,
       numerosquadriglieri : 0,
@@ -65,6 +65,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
         newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
         newRequest.numeroprotagonisti = $scope.iscr.numeroprotagonisti;
         newRequest.descrizione = $scope.iscr.descrizione;
+        newRequest.tipo = $scope.iscr.tipo;
 
         $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
           success(function(data, status, headers, config) {
