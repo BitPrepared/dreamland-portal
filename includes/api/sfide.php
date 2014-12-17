@@ -212,6 +212,8 @@ function sfide($app) {
                     $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
                 }
 
+                if ( !isset($_SESSION['portal'])) $_SESSION['portal'] = array();
+                if ( !isset($_SESSION['portal']['request'])) $_SESSION['portal']['request'] = array();
                 $_SESSION['portal']['request']['sfidaid'] = $sfida_id;
 
 			} catch ( Exception $e ) {
