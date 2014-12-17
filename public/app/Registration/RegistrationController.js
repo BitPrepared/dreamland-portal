@@ -99,8 +99,8 @@ define(['angular','dreamApp','moment'], function(angular,dreamApp,moment){
         var newRequest = {};
         newRequest.email = $scope.email;
         newRequest.codicecensimento = $scope.codcens;
-        $datanascita = moment($scope.datan);
-        newRequest.datanascita = $datanascita.format('YYYYMMDD');
+        var datanascita = moment($scope.datan);
+        newRequest.datanascita = datanascita.format('YYYYMMDD');
 
         $rootScope.remoteLoad = $http.post('./api/registrazione/step1', newRequest).
           success(function(data, status, headers, config) {
