@@ -180,7 +180,11 @@ function sfide($app) {
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
 
-                $capoReparto = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento)[0];
+                $capoRepartoArray = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento);
+
+                $app->log->debug(var_export($capoRepartoArray));
+
+                $capoReparto = $capoRepartoArray[0];
 
                 $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
 
