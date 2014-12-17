@@ -26,11 +26,12 @@ cp bower_components/jquery/dist/jquery.min.js public/assets/js/dist/
 cp bower_components/jquery/dist/jquery.min.map public/assets/js/dist/ 
 cp bower_components/angular/angular.min.js public/assets/js/dist/ 
 cp bower_components/angular/angular.min.js.map public/assets/js/dist/ 
-cp bower_components/angular-i18n/angular-locale_it-it.js public/assets/js/dist/locale/ 
+cp bower_components/angular-i18n/angular-locale_it-it.js public/assets/js/dist/locale/
+#cp bower_components/angular-i18n/*.js public/assets/js/dist/locale/
+
 cp bower_components/angular-bootstrap/*.min.js public/assets/js/dist/
 cp bower_components/angular-sanitize/angular-sanitize.min.js public/assets/js/dist/
 cp bower_components/angular-sanitize/angular-sanitize.min.js.map public/assets/js/dist/
-cp bower_components/angular-i18n/*.js public/assets/js/dist/ 
 cp bower_components/ngDialog/js/ngDialog.min.js public/assets/js/dist/ 
 cp bower_components/angular-ui-router/release/angular-ui-router.min.js public/assets/js/dist/ 
 cp bower_components/angular-ui-date/src/date.js public/assets/js/dist/angular-date.js

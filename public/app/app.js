@@ -18,7 +18,7 @@ require.config({
       'angular-date': '../assets/js/dist/angular-date',
 
       // SERVICE 
-      'spinnerService': 'Spinner/spinnerService',
+      'spinnerService': 'Spinner/SpinnerService',
       'authService': 'Authentication/AuthService',
       'sharedServices': 'Service/sharedService'
     },
