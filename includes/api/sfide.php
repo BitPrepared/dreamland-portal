@@ -212,6 +212,8 @@ function sfide($app) {
                     $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
                 }
 
+                $_SESSION['portal']['request']['sfidaid'] = $sfida_id;
+
 			} catch ( Exception $e ) {
 		    	if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
 			    	$url_login = $url.'wp-login.php';
