@@ -1,4 +1,4 @@
-define(['angular','dreamApp'], function(angular,dreamApp){
+define(['angular','dreamApp','moment'], function(angular,dreamApp,moment){
    'use strict';
 
   var registrationController = dreamApp.controller('RegistrationController', function ($scope, $rootScope, $http, $state, ngDialog, Portal, $stateParams, $window) {
