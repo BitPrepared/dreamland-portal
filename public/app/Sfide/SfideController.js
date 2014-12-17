@@ -63,9 +63,8 @@ define(['angular','dreamApp'], function(angular,dreamApp){
         newRequest.brevettisquadriglierinuove = $scope.iscr.brevettisquadriglierinuove;
         newRequest.obiettivopunteggio = $scope.iscr.punteggiosquadriglia;
         newRequest.categoriaSfida = $scope.iscr.categoriaSfida;
+        newRequest.numeroprotagonisti = $scope.iscr.numeroprotagonisti;
         newRequest.descrizione = $scope.iscr.descrizione;
-
-          debugger;
 
         $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
           success(function(data, status, headers, config) {
