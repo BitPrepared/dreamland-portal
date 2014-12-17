@@ -294,7 +294,7 @@ function registration($app){
 
                 $wordpress = $app->config('wordpress');
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'#/home/reg/cc?code='.$token;
+				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/reg/cc?code='.$token;
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
 
 				$message =  'Ciao '.$nomeCapoReparto.",\n";
