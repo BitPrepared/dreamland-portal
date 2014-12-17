@@ -1,35 +1,32 @@
 <div class="col-md-4" ng-controller="SfideController">
 
-	<div ng-if="isReady()">
+    <div ng-if="!isSfidaSpeciale()">
 
-		<div ng-if="!isSfidaSpeciale()">
+        <legend>Iscrizione Grande Sfida</legend>
+        <h4>{{sfida.titolo}}</h4>
 
-            <legend>Iscrizione Grande Sfida</legend>
-            <h4>{{sfida.titolo}}</h4>
+       <div ng-switch="step">
+          <div ng-switch-when="1">
+             <div ng-include src="'app/Sfide/_step1.html'"></div>
+          </div>
+          <div ng-switch-when="2">
+             <div ng-include src="'app/Sfide/_step2.html'"></div>
+          </div>
+       </div>
 
-		   <div ng-switch="step">
-		      <div ng-switch-when="1">
-		         <div ng-include src="'app/Sfide/_step1.html'"></div>
-		      </div>
-		      <div ng-switch-when="2">
-		         <div ng-include src="'app/Sfide/_step2.html'"></div>
-		      </div>
-		   </div>
+    </div>
+    <div ng-if="isSfidaSpeciale()">
 
-		</div>
-		<div ng-if="isSfidaSpeciale()">
+        <legend>Iscrizione Sfida Speciale</legend>
+        <h4>{{sfida.titolo}}</h4>
 
-            <legend>Iscrizione Sfida Speciale</legend>
-            <h4>{{sfida.titolo}}</h4>
-
-            <div ng-switch="step">
-                <div ng-switch-when="1">
-                    <div ng-include src="'app/Sfide/_stepSpeciale.html'"></div>
-                </div>
+        <div ng-switch="step">
+            <div ng-switch-when="1">
+                <div ng-include src="'app/Sfide/_stepSpeciale.html'"></div>
             </div>
-		</div>
+        </div>
+    </div>
 
-	</div>
 
 </div>
 
