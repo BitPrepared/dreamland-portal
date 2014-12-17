@@ -1,20 +1,27 @@
-authenticationModule.controller('LoginController', function ($scope, $rootScope,$state, AUTH_EVENTS, AuthService) {
+define(['angular','authService'], function(angular,authenticationModule){
+   'use strict';
 
-  $scope.credentials = {
-    username: '',
-    password: ''
-  };
+  var login = authenticationModule.controller('LoginController', function ($scope, $rootScope,$state, AUTH_EVENTS, AuthService) {
 
-  $scope.login = function (credentials) {
-    
-    $scope.loginPromise = AuthService.login(credentials);
+    $scope.credentials = {
+      username: '',
+      password: ''
+    };
 
-    $scope.loginPromise.then(function () {
-      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      $state.go('home');
-    }, function () {
-      $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-    });
-  };
+    $scope.login = function (credentials) {
+      
+      $scope.loginPromise = AuthService.login(credentials);
 
-})
+      $scope.loginPromise.then(function () {
+        $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+        $state.go('home');
+      }, function () {
+        $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+      });
+    };
+
+  });
+
+  return login;
+
+});

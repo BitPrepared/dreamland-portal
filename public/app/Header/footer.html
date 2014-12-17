@@ -1,6 +1,6 @@
-<footer id="footer">
+<footer id="footer" ng-controller="HeaderController">
 	<div class="container">
 		<hr>
-		<small></small>
+		<small ng-show="isAuthenticated()">Current user level: {{getCurrentUserRole()}} </small>
 	</div>
 </footer>

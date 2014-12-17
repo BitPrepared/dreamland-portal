@@ -15,46 +15,49 @@
         
         <ul class="nav navbar-nav navbar-right">
 
-          <li ng-show="!isAutenticated()">
-            <a href="http://www.returntodreamland.it/">Home</a>
+          <li ng-show="isGuest()">
+            <a href="{{wordpressUrl}}">Home</a>
           </li>
 
-          <li ng-show="!isAutenticated()">
+          <li ng-show="isGuest()">
             <a ui-sref="home.registration">Registrazione Utente</a>
           </li>
 
-          <li ng-show="!isAutenticated()">
-            <a href="./login">Login Utente</a>
+          <li ng-show="isGuest()">
+            <a href="{{wordpressUrl}}wp-login.php">Login Utente</a>
           </li>
 
-          <li ng-show="isAutenticated()">
+          <li ng-show="isAuthenticated() && !isGuest()">
+            <a href="{{wordpressUrl}}sfide">Sfide</a>
+          </li>
+
+          <li ng-show="isAuthenticated() && !isGuest()">
             <a href="#/profilo">Profilo Utente</a>
           </li>
 
+          <li class="dropdown" ng-class="{ active: isActive('/admin') }" ng-show="isAuthorized(userRoles.administrator)">
+            <a href="#" class="dropdown-toggle"> Admin <b class="caret"></b></a>
+            <ul class="dropdown-menu">
 
-          <!--<li class="dropdown" ng-class="{ active: isActive('/admin') }" ng-show="isAuthorized(userRoles.admin)">-->
-            <!--<a href="#" class="dropdown-toggle"> Admin <b class="caret"></b></a>-->
-            <!--<ul class="dropdown-menu">-->
+              <li>
+                <a href="#/upload">Carica File</a>
+              </li>
 
-              <!--<li>-->
-                <!--<a href="#/upload">Carica File</a>-->
-              <!--</li>-->
-
-            <!--</ul>-->
-          <!--</li>-->
+            </ul>
+          </li>
 
           <li class="dropdown">
             <a href="#" class="dropdown-toggle"> Help <b class="caret"></b></a>
             <ul class="dropdown-menu">
               
               <li>
-                <a href="http://returntodreamland.agesci.org/">Sito Principale</a>
+                <a href="{{wordpressUrl}}">Sito Principale</a>
               </li>
 
               <li class="divider"></li>
 
               <li>
-                <a ng-href="http://returntodreamland.agesci.org/blog/faqs">Faq</a>
+                <a ng-href="{{wordpressUrl}}blog/faqs">Faq</a>
               </li>
 
             </ul>

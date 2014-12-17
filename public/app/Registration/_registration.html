@@ -1,3 +1,4 @@
+
 <iframe src="sink.html" name="sink" style="display:none"></iframe>
 
 <div class="col-md-4" ng-controller="RegistrationController">
@@ -34,7 +35,7 @@
 		<div class="form-group">
 			<label class="control-label" for="datan">Data Nascita</label>
 			<div class="controls">
-				<input id="datan" name="datan" type="date" class="form-control input-sm" required ng-model="datan">
+				<input ui-date="dateOptions" id="datan" class="form-control input-sm" ng-required="true" ui-date ng-model="datan">
 				<p class="help-block">Data di Nascita</p>
 			</div>
 		</div>

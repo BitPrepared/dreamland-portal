@@ -32,7 +32,8 @@ $app->hook('slim.before.dispatch', function () use ($app) {
 		$dati = array(
 			'title' => $app->config('title'),
 			'baseUrl' => $app->request->getRootUri().'/',
-			'footerText' => '&copy;2014 Return To Dreamland - AGESCI',
+			'wordpressUrl' => $app->config('wordpress')['url'],
+			'footerText' => '&copy;2014 Return To Dreamland | AGESCI',
 			'wordpress' => $app->config('wordpress')
 		);
 
@@ -55,7 +56,8 @@ $app->hook('slim.after.dispatch', function () use ($app) {
 		$dati = array(
 			'title' => $app->config('title'),
 			'baseUrl' => $app->request->getRootUri().'/',
-			'footerText' => '&copy;2014 Return To Dreamland - AGESCI',
+			'wordpressUrl' => $app->config('wordpress')['url'],
+			'footerText' => '&copy;2014 Return To Dreamland | AGESCI',
 			'wordpress' => $app->config('wordpress')
 		);
 		

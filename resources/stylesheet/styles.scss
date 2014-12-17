@@ -72,11 +72,10 @@ body {
 /* Form Validation
 -------------------------------------------------- */
 
-.ng-invalid textarea,select,input {
-  border: 1px solid $rosso_danger !important;
+textarea.ng-valid, select.ng-valid, input.ng-valid {
+  border: 1px solid $verde_agesci;
 }
 
-.ng-valid textarea,select,input {
-  border: 1px solid $verde_agesci !important;
+ textarea.ng-invalid, select.ng-invalid, input.ng-invalid {
+  border: 1px solid $rosso_danger;
 }
-

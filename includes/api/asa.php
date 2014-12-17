@@ -14,11 +14,15 @@ function asa($app){
         // Get user with ID
         $app->get('/user/current', function () use ($app) {
             if ( !isset($_SESSION['wordpress']) ) {
-                $app->response->setBody( json_encode('no') );
+                $app->halt(404,json_encode('utente non attivo'));
             } else {
+                $wordpress = $_SESSION['wordpress'];
                 $data = array(
-                    'id' => $_SESSION['user_id'],
-                    'user_login' => $_SESSION['user_info']['user_login']
+                    'id' => $wordpress['user_id'],
+                    'username' => $wordpress['user_info']['user_login'],
+                    'email' => $wordpress['user_info']['email'],
+                    'roles' => $wordpress['user_info']['roles'],
+                    'codicecensimento' => $wordpress['user_info']['codicecensimento']
                 );
                 $app->response->setBody( json_encode( $data ) );
             }

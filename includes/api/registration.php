@@ -73,7 +73,7 @@ function registration($app){
 				$obj_request = json_decode($body);
 				$email = $obj_request->email;
 				$codicecensimento = $obj_request->codicecensimento;
-				$datanascita = $obj_request->datanascita;
+				$datanascita = $obj_request->datanascita; //20080506
 
 				validate_email($app,$email);
 

@@ -1,45 +1,52 @@
-sharedServicesModule.config(function ($httpProvider) {
+define(['angular'], function(angular){
+   'use strict';
 
-    var counter = 0;
+    var spinnerServiceModule = angular.module('spinnerService',[]);
+    spinnerServiceModule.config(function ($httpProvider) {
 
-    $httpProvider.interceptors.push(
+        var counter = 0;
 
-        function ($q) {
-            return {
+        $httpProvider.interceptors.push(
 
-                // optional method
-                'request': function(config) {
-                    // todo start the spinner here
-                    $('#spinnerdiv').show();
-                    counter++;
-                    return $q.when(config);
-                },
+            function ($q) {
+                return {
 
-                // optional method
-                'requestError': function(rejection) {
-                    // do something on success
-                    counter--;
-                    if ( counter == 0 ) $('#spinnerdiv').hide();
-                    return $q.reject(rejection);
-                },
+                    // optional method
+                    'request': function(config) {
+                        // todo start the spinner here
+                        $('#spinnerdiv').show();
+                        counter++;
+                        return $q.when(config);
+                    },
 
-                // optional method
-                'response': function(response) {
-                    // do something on success
-                    counter--;
-                    if ( counter == 0 ) $('#spinnerdiv').hide();
-                    return $q.when(response);
-                },
+                    // optional method
+                    'requestError': function(rejection) {
+                        // do something on success
+                        counter--;
+                        if ( counter == 0 ) $('#spinnerdiv').hide();
+                        return $q.reject(rejection);
+                    },
 
-                'responseError': function(rejection) {
-                    // do something on error
-                    counter--;
-                    if ( counter == 0 ) $('#spinnerdiv').hide();
-                    return $q.reject(rejection);
-                }
+                    // optional method
+                    'response': function(response) {
+                        // do something on success
+                        counter--;
+                        if ( counter == 0 ) $('#spinnerdiv').hide();
+                        return $q.when(response);
+                    },
 
-            };
-        }
+                    'responseError': function(rejection) {
+                        // do something on error
+                        counter--;
+                        if ( counter == 0 ) $('#spinnerdiv').hide();
+                        return $q.reject(rejection);
+                    }
 
-    );
+                };
+            }
+
+        );
+    });
+
+  return spinnerServiceModule;
 });
