@@ -106,7 +106,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
     }
 
     $scope.isSfidaSpeciale = function(){
-      return $scope.sfida.sfidaspeciale;
+      return null != $scope.sfida && $scope.sfida.sfidaspeciale;
     }
 
   });
