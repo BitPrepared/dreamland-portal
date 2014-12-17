@@ -180,9 +180,7 @@ function sfide($app) {
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
 
-                $capoRepartoArray = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento);
-
-                $app->log->debug(var_export($capoRepartoArray));
+                $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
 
                 $capoReparto = $capoRepartoArray[0];
 
