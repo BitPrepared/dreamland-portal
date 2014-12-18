@@ -138,6 +138,7 @@ function sfide($app) {
 			    }
 			    $app->log->error($e->getMessage());
 			    $app->log->error($e->getTraceAsString());
+                $app->log->error('Sfida: '.$idsfida);
 			    $app->halt(500, json_encode('Internal error'));
 		    }
 
@@ -232,7 +233,7 @@ function sfide($app) {
 			    }
 			    $app->log->error($e->getMessage());
 			    $app->log->error($e->getTraceAsString());
-			    $app->log->error('Body richiesta : ' . $body);
+			    $app->log->error('Body richiesta : ' . $body. ' per sfida '.$sfida_id);
 			    $app->halt(500, json_encode('Internal error'));
 		    }
 
@@ -291,7 +292,7 @@ function sfide($app) {
                 }
                 $app->log->error($e->getMessage());
                 $app->log->error($e->getTraceAsString());
-                $app->log->error('Body richiesta : ' . $body);
+                $app->log->error('Body richiesta : ' . $body. ' per sfida '.$sfida_id);
                 $app->halt(500, json_encode('Internal error'));
             }
 

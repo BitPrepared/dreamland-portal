@@ -32,7 +32,7 @@ define(['angular','dreamApp','moment'], function(angular,dreamApp,moment){
       'nome' : null,
       'cognome' : null,
       'nomesq': null,
-      'ruolosq' : "Capo Sq.",
+      'ruolosq' : $scope.ruolisquadriglia[1],
       'numerosquadriglieri' : 0,
       'specialitasquadriglieri' : 0,
       'brevettisquadriglieri' : 0,
@@ -100,7 +100,7 @@ define(['angular','dreamApp','moment'], function(angular,dreamApp,moment){
         newRequest.email = $scope.email;
         newRequest.codicecensimento = $scope.codcens;
         var datanascita = moment($scope.datan);
-        newRequest.datanascita = datanascita.format('YYYYMMDD');
+        newRequest.datanascita = $datanascita.format('YYYYMMDD');
 
         $rootScope.remoteLoad = $http.post('./api/registrazione/step1', newRequest).
           success(function(data, status, headers, config) {
