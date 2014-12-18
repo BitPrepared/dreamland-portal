@@ -352,8 +352,8 @@ function registration($app){
                 } catch( Requests_Exception_HTTP_500 $e) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
-                    $app->log->error(var_export($e,true));
-//                    $app->log->error(var_export($e->body,true));
+//                    $app->log->error(var_export($e,true));
+                    $app->log->error(var_export($e->getData()->body,true));
                     throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
                 } catch ( Requests_Exception_HTTP_404 $e ) {
                     $app->log->error('Wordpress code : '.$e->getCode());
@@ -362,7 +362,7 @@ function registration($app){
                 } catch ( Requests_Exception_HTTP_403 $e ) {
                      $app->log->error('Wordpress code : '.$e->getCode());
                      $app->log->error($e->getTraceAsString());
-                     $app->log->error(var_export($e->body,true));
+                     $app->log->error(var_export($e->getData()->body,true));
                      throw new Exception($e->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
                 }
 
