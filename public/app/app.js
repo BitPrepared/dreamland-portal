@@ -7,6 +7,10 @@ require.config({
       'moment' : '../assets/js/dist/moment-with-locales.min',
       'underscore': '../assets/js/dist/underscore-min',
 
+      //JQUERY
+      'jquery' : '../assets/js/dist/jquery.min',
+      'jquery-ui' : '../assets/js/dist/jquery-ui.min',
+
       // ANGULARJS
       'ngDialog': '../assets/js/dist/ngDialog.min',
       'angular-ui-router': '../assets/js/dist/angular-ui-router.min',
@@ -61,7 +65,7 @@ require.config({
 
 // Start the main app logic.
 requirejs([
-  'dist/jquery.min', 'dist/jquery-ui.min', 'angular', 'underscore', 
+  'jquery', 'jquery-ui', 'angular', 'underscore',
   'dreamApp', 
   'Portal/PortalService',
   'ApplicationController',
