@@ -279,8 +279,10 @@ function sfide($app) {
                 $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
 
                 if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
-                    $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
+                    $app->log->error('Invio mail capo reparto di de-iscrizione sq. sfida fallita');
                 }
+
+                $app->log->info('squadriglia di '. $codicecensimento .' di-siscritta da '.$sfida_id);
 
             } catch ( Exception $e ) {
                 if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
