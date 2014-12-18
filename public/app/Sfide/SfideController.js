@@ -49,7 +49,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
     $scope.step = angular.isDefined($stateParams.step) ? $stateParams.step : 1;
 
     $scope.caratteriMancanti = function() {
-        return $scope.iscr.descrizione != undefined ? 50 - $scope.iscr.descrizione.length : 50;
+        return 50 - angular.element('#descrizione').val().length;
     }
 
     $scope.setStep = function(step){
