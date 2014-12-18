@@ -1,9 +1,8 @@
 'use strict';
 
 require.config({
-    baseUrl: 'app/', //assets/js/dist/
+    baseUrl: 'app/',
     paths: {
-      'dist' : '../assets/js/dist',
       'angular': '../assets/js/dist/angular.min',
       'moment' : '../assets/js/dist/moment-with-locales.min',
       'underscore': '../assets/js/dist/underscore-min',

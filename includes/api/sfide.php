@@ -195,21 +195,23 @@ function sfide($app) {
                 $message .= 'La tua squadriglia '. $squadriglia->nome .' ha richiesto di partecipare ad una sfida su Dreamland'."\n";
                 $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
                 if ( $drm_iscrizione_sfida->sfidaspeciale ) {
-                    $message .= 'Si tratta di una stida speciale'."\n";
+                    $message .= 'Si tratta di una stifa speciale'."\n";
                 } else {
-                    $message .= 'Si tratta di una grande impresa di tipo '.$drm_iscrizione_sfida->tipo."\n";
-                    $message .= 'Obiettivi Specialita : '.$drm_iscrizione_sfida->obiettivospecialita."\n";
-                    $message .= 'Obiettivi Brevetti : '.$drm_iscrizione_sfida->obiettivobrevetti."\n";
-                    $message .= 'Descrizione : '.$drm_iscrizione_sfida->descrizione."\n";
+                    $message .= 'Si tratta di una grande sfida di tipo '.$drm_iscrizione_sfida->tipo."\n";
+
+                    if ( $drm_iscrizione_sfida->tipo == "impresa" ) {
+                        $message .= 'Numero specialita che vogliono conquistare : ' . $drm_iscrizione_sfida->obiettivospecialita . "\n";
+                        $message .= 'Numero di brevetti che vogliono conquistare : ' . $drm_iscrizione_sfida->obiettivobrevetti . "\n";
+                        $message .= 'Descrizione : ' . $drm_iscrizione_sfida->descrizione . "\n";
+                    } else {
+                        $message .= 'Ricordiamo che in questo caso dovrete assegnare alla vostra squadriglia una missione da sogno riguardante la categoria scelta.'."\n";
+                    }
                     $message .= 'Categoria Sfida : '.$drm_iscrizione_sfida->categoriasfida."\n";
                 }
 
                 $message .= 'Saranno protagonisti in : '.$drm_iscrizione_sfida->numeroprotagonisti."\n";
                 $message .= ''."\n";
 
-                if ( $drm_iscrizione_sfida->tipo == 'missione' ){
-                    $message .= 'La sfida sarà una missione, ricordati di fornigliela!'."\n";
-                }
                 $message .= ''."\n";
 
                 $message .= 'Ulteriori dettagli qui: '.$drm_iscrizione_sfida->permalink."\n";
