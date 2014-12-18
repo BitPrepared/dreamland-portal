@@ -51,8 +51,9 @@
 			<div class="form-group">
 				<label class="control-label" for="descrizione">Cosa vogliamo fare</label>
 				<div class="controls">
-					<textarea id="descrizione" name="descrizione" class="form-control" ng-model="iscr.descrizione" placeholder="minimo 200 caratteri" ng-minlength="200" rows=6 required></textarea>
+					<textarea id="descrizione" name="descrizione" class="form-control" ng-model="iscr.descrizione" placeholder="minimo 50 caratteri" ng-minlength="50" rows=6 required></textarea>
                     <span class="e" ng-show="iscr.descrizione.$invalid">Testo corto, 200 caratteri minimo</span>
+                    Mancano : {{caratteriMancanti()}}
                 </div>
 			</div>
 
@@ -89,7 +90,7 @@
 			</span>
 		</h3>
 
-		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-if="iscr.punteggiosquadriglia > 0 && iscr.descrizione != undefined" class="animate-if">Partecipa</button>
+		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-show="iscr.punteggiosquadriglia > 0 && ( isMissione() || iscr.descrizione != undefined )" class="animate-if">Partecipa</button>
 		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" ng-click="setStep(1)">Prev</button>
 
 	</form>

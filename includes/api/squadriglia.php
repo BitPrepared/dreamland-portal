@@ -12,7 +12,7 @@ function squadriglia($app) {
 		$app->get('/' , function() use ($app){
 
 			$app->response->headers->set('Content-Type', 'application/json');
-
+            $app->response->setStatus(500);
 			try {
 
 			    if ( !isset($_SESSION['wordpress']) ) {
@@ -36,6 +36,7 @@ function squadriglia($app) {
 			    	);
 
 			    	$app->response->setBody( json_encode( $x ) );
+                    $app->response->setStatus(200);
 			    } else {
                     $app->log->info('Squadriglia non trovata x codcens: '.$codicecensimento);
 			    	$app->halt(404, json_encode('Squadriglia non trovata x codcens: '.$codicecensimento));
@@ -55,6 +56,7 @@ function squadriglia($app) {
 		$app->post('/' , function() use ($app){
 			
 			$app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setStatus(500);
 			$body = $app->request->getBody();
 
 			try {
@@ -84,6 +86,7 @@ function squadriglia($app) {
 				    $id = R::store($squadriglia);
 
 				    $app->log->info('Creata squadriglia : '.'['.$id.'] -> '.$body);
+                    $app->response->setStatus(200);
 			    } else {
 					$app->halt(412, json_encode('Squadriglia gia presente'));
 			    }
@@ -103,6 +106,7 @@ function squadriglia($app) {
 		$app->put('/' , function() use ($app){
 			
 			$app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setStatus(500);
 			$body = $app->request->getBody();
 
 			try {
@@ -133,6 +137,7 @@ function squadriglia($app) {
 
 				    R::store($squadriglia);
 
+                    $app->response->setStatus(200);
 				    $app->log->info('Aggiornata squadriglia : '.'['.$squadriglia->id.'] -> '.$body);
 			    } else {
                     $app->log->warn('Squadriglia non trovata x codcens: '.$codicecensimento);

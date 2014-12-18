@@ -4,7 +4,6 @@ define(['angular','dreamApp'], function(angular,dreamApp){
   var sfideController = dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, $state, ngDialog, $stateParams, Portal, $window) {
 
     $scope.sfidaid = angular.isDefined($stateParams.id) ? $stateParams.id : -1;
-
     $scope.squadriglia = null;
     $scope.sfida = null;
 
@@ -48,6 +47,10 @@ define(['angular','dreamApp'], function(angular,dreamApp){
     };
 
     $scope.step = angular.isDefined($stateParams.step) ? $stateParams.step : 1;
+
+    $scope.caratteriMancanti = function() {
+        return iscr.descrizione != undefined ? 50 - iscr.descrizione.length : 50;
+    }
 
     $scope.setStep = function(step){
       $scope.step = step;

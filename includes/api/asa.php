@@ -13,6 +13,7 @@ function asa($app){
 
         // Get user with ID
         $app->get('/user/current', function () use ($app) {
+            $app->response->setStatus(500);
             if ( !isset($_SESSION['wordpress']) ) {
                 $app->halt(404,json_encode('utente non attivo'));
             } else {
@@ -25,6 +26,7 @@ function asa($app){
                     'codicecensimento' => $wordpress['user_info']['codicecensimento']
                 );
                 $app->response->setBody( json_encode( $data ) );
+                $app->response->setStatus(200);
             }
         });
 

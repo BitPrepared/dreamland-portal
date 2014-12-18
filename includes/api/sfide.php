@@ -11,7 +11,8 @@ function sfide($app) {
 	$app->group('/sfide', function () use ($app) {
 		
 		$app->get('/:id', function ($sfida_id) use ($app) {
-
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
 			try {
 
 			    if ( !isset($_SESSION['wordpress']) ) {
@@ -62,6 +63,8 @@ function sfide($app) {
 
 	    $app->get('/iscrizione/:id', function ($idsfida) use ($app) {
 
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'text/html');
 		    try {
 
 			    if ( !isset($_SESSION['wordpress']) ) {
@@ -144,9 +147,12 @@ function sfide($app) {
 
 		$app->put('/iscrizione/:id' , function($sfida_id) use ($app){
 
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
+
 			$url = $app->config('wordpress')['url'];
 			$body = $app->request->getBody();
-			
+
 			try {
 
 			    if ( !isset($_SESSION['wordpress']) ) {
@@ -180,9 +186,7 @@ function sfide($app) {
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
 
-                $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
-
-                $capoReparto = $capoRepartoArray[0];
+                $capoReparto = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento)[0];
 
                 $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
 
@@ -234,6 +238,9 @@ function sfide($app) {
 		});
 
         $app->delete('/iscrizione/:id' , function($sfida_id) use ($app){
+
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
 
             $url = $app->config('wordpress')['url'];
             $body = $app->request->getBody();

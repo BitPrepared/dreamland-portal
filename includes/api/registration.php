@@ -14,6 +14,7 @@ function registration($app){
     	// Step Registrazione Capi Reparto
 		$app->get('/info/:token', function ($token) use ($app) {
 
+            $app->response->setStatus(500);
 			$app->response->headers->set('Content-Type', 'application/json');
 			try{
 				
@@ -52,6 +53,7 @@ function registration($app){
 				$_SESSION['portalCodiceCensimento'] = $codicecensimento;
 
 				$app->response->setBody( json_encode($info) );
+                $app->response->setStatus(200);
 
     		} catch(Exception $e) {
 				$app->log->error($e->getMessage());
@@ -66,7 +68,8 @@ function registration($app){
     	// Step Registrazione
         $app->post('/step1', function () use ($app) {
 
-        	$app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
         	try{
 
 				$body = $app->request->getBody();
@@ -149,8 +152,8 @@ function registration($app){
 					}
 
 					// json_encode(array('email' => $email,'codcens' => $codicecensimento))
-					$app->response->setBody( json_encode('ok') );
-
+					$app->response->setBody( json_encode('ok') ); // FIXME: verificare se serve
+                    $app->response->setStatus(201);
 				}
 
 			} catch(Exception $e) {
@@ -169,7 +172,8 @@ function registration($app){
 		// Step Registrazione2
 		$app->post('/step2/:token', function ($token) use ($app) {
 
-			$app->response->headers->set('Content-Type', 'application/json');
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
 			try{
 
 				// devo cercare $token nel db e recuperare le varie informazioni
@@ -313,63 +317,60 @@ function registration($app){
                 $app->log->debug('Mi connettero a '.$url);
 
                 $newUserRequest = array( 
-						'username' => $codicecensimento,
-						'password' => 'DA GENERARE RANDOM',
-						'first_name' => 'Sq. '.$nomesquadriglia,
-						'last_name' => 'Gruppo '.$gruppoNome,
-						'nickname' => 'Sq. '.$nomesquadriglia. ' Gruppo '.$gruppoNome,
-						'email' => $email,
-						'meta' => array(
-                            'nome' => $nome,
-                            'cognome' => $cognome,
-							'squadriglia' => $nomesquadriglia,
-							'group' => $gruppo,
-							'groupDisplay' => $gruppoNome,
-							'zone' => $zona,
-							'zoneDisplay' => $zonaNome,
-							'region' => $regione,
-							'regionDisplay' => $regioneNome,
-                            'regionShort' => $regioneNomeCorto,
-							'codicecensimento' => $codicecensimento,
-							'numerocomponenti' => $ncomponenti,
-							'nspecialita' => $nspecialita,
-							'nbrevetti' => $nbrevetti,
-							'punteggio' => $punteggiosquadriglia,
-							'ruolocensimento' => 'eg'
-						)
-					);
+                    'username' => $codicecensimento,
+                    'password' => 'DA GENERARE RANDOM',
+                    'first_name' => 'Sq. '.$nomesquadriglia,
+                    'last_name' => 'Gruppo '.$gruppoNome,
+                    'nickname' => 'Sq. '.$nomesquadriglia. ' Gruppo '.$gruppoNome,
+                    'email' => $email,
+                    'meta' => array(
+                        'nome' => $nome,
+                        'cognome' => $cognome,
+                        'squadriglia' => $nomesquadriglia,
+                        'group' => $gruppo,
+                        'groupDisplay' => $gruppoNome,
+                        'zone' => $zona,
+                        'zoneDisplay' => $zonaNome,
+                        'region' => $regione,
+                        'regionDisplay' => $regioneNome,
+                        'regionShort' => $regioneNomeCorto,
+                        'codicecensimento' => $codicecensimento,
+                        'numerocomponenti' => $ncomponenti,
+                        'nspecialita' => $nspecialita,
+                        'nbrevetti' => $nbrevetti,
+                        'punteggio' => $punteggiosquadriglia,
+                        'ruolocensimento' => 'eg'
+                    )
+                );
 
-                 try {
-					
-				 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                try {
+
+                    $wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
                     $wapi->setRequestOption('timeout',30);
-				 	$newUser = $wapi->users->create( $newUserRequest );
+                    $newUser = $wapi->users->create( $newUserRequest );
 
-				 } catch( Requests_Exception_HTTP_500 $e) {
-				 	$app->log->error('Wordpress code : '.$e->getCode());
-				 	$app->log->error($e->getTraceAsString());
+                } catch( Requests_Exception_HTTP_500 $e) {
+                    $app->log->error('Wordpress code : '.$e->getCode());
+                    $app->log->error($e->getTraceAsString());
                     $app->log->error(var_export($e->body,true));
-				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
-				 } catch ( Requests_Exception_HTTP_404 $e ) {
-				 	$app->log->error('Wordpress code : '.$e->getCode());
-				 	$app->log->error($e->getTraceAsString());
-				 	throw new Exception($e->getMessage(), Errori::WORDPRESS_NOT_FOUND);
-                 } catch ( Requests_Exception_HTTP_403 $e ) {
+                    throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
+                } catch ( Requests_Exception_HTTP_404 $e ) {
+                    $app->log->error('Wordpress code : '.$e->getCode());
+                    $app->log->error($e->getTraceAsString());
+                    throw new Exception($e->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+                } catch ( Requests_Exception_HTTP_403 $e ) {
                      $app->log->error('Wordpress code : '.$e->getCode());
                      $app->log->error($e->getTraceAsString());
                      $app->log->error(var_export($e->body,true));
                      throw new Exception($e->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
-                 }
+                }
 
-				 $app->log->info('Creato utente in wordpress '.$newUser->ID);
-				 $findToken->completato = true;
-				 R::store($findToken);
-				 $app->response->setBody( json_encode('ok') );
+                $app->log->info('Creato utente in wordpress '.$newUser->ID);
+                $findToken->completato = true;
+                R::store($findToken);
 
-//                $_SESSION['portal'] = array();
-//                $_SESSION['portal']['request'] = $newUserRequest;
-//                $findToken->completato = true;
-//                R::store($findToken);
+                $app->response->setBody( json_encode('ok') );
+                $app->response->setStatus(200);
 
                 $app->log->info('Completata registrazione token '.$token);
 
@@ -383,13 +384,12 @@ function registration($app){
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
-//			$app->response->setBody( json_encode($url.'/portal/pk') );
-
         });
 
 		// Step Registrazione Capi Reparto
 		$app->post('/stepc/:token', function ($token) use ($app) {
 
+            $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
 			try{
 
@@ -467,6 +467,8 @@ function registration($app){
                     $findToken->codicecensimento = $codicecensimento;
 				 	R::store($findToken);
 
+                     $app->response->setStatus(200);
+
 				 } catch( Requests_Exception_HTTP_500 $e) {
 				 	$app->log->error('Wordpress code : '.$e->getCode());
 				 	$app->log->error($e->getTraceAsString());
@@ -477,14 +479,6 @@ function registration($app){
 				 	throw new Exception($e2->getMessage(), Errori::WORDPRESS_NOT_FOUND);
 				 }
 
-//                $_SESSION['portal'] = array();
-//                $_SESSION['portal']['request'] = $newUserRequest;
-//
-//                $findToken->codicecensimento = $codicecensimento;
-//                $findToken->completato = true;
-//                R::store($findToken);
-//                $app->log->info('Completata registrazione token '.$token);
-
     		} catch(Exception $e) {
 				$app->log->error($e->getMessage());
 				$testo = 'Dati Non Validi';
@@ -493,10 +487,6 @@ function registration($app){
 				else $app->log->error($e->getTraceAsString());
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
-
-//            $app->redirect($app->request->getRootUri().'/page/success_iscrizione');
-
-//            $app->response->setBody( json_encode($url.'/portal/pk') );
 
         });
 
