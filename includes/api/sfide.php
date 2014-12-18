@@ -45,6 +45,7 @@ function sfide($app) {
 					);
 
 					$app->response->setBody( json_encode( $x ) );
+                    $app->response->setStatus(200);
 				} else {
 			    	$app->halt(404, json_encode('Sfida non trovata'));
 			    }
