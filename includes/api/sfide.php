@@ -195,12 +195,12 @@ function sfide($app) {
                 $message .= 'La tua squadriglia '. $squadriglia->nome .' ha richiesto di partecipare ad una sfida su Dreamland'."\n";
                 $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
                 if ( $drm_iscrizione_sfida->sfidaspeciale ) {
-                    $message .= 'Si tratta di una stifa speciale'."\n";
+                    $message .= 'Si tratta di una sfida speciale'."\n";
                 } else {
                     $message .= 'Si tratta di una grande sfida di tipo '.$drm_iscrizione_sfida->tipo."\n";
 
                     if ( $drm_iscrizione_sfida->tipo == "impresa" ) {
-                        $message .= 'Numero specialita che vogliono conquistare : ' . $drm_iscrizione_sfida->obiettivospecialita . "\n";
+                        $message .= 'Numero specialità che vogliono conquistare : ' . $drm_iscrizione_sfida->obiettivospecialita . "\n";
                         $message .= 'Numero di brevetti che vogliono conquistare : ' . $drm_iscrizione_sfida->obiettivobrevetti . "\n";
                         $message .= 'Descrizione : ' . $drm_iscrizione_sfida->descrizione . "\n";
                     } else {
