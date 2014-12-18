@@ -1,4 +1,4 @@
-define(['angular','dreamApp'], function(angular,dreamApp){
+define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
    'use strict';
 
   var sfideController = dreamApp.controller('SfideController', function ($scope, $q, $rootScope, $http, $state, ngDialog, $stateParams, Portal, $window) {
@@ -17,7 +17,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
 
       Portal.loadSfida($scope.sfidaid,function(sfida){
         $scope.sfida = sfida;
-        $scope.iscr.categoriaSfida = sfida.categoria;
+        $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
         $scope.update();
       },function(errore){
         $scope.currentError = errore;
@@ -49,7 +49,8 @@ define(['angular','dreamApp'], function(angular,dreamApp){
     $scope.step = angular.isDefined($stateParams.step) ? $stateParams.step : 1;
 
     $scope.caratteriMancanti = function() {
-        return 50 - angular.element('#descrizione').val().length;
+        var scritti = angular.element('#descrizione').val().length;
+        return 50 - scritti > 0 ? 50 - scritti : 0 ;
     }
 
     $scope.setStep = function(step){
