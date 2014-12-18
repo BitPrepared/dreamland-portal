@@ -17,7 +17,12 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
 
       Portal.loadSfida($scope.sfidaid,function(sfida){
         $scope.sfida = sfida;
-        $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
+        if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
+            $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
+        } else { //missione
+            $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
+        }
+
         $scope.update();
       },function(errore){
         $scope.currentError = errore;
