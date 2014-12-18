@@ -295,6 +295,7 @@ function registration($app){
 
                 $app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
 
+                //FIXME controllare che non esista gia questo utente
 
                 $wordpress = $app->config('wordpress');
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';

@@ -32,7 +32,7 @@
 		<div class="form-group">
 			<label class="control-label" for="numerosquadriglieri">Numero componenti squadriglia</label>
 			<div class="controls">
-				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.numerosquadriglieri">
+				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="reg.numerosquadriglieri">
 			</div>
 		</div>
 
@@ -40,7 +40,7 @@
 		<div class="form-group">
 			<label class="control-label" for="specialitasquadriglieri">Numero totale Specialit&agrave; possedute dalla Sq</label>
 			<div class="controls">
-				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.specialitasquadriglieri">
+				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="reg.specialitasquadriglieri">
 			</div>
 		</div>
 
@@ -48,7 +48,7 @@
 		<div class="form-group">
 			<label class="control-label" for="brevettisquadriglieri">Numero totale Brevetti posseduti dalla Sq</label>
 			<div class="controls">
-				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" ng-model="reg.brevettisquadriglieri">
+				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="reg.brevettisquadriglieri">
 			</div>
 		</div>
 
@@ -56,7 +56,7 @@
 		<div class="form-group">
 			<label class="control-label" for="specialitadisquadriglia">Specialit&agrave; (anno scout precedente) di Squadriglia</label>
 			<div class="controls">
-				<input type="checkbox" ng-model="reg.specialitadisquadriglia" ng-change="update()">
+				<input id="specialitadisquadriglia" type="checkbox" ng-model="reg.specialitadisquadriglia" ng-change="update()">
 				
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 		<div class="form-group">
 			<label class="control-label" for="rinnovospecialitadisquadriglia">Rinnovato (anno scout precedente) specialit&agrave; di Squadriglia</label>
 			<div class="controls">
-				<input type="checkbox" ng-model="reg.rinnovospecialitadisquadriglia" ng-change="update()">
+				<input id="rinnovospecialitadisquadriglia" type="checkbox" ng-model="reg.rinnovospecialitadisquadriglia" ng-change="update()">
 			</div>
 		</div>
 
