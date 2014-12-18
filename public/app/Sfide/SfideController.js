@@ -17,10 +17,14 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
 
       Portal.loadSfida($scope.sfidaid,function(sfida){
         $scope.sfida = sfida;
-        if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
-            $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
-        } else { //missione
-            $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
+        if ( !sfida.sfidaspeciale ) {
+            if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
+                $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
+            } else { //missione
+                $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
+            }
+        } else {
+            $scope.iscr.categoriaSfida = _.find($scope.categoriaMissioneSpeciale, function(cat){ return sfida.categoria.desc == cat.desc; });
         }
 
         $scope.update();
@@ -39,6 +43,8 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     $scope.tipiSfida = ['missione','impresa'];
     $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
     $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
+    $scope.categoriaMissioneSpeciale = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} , {'desc' : 'Altro', 'code' : 3} ];
+
 
     $scope.iscr = {
       tipo : $scope.tipiSfida[1],
