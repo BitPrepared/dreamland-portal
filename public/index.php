@@ -39,7 +39,11 @@ $username = $config['db']['user'];
 $password = $config['db']['password'];
 
 R::setup($dsn,$username,$password);
-R::freeze(true);
+if ( DEBUG ) {
+    R::freeze(false);
+} else {
+    R::freeze(true);
+}
 
 $app = new \Slim\Slim(array(
 	'mode' => $config['enviroment']
