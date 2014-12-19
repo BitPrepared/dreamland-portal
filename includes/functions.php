@@ -31,7 +31,6 @@ function validate_email($app,$email){
 	}
 }
 
-
 // route middleware for simple API authentication (mcrypt)
 function authenticate(\Slim\Route $route) {
     $app = \Slim\Slim::getInstance();
@@ -148,7 +147,11 @@ function findDatiRagazzo($codicecensimento) {
 function findDatiCapoReparto($regione,$gruppo,$legame = null) {
     $info_cc = array();
     if ( null != $legame ) {
-        $findMyCCs = R::findAll('registration','regione = ? and gruppo = ? and type = ? and legame = ?',array($regione,$gruppo,'CC',$legame));
+
+        $legameBean = R::findOne('legami', ' codicecensimento = ? ', array($legame));
+        $emailCapoReparto = $legameBean->emailcaporeparto;
+
+        $findMyCCs = R::findAll('registration','regione = ? and gruppo = ? and type = ? and email = ? ',array($regione,$gruppo,'CC',$emailCapoReparto));
         if ( null != $findMyCCs ) {
             $i = 0;
             foreach ($findMyCCs as $findMyCC) {
@@ -186,4 +189,11 @@ function findDatiCapoReparto($regione,$gruppo,$legame = null) {
         }
     }
 	return $info_cc;
+}
+
+function legaCapoRepartoToRagazzo($emailcaporeparto,$codiceRagazzo){
+    $legami = R::dispense('legami');
+    $legami->emailcaporeparto = $emailcaporeparto;
+    $legami->codicecensimento = $codiceRagazzo;
+    R::store($legami);
 }

@@ -84,7 +84,7 @@ function registration($app){
 					$app->log->info('Ragazzo di san marino : '.$email);
 					$app->response->setBody( json_encode(array('message' => 'verrai contattato quanto prima all\'email '.$email)) );
 
-					// DA FARE
+					//FIXME DA FARE
 
 				} else {
 
@@ -94,19 +94,19 @@ function registration($app){
 						throw new Exception('Codice censimento '.$codicecensimento.' e Data Nascita : '.$datanascita .' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
 					}
 
-					$mailgun = $app->config('mailgun');
-					$mailgun_domain = $mailgun['domain'];
-					$mailgun_key = $mailgun['key'];
-					$mgClient = new Mailgun($mailgun_key);
-                    $mgClient->sendMessage($mailgun_domain,
-						array(
-							'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
-                            'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
-                            'subject' => 'Richiesta iscrizione',
-                            'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
-							'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
-							'o:tag'   => array('Registrazione','step1'))
-						);
+//					$mailgun = $app->config('mailgun');
+//					$mailgun_domain = $mailgun['domain'];
+//					$mailgun_key = $mailgun['key'];
+//					$mgClient = new Mailgun($mailgun_key);
+//                    $mgClient->sendMessage($mailgun_domain,
+//						array(
+//							'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
+//                            'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
+//                            'subject' => 'Richiesta iscrizione',
+//                            'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
+//							'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
+//							'o:tag'   => array('Registrazione','step1'))
+//						);
 
                     // RICERCA REGISTRAZIONE PRECEDENTE E/G
 					$token = '';
@@ -115,6 +115,9 @@ function registration($app){
 						$token = $findToken['token'];
 						if ( $findToken['completato'] ) {
 							$app->log->info('Utente gia registrato');
+
+                            //FIXME : deve andare in una pagina con spiegato l'errore
+
 							$app->redirect('/error');
 						}
 					} else {
@@ -280,6 +283,7 @@ function registration($app){
                     $drm_registration = R::dispense('registration');
                     // $drm_registration->token = md5(uniqid(rand(), true));
                     $drm_registration->token = $token;
+                    $drm_registration->completato = false;
                 }
 
                 $drm_registration->email = $emailCapoReparto;
@@ -289,15 +293,22 @@ function registration($app){
                 $drm_registration->regione = $regione;
                 $drm_registration->zona = $zona;
                 $drm_registration->gruppo = $gruppo;
-                $drm_registration->legame = $codicecensimento;
-                $drm_registration->completato = false;
+                $drm_registration->legame = null; //ex codicecensimento
                 $drm_registration_id = R::store($drm_registration);
+
+                legaCapoRepartoToRagazzo($emailCapoReparto,$codicecensimento);
 
                 $app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
 
+                $wordpress = $app->config('wordpress');
+                $url = $wordpress['url'].'wp-json';
+                $app->log->debug('Mi connettero a '.$url);
+
+                $wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
+                $wapi->setRequestOption('timeout',30);
+
                 //FIXME controllare che non esista gia questo utente
 
-                $wordpress = $app->config('wordpress');
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
 				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/reg/cc?code='.$token;
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
@@ -313,9 +324,6 @@ function registration($app){
                     $app->log->error('Invio mail capo reparto fallita');
 					$app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
 				}
-
-                $url = $wordpress['url'].'wp-json';
-                $app->log->debug('Mi connettero a '.$url);
 
                 $newUserRequest = array( 
                     'username' => $codicecensimento,
@@ -345,11 +353,7 @@ function registration($app){
                 );
 
                 try {
-
-                    $wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
-                    $wapi->setRequestOption('timeout',30);
                     $newUser = $wapi->users->create( $newUserRequest );
-
                 } catch( Requests_Exception_HTTP_500 $e) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
