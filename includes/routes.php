@@ -25,6 +25,8 @@ $app->get('/home', 'authenticate', function () use ($app) {
 		$app->redirect($app->request->getRootUri().'/');
 	}
 
+    $dati = array();
+
 	$wordpress = $_SESSION['wordpress'];
 	$dati['logout_url'] = $wordpress['logout_url'];
 
@@ -45,39 +47,13 @@ $app->get('/home', 'authenticate', function () use ($app) {
 		$dati['codicecensimento'] = $codicecensimento;
 
 	} else {
-		// ruolo principale
-		$ruolo = $wordpress['user_info']['roles'][0];
-
-		$codicecensimento = intval('1142792');
-		$find = R::findOne('asa_anagrafica_eg',' codicesocio = ?',array($codicecensimento));
-		if ( $find != null ) {
-			$dati['nome'] = $find['nome'];
-			$dati['cognome'] = $find['cognome'];
-			$gruppo = $find['ord'];
-			$findcc = R::findOne('asa_capireparto_ruolo',' ord = ?',array($gruppo));
-			if ( null != $findcc ) {
-				$codiceSocioCapoReparto = $findcc['codicesocio'];
-				$findccAnagrafica = R::findOne('asa_anagrafica_capireparto',' codicesocio = ?',array($codiceSocioCapoReparto));
-				if ( null != $findccAnagrafica) {
-					$dati['ccnome'] = $findccAnagrafica['nome'];
-					$dati['cccognome'] = $findccAnagrafica['cognome'];
-					$findccEmail = R::findOne('asa_capireparto_email',' codicesocio = ? and tipo = ?',array($codiceSocioCapoReparto,'E'));
-					if ( null != $findccEmail ) {
-						$dati['ccemail'] = $findccEmail['recapito'];
-					} else {
-						$dati['ccemail'] = '';
-					}
-				} else {
-					$app->log->warn('Attenzione ragazzo '.$codicecensimento.' senza capo reparto censito');
-					$dati['ccnome'] = '';
-					$dati['cccognome'] = '';
-					$dati['ccemail'] = '';
-				}
-
-			}
-
-		} 
-
+        if ( isset($wordpress['user_info']['roles ']) ) {
+            $ruolo = $wordpress['user_info']['roles '][0];
+        } else {
+            $app->log->error('Sistuazione anomala, distruggo la sessione ' . var_export($_SESSION, true));
+            session_destroy();
+            $app->redirect('/');
+        }
 	}
 
 	$app->render('home/'.$ruolo.'.html', $dati);

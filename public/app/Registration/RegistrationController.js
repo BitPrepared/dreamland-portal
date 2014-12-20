@@ -102,7 +102,7 @@ define(['angular','dreamApp','moment'], function(angular,dreamApp,moment){
         var datanascita = moment($scope.datan);
         newRequest.datanascita = datanascita.format('YYYYMMDD');
 
-        $rootScope.remoteLoad = $http.post('./api/registrazione/step1', newRequest).
+        $http.post('./api/registrazione/step1', newRequest).
           success(function(data, status, headers, config) {
             $state.go('home.registration.ok',{ msg : 'riceverai in breve tempo una mail per proseguire con la registrazione'},{reload : true});
           }).

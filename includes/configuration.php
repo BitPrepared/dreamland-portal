@@ -10,6 +10,8 @@ function configure_slim($config){
 			$handlers[] = new \Monolog\Handler\HipChatHandler($hipchat['token'], $hipchat['room'], $hipchat['name'], $hipchat['notify'], \Monolog\Logger::INFO, $hipchat['bubble'], $hipchat['useSSL']);
 		}
         $streamToFile = new \Monolog\Handler\StreamHandler($config['log']['filename']);
+
+        //@See https://github.com/Seldaek/monolog/blob/master/doc/usage.md
         // DEFAULT: "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
         $output = "[%datetime%] [%level_name%] [%extra%] : %message% %context%\n";
         $formatter = new Monolog\Formatter\LineFormatter($output);

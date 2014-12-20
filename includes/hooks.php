@@ -29,13 +29,21 @@ $app->hook('slim.before.dispatch', function () use ($app) {
 
 	if ( !$app->request->isAjax() && !$app->request->isXhr() && !$api ) {
 
-		$dati = array(
+        $dati = array();
+        $an = $app->config('google');
+        if ( !empty($an['analytics']) && !DEBUG ) {
+            $dati['gaAnalyticsCode'] = $an['analytics'];
+        } else {
+            $dati['gaAnalyticsCode'] = null;
+        }
+
+		$dati = array_merge($dati,array(
 			'title' => $app->config('title'),
 			'baseUrl' => $app->request->getRootUri().'/',
 			'wordpressUrl' => $app->config('wordpress')['url'],
 			'footerText' => '&copy;2014 Return To Dreamland | AGESCI',
 			'wordpress' => $app->config('wordpress')
-		);
+		));
 
 		try {
 			$app->render('header.php',$dati);

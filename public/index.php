@@ -67,7 +67,8 @@ $app->config(array(
     'wordpress' => $config['wordpress'],
     'email_sender' => $config['email_sender'],
     'smtp' => $config['smtp'],
-    'sfide' => $config['sfide']
+    'sfide' => $config['sfide'],
+    'google' => $config['google']
 ));
 
 // Only invoked if mode is "production"
