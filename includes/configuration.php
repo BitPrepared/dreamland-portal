@@ -9,9 +9,18 @@ function configure_slim($config){
 			$hipchat = $config['log']['hipchat'];
 			$handlers[] = new \Monolog\Handler\HipChatHandler($hipchat['token'], $hipchat['room'], $hipchat['name'], $hipchat['notify'], \Monolog\Logger::INFO, $hipchat['bubble'], $hipchat['useSSL']);
 		}
-		$handlers[] = new \Monolog\Handler\StreamHandler($config['log']['filename']);
+        $streamToFile = new \Monolog\Handler\StreamHandler($config['log']['filename']);
+        // DEFAULT: "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
+        $output = "[%datetime%] [%level_name%] [%extra%] : %message% %context%\n";
+        $formatter = new Monolog\Formatter\LineFormatter($output);
+        $streamToFile->setFormatter($formatter);
+		$handlers[] = $streamToFile;
 		$logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
-		    'handlers' => $handlers
+		    'handlers' => $handlers,
+            'processors' => array(
+                new Monolog\Processor\UidProcessor(),
+                new Monolog\Processor\WebProcessor($_SERVER),
+            )
 		));
 		switch ($config['log']['level']) {
 			case "EMERGENCY" 	:

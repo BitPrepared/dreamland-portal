@@ -115,10 +115,7 @@ function registration($app){
 						$token = $findToken['token'];
 						if ( $findToken['completato'] ) {
 							$app->log->info('Utente gia registrato');
-
-                            //FIXME : deve andare in una pagina con spiegato l'errore
-
-							$app->redirect('/error');
+                            $app->halt(412, json_encode('Utente gia registrato')); //Precondition Failed
 						}
 					} else {
 						$token = generateToken(18);
@@ -160,13 +157,29 @@ function registration($app){
 				}
 
 			} catch(Exception $e) {
-				$app->log->error($e->getMessage());
 				$testo = 'Dati Non Validi';
-				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-				elseif ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN ) $testo = 'mail apparentemente non valida';
-				elseif ( $e->getCode() == Errori::CODICE_CENSIMENTO_NOT_FOUND ) $testo = 'codice censimento non valido';
-				else $app->log->error($e->getTraceAsString());
-                $app->log->info($body);
+                $warn = false;
+                switch ($e->getCode()) {
+                    case Error::FORMATO_MAIL_NON_VALIDO:
+                        $testo = $e->getMessage();
+                        $warn = true;
+                    break;
+                    case Error::FORMATO_MAIL_NON_VALIDO_MAILGUN:
+                        $testo = 'mail apparentemente non valida';
+                        $warn = true;
+                    break;
+                    case Error::CODICE_CENSIMENTO_NOT_FOUND:
+                        $testo = 'codice censimento non valido';
+                        $warn = true;
+                    break;
+                }
+                if ( !$warn ) {
+                    $app->log->info($body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage().' body: '.$body);
+                }
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}
 
