@@ -52,4 +52,30 @@ class ApiClient extends \WPAPI {
     }
 
 
+    /**
+     * Get a collection (OVERRIDE)
+     *
+     * @throws OutOfRangeException Invalid key
+     * @param string $key Key of the collection to get
+     * @return mixed Collection object
+     */
+    public function __get($key) {
+        $classes = array(
+            'index' => 'WPAPI_Index',
+            'posts' => 'WPAPI_Posts',
+            'users' => 'WPAPI_Users',
+            'profiles' => 'BitPrepared\Wordpress\WPAPI_Profiles'
+        );
+
+        if (!isset($classes[$key])) {
+            throw new OutOfRangeException('Key not found');
+        }
+
+        if (!isset($this->collections[$key])) {
+            $this->collections[$key] = new $classes[$key]($this);
+        }
+
+        return $this->collections[$key];
+    }
+
 }

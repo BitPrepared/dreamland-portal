@@ -331,7 +331,33 @@ function registration($app){
                 $wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
                 $wapi->setRequestOption('timeout',30);
 
-                //FIXME controllare che non esista gia questo utente
+                $profileUser = null;
+                try {
+                    $profileUser = $wapi->profiles->get( $codicecensimento );
+                } catch( Requests_Exception_HTTP_500 $e) {
+                    $app->log->error('Wordpress code : '.$e->getCode());
+                    $app->log->error($e->getTraceAsString());
+                    $app->log->error(var_export($e->getData()->body,true));
+                    throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
+                } catch ( Requests_Exception_HTTP_404 $e ) {
+                    $app->log->error('Wordpress code : '.$e->getCode());
+                    $app->log->error($e->getTraceAsString());
+                    throw new Exception($e->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+                } catch ( Requests_Exception_HTTP_403 $e ) {
+                    $app->log->error('Wordpress code : '.$e->getCode());
+                    $app->log->error($e->getTraceAsString());
+                    $app->log->error(var_export($e->getData()->body,true));
+                    throw new Exception($e->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
+                } catch (Exception $e) {
+                    $app->log->info('Utente non presente su wordpress, procedo con la registrazione.');
+                }
+
+                if ( null != $profileUser ) {
+                    $app->log->info('Utente in wordpress gia presente '.$profileUser->user_id.' quindi setto a completata l\'iscrizione. ');
+                    $findToken->completato = true;
+                    R::store($findToken);
+                    throw new Exception('Utente già registrato', Errori::WORDPRESS_UTENTE_GIA_PRESENTE);
+                }
 
 				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
 				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/reg/cc?code='.$token;
@@ -383,7 +409,6 @@ function registration($app){
                 } catch( Requests_Exception_HTTP_500 $e) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
-//                    $app->log->error(var_export($e,true));
                     $app->log->error(var_export($e->getData()->body,true));
                     throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
                 } catch ( Requests_Exception_HTTP_404 $e ) {
@@ -412,6 +437,7 @@ function registration($app){
 				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
                 if ( $e->getCode() == Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE ) $testo = 'errore creazione utente';
                 if ( $e->getCode() == Errori::WORDPRESS_NOT_FOUND ) $testo = 'Configurazione wordpress errata';
+                if ( $e->getCode() == Errori::WORDPRESS_UTENTE_GIA_PRESENTE ) $testo = 'Utente gia registrato';
 				else $app->log->error($e->getTraceAsString());
 				$app->halt(412, json_encode($testo)); //Precondition Failed
 			}

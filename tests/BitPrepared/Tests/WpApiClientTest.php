@@ -35,6 +35,8 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
             $this->wapi->setRequestOption('timeout', 30);
             $res = $this->wapi->users->getAll();
 
+            $this->assertTrue(count($res) > 0);
+
             foreach ( $res as $u ) {
                echo $u->username."\n";
             }
@@ -47,6 +49,46 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
         }
 
     }
+
+    public function testRemoteUserProfile()
+    {
+
+        echo 'Elenco Profili: '."\n";
+
+        try {
+
+            $this->wapi->setRequestOption('timeout', 30);
+            $res = $this->wapi->profiles->get('56789123');
+            $data = $res->getRawData();
+            echo 'user id: '.$res->user_id."\n";
+            echo 'meta count : '.count($res->meta)."\n";
+            $this->assertTrue( !empty($data) );
+
+        } catch (\Exception $e) {
+            echo $e->getMessage()."\n";
+            echo $e->getCode()."\n";
+            echo $e->getTraceAsString()."\n";
+            $this->assertTrue(FALSE);
+        }
+
+    }
+
+    public function testRemoteUserProfileNotExistList()
+    {
+
+        try {
+
+            $this->wapi->setRequestOption('timeout', 30);
+            $res = $this->wapi->profiles->get('11');
+            $this->assertNull($res);
+            $this->assertTrue(FALSE);
+        } catch (\Exception $e) {
+            $this->assertTrue(TRUE);
+        }
+
+    }
+
+
 
     public function testRemoteCreate()
     {
