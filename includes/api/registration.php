@@ -221,6 +221,10 @@ function registration($app){
 				$nspecialita = $obj_request->specialitasquadriglieri;
 				$nbrevetti = $obj_request->brevettisquadriglieri;
 
+                //STATISTICA
+                $specialitadisquadriglia = $obj_request->specialitadisquadriglia;
+                $rinnovospecialitadisquadriglia = $obj_request->rinnovospecialitadisquadriglia;
+
 				$punteggiosquadriglia = $obj_request->punteggiosquadriglia;
 
                 $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
@@ -230,6 +234,8 @@ function registration($app){
                     $squadriglia->componenti = intval($ncomponenti);
                     $squadriglia->specialita = intval($nspecialita);
                     $squadriglia->brevetti = intval($nbrevetti);
+                    $squadriglia->conquistaspecsq = $specialitadisquadriglia;
+                    $squadriglia->rinnovospecsq = $rinnovospecialitadisquadriglia;
                     $squadriglia->nomesquadriglia = $nomesquadriglia;
                     $squadriglia->gruppo = $gruppoNome;
                     R::store($squadriglia);
@@ -238,6 +244,8 @@ function registration($app){
                     $squadriglia->componenti = intval($ncomponenti);
                     $squadriglia->specialita = intval($nspecialita);
                     $squadriglia->brevetti = intval($nbrevetti);
+                    $squadriglia->conquistaspecsq = $specialitadisquadriglia;
+                    $squadriglia->rinnovospecsq = $rinnovospecialitadisquadriglia;
                     R::store($squadriglia);
                     $app->log->info('Aggiornata squadriglia assegnata a '.$codicecensimento);
                 }
@@ -314,10 +322,12 @@ function registration($app){
 				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
 
 				$message =  'Ciao '.$nomeCapoReparto.",\n";
-				$message .= 'Una tua squadriglia ha richiesto di partecipare a Return To Dreamland'."\n";
-				$message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: '."\n";
-				$message .= 'Link: '."\n".$urlWithToken."\n";
-				$message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.'."\n";
+				$message .= 'La squadriglia '.$nomesquadriglia.' ha richiesto di partecipare a Return To Dreamland'."\n";
+				if ( !$drm_registration->completato ) {
+                    $message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: '."\n";
+				    $message .= 'Link: '."\n".$urlWithToken."\n";
+				    $message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.'."\n";
+                }
 				$message .= 'Link pagine autorizzazioni : '."\n".$urlAdminDreamers."\n";
 				
 				if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
