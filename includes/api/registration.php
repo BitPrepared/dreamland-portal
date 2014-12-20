@@ -94,19 +94,22 @@ function registration($app){
 						throw new Exception('Codice censimento '.$codicecensimento.' e Data Nascita : '.$datanascita .' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
 					}
 
-//					$mailgun = $app->config('mailgun');
-//					$mailgun_domain = $mailgun['domain'];
-//					$mailgun_key = $mailgun['key'];
-//					$mgClient = new Mailgun($mailgun_key);
-//                    $mgClient->sendMessage($mailgun_domain,
-//						array(
-//							'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
-//                            'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
-//                            'subject' => 'Richiesta iscrizione',
-//                            'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
-//							'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
-//							'o:tag'   => array('Registrazione','step1'))
-//						);
+                    if (!DEBUG) {
+                        $mailgun = $app->config('mailgun');
+                        $mailgun_domain = $mailgun['domain'];
+                        $mailgun_key = $mailgun['key'];
+                        $mgClient = new Mailgun($mailgun_key);
+                        $mgClient->sendMessage($mailgun_domain,
+                            array(
+                                'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
+                                'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
+                                'subject' => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
+                                'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento.' step 1.',
+                                'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
+                                'o:tag'   => array('Registrazione','step1'))
+                            );
+
+                    }
 
                     // RICERCA REGISTRAZIONE PRECEDENTE E/G
 					$token = '';
@@ -160,15 +163,15 @@ function registration($app){
 				$testo = 'Dati Non Validi';
                 $warn = false;
                 switch ($e->getCode()) {
-                    case Error::FORMATO_MAIL_NON_VALIDO:
+                    case Errori::FORMATO_MAIL_NON_VALIDO:
                         $testo = $e->getMessage();
                         $warn = true;
                     break;
-                    case Error::FORMATO_MAIL_NON_VALIDO_MAILGUN:
+                    case Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN:
                         $testo = 'mail apparentemente non valida';
                         $warn = true;
                     break;
-                    case Error::CODICE_CENSIMENTO_NOT_FOUND:
+                    case Errori::CODICE_CENSIMENTO_NOT_FOUND:
                         $testo = 'codice censimento non valido';
                         $warn = true;
                     break;
