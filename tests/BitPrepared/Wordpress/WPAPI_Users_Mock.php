@@ -31,7 +31,6 @@ class WPAPI_Users_Mock {
 //        FIXME: IF DATA MANCANO ALCUNI OBBLIGATORI
 //        throw new \Requests_Exception_HTTP_500();
 
-        error_log(var_export($data,true),0,'stderr');
         return new \WPAPI_User( $this->api, $data );
     }
 
