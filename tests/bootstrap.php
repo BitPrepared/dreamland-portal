@@ -17,7 +17,7 @@ date_default_timezone_set('Europe/Rome');
 define('APPLICATION_PATH', realpath(__DIR__ . '/..'));
 define('BASE_DIR' , APPLICATION_PATH.'/');
 
-require APPLICATION_PATH.'/config.php';
+require APPLICATION_PATH.'/config-test.php';
 
 $loader = require APPLICATION_PATH . '/vendor/autoload.php';
 

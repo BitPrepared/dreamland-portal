@@ -17,14 +17,18 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-
-        include __DIR__.'/../../../../config.php';
-
+        include __DIR__.'/../../../../config-test.php';
         $url = $config['wordpress']['url'].'wp-json';
-
         $this->wapi = new ApiClient($url, $config['wordpress']['username'], $config['wordpress']['password']);
     }
 
+    /**
+     * ATTENZIONE I TEST MARCATI remoteTasks vanno eseguiti con --group remoteTasks
+     */
+
+    /**
+     * @group remoteTasks
+     */
     public function testRemoteUsersList()
     {
 
@@ -50,6 +54,9 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @group remoteTasks
+     */
     public function testRemoteUserProfile()
     {
 
@@ -73,6 +80,9 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @group remoteTasks
+     */
     public function testRemoteUserProfileNotExistList()
     {
 

@@ -33,12 +33,14 @@ function asa($app){
 
         // Get user with ID
         $app->get('/user/:id', function ($id) use ($app) {
-
+            $app->response->setBody( json_encode( 'non implentato' ) );
+            $app->response->setStatus(500);
         });
 
         // Create user with ID
         $app->post('/user', function () use ($app) {
-
+            $app->response->setBody( json_encode( 'non implentato' ) );
+            $app->response->setStatus(500);
         });
 
         $app->post('/users', function() use ($app) {
@@ -96,12 +98,14 @@ function asa($app){
 
         // Update user with ID
         $app->put('/user/:id', function ($id) use ($app) {
-
+            $app->response->setBody( json_encode( 'non implentato' ) );
+            $app->response->setStatus(500);
         });
 
         // Delete user with ID
         $app->delete('/user/:id', function ($id) use ($app) {
-
+            $app->response->setBody( json_encode( 'non implentato' ) );
+            $app->response->setStatus(500);
         });
 
     });

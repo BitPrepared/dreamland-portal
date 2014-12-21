@@ -9,16 +9,19 @@
 namespace Integration\Tests;
 
 use There4\Slim\Test\WebTestCase;
+use RedBean_Facade as R;
 
 if ( !class_exists('Integration\Tests\IntegrationTest') ) {
 
     abstract class IntegrationTest extends WebTestCase {
 
         public function getSlimInstance() {
-            require APPLICATION_PATH.'/config.php';
+            require APPLICATION_PATH.'/config-test.php';
             extract(configure_slim($config), EXTR_SKIP);
 
             require APPLICATION_PATH.'/includes/app.php';
+
+            R::nuke(); //CLEAN DB
 
             require APPLICATION_PATH.'/includes/hooks.php';
             require APPLICATION_PATH.'/includes/routes.php';

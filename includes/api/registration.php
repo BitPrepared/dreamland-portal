@@ -96,19 +96,20 @@ function registration($app){
 
                     if (!DEBUG) {
                         $mailgun = $app->config('mailgun');
-                        $mailgun_domain = $mailgun['domain'];
-                        $mailgun_key = $mailgun['key'];
-                        $mgClient = new Mailgun($mailgun_key);
-                        $mgClient->sendMessage($mailgun_domain,
-                            array(
-                                'from'    => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
-                                'to'      => 'Staff Dreamland <return2dreamland@gmail.com>',
-                                'subject' => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento,
-                                'text'    => 'Richiesta iscrizione da parte di : '.$email.' '.$codicecensimento.' step 1.',
-                                'bcc'     => 'Staff Dreamland <return2dreamland@gmail.com>',
-                                'o:tag'   => array('Registrazione','step1'))
+                        if ( isset($mailgun['pubkey']) ) {
+                            $mailgun_domain = $mailgun['domain'];
+                            $mailgun_key = $mailgun['key'];
+                            $mgClient = new Mailgun($mailgun_key);
+                            $mgClient->sendMessage($mailgun_domain,
+                                array(
+                                    'from' => 'Mailgun Sandbox <postmaster@sandbox8de4140d230448f49edbb569e9480eec.mailgun.org>',
+                                    'to' => 'Staff Dreamland <return2dreamland@gmail.com>',
+                                    'subject' => 'Richiesta iscrizione da parte di : ' . $email . ' ' . $codicecensimento,
+                                    'text' => 'Richiesta iscrizione da parte di : ' . $email . ' ' . $codicecensimento . ' step 1.',
+                                    'bcc' => 'Staff Dreamland <return2dreamland@gmail.com>',
+                                    'o:tag' => array('Registrazione', 'step1'))
                             );
-
+                        }
                     }
 
                     // RICERCA REGISTRAZIONE PRECEDENTE E/G

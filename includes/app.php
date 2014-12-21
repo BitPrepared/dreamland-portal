@@ -12,7 +12,11 @@ if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
 
 use RedBean_Facade as R;
 
-$dsn      = $config['db']['type'].':host='.$config['db']['host'].';dbname='.$config['db']['database'];
+if ( strcmp('sqlite',$config['db']['type']) == 0 ){
+    $dsn      = $config['db']['type'].':'.$config['db']['host'];
+} else {
+    $dsn      = $config['db']['type'].':host='.$config['db']['host'].';dbname='.$config['db']['database'];
+}
 $username = $config['db']['user'];
 $password = $config['db']['password'];
 
@@ -37,7 +41,7 @@ $app->config(array(
     'import' => $config['import'],
     'cookies.lifetime' => $config['cookies.lifetime'],
     'security.salt' => $config['security.salt'],
-    'mailgun' => $config['mailgun'],
+    'mailgun' => isset($config['mailgun']) ? $config['mailgun'] : array(),
     'wordpress' => $config['wordpress'],
     'email_sender' => $config['email_sender'],
     'smtp' => $config['smtp'],

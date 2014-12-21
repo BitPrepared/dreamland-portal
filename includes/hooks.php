@@ -1,7 +1,6 @@
 <?php
 
 $app->hook('slim.before.router', function () use ($app) {
-
 	$req = $app->request;
 	$allGetVars = $req->get();
 	$allPostVars = $req->post();
@@ -14,15 +13,14 @@ $app->hook('slim.before.router', function () use ($app) {
 
 	$srcUri = $req->getRootUri();
 	$srcUrl = $req->getResourceUri();
-    if (DEBUG) {
-        //$app->log->info(@Kint::dump( $srcUrl ));
-        $app->log->debug('REQUEST : '.var_export($_REQUEST,true));
-        $app->log->debug('URI : '.$srcUri);
-        $app->log->debug('URL : '.$srcUrl);
-        $app->log->debug('Params : '.$srcParam);
-        $req->isAjax() ? $app->log->debug('Ajax attivo') : $app->log->debug('Ajax non attivo');
-    }
-
+//    if (DEBUG) {
+//        //$app->log->info(@Kint::dump( $srcUrl ));
+//        $app->log->debug('REQUEST : '.var_export($_REQUEST,true));
+//        $app->log->debug('URI : '.$srcUri);
+//        $app->log->debug('URL : '.$srcUrl);
+//        $app->log->debug('Params : '.$srcParam);
+//        $req->isAjax() ? $app->log->debug('Ajax attivo') : $app->log->debug('Ajax non attivo');
+//    }
 });
 
 $app->hook('slim.before.dispatch', function () use ($app) {

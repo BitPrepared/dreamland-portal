@@ -11,6 +11,25 @@ namespace Integration\Tests;
 class GetAsaTest extends IntegrationTest
 {
 
+    public function testProfileAttivo()
+    {
+        $_SESSION['wordpress'] = array(
+            'user_id' => '1',
+            'user_info' => array(
+                'user_login' => 'test',
+                'user_registered' => '12212312',
+                'roles' => array('utente_eg'),
+                'email' => 'test@test',
+                'codicecensimento' => 12312
+            ),
+            'logout_url' => 'http://remoteurl/logout'
+        );
+        $this->get('/api/asa/user/current');
+        $this->assertEquals(200, $this->client->response->status());
+        $this->assertSame('{"id":"1","username":"test","email":"test@test","roles":["utente_eg"],"codicecensimento":12312}', $this->client->response->body());
+        unset($_SESSION['wordpress']);
+    }
+
     public function testProfile()
     {
         $this->get('/api/asa/user/current');
@@ -20,7 +39,7 @@ class GetAsaTest extends IntegrationTest
     public function testProfileSpecifico()
     {
         $this->get('/api/asa/user/4000');
-        $this->assertEquals(404, $this->client->response->status());
+        $this->assertEquals(500, $this->client->response->status());
     }
 
 }

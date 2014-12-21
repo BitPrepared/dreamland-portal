@@ -13,18 +13,21 @@ function validate_email($app,$email){
 		throw new Exception('l\' email non rispetta gli standard RFC', Errori::FORMATO_MAIL_NON_VALIDO);
 	}
 
+    $mailgun = $app->config('mailgun');
 	try {
-		$mailgun_pub_key = $app->config('mailgun')['pubkey'];
-		$mgClient = new Mailgun($mailgun_pub_key);
-		$external_valid = $mgClient->get("address/validate", array('address' => $email));
-		if ( !$external_valid->http_response_body->is_valid ) {
-			$app->log->error('Servizio esterno reputa email "'.$email.'" non valida');
-			throw new Exception('l\' email non rispetta gli standard di mailgun', Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN);
-		}
+        if ( isset($mailgun['pubkey']) ) {
+            $mailgun_pub_key = $mailgun['pubkey'];
+            $mgClient = new Mailgun($mailgun_pub_key);
+            $external_valid = $mgClient->get("address/validate", array('address' => $email));
+            if ( !$external_valid->http_response_body->is_valid ) {
+                $app->log->error('Servizio esterno reputa email "'.$email.'" non valida');
+                throw new Exception('l\' email non rispetta gli standard di mailgun', Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN);
+            }
 
-		if ($validator->hasWarnings()) {
-			$app->log->warn($email . ' has unusual/deprecated features (result code ' . var_export($validator->getWarnings(), true) . ')');
-		}
+            if ($validator->hasWarnings()) {
+                $app->log->warn($email . ' has unusual/deprecated features (result code ' . var_export($validator->getWarnings(), true) . ')');
+            }
+        }
 	} catch (Exception $e) {
 		$app->log->error('Code: '.$e->getCode());
 		$app->log->error($e->getTraceAsString());
