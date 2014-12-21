@@ -38,7 +38,8 @@ function authenticate(\Slim\Route $route) {
 
     $secHash = new \BitPrepared\Security\SecureHash();
 
-    $password = $_SERVER['HTTP_USER_AGENT'];
+    // @equivalent : $password = $_SERVER['HTTP_USER_AGENT'];, ora pero supporta i test
+    $password = $app->request->headers->get('HTTP_USER_AGENT');
     $identifiedIp = \BitPrepared\Security\IpIdentifier::get_ip_address();
     $password .= $identifiedIp;
 	$password .= $app->config('security.salt');
@@ -60,19 +61,17 @@ function authenticate(\Slim\Route $route) {
 			echo 'Attenzione: svuotare la cache del browser prima di proseguire, anomalia individuata al suo interno.';
 			$app->log->info("fingerprint errato ".$cookie_fingerprint." ".$identifiedIp);
 			$app->deleteCookie('fingerprint');
-			$app->redirect('/'); 
+			$app->redirect('/');
 			exit;
 			// DA GESITRE
 		}
-	} 
-	
+	}
+
 	$salt = ''; //reset
 	$fingerprint = $secHash->create_hash($password,$salt);
 	$_SESSION['salt'] = $salt;
 	$app->setEncryptedCookie('fingerprint',$fingerprint);
 	$app->log->debug("new fingerprint ".$fingerprint);
-	
-
 }
 
 function crypto_rand_secure($min, $max) {
@@ -199,4 +198,26 @@ function legaCapoRepartoToRagazzo($emailcaporeparto,$codiceRagazzo){
     $legami->emailcaporeparto = $emailcaporeparto;
     $legami->codicecensimento = $codiceRagazzo;
     R::store($legami);
+}
+
+function decodeInfoPhp() {
+    ob_start();
+    phpinfo(INFO_GENERAL);
+    $phpinfo = array('phpinfo' => array());
+    if(preg_match_all('#(?:<h2>(?:<a name=".*?">)?(.*?)(?:</a>)?</h2>)|(?:<tr(?: class=".*?")?><t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>(?:<t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>(?:<t[hd](?: class=".*?")?>(.*?)\s*</t[hd]>)?)?</tr>)#s', ob_get_clean(), $matches, PREG_SET_ORDER))
+        foreach($matches as $match)
+            if(strlen($match[1]))
+                $phpinfo[$match[1]] = array();
+            elseif(isset($match[3])) {
+                $t = array_keys($phpinfo);
+                $v = end($t);
+                $phpinfo[$v][$match[2]] = isset($match[4]) ? array($match[3], $match[4]) : $match[3];
+            }
+            else {
+                $t = array_keys($phpinfo);
+                $v = end($t);
+                $phpinfo[$v][] = $match[2];
+            }
+    ob_end_clean();
+    return $phpinfo;
 }

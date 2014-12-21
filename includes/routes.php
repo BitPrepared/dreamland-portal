@@ -9,7 +9,6 @@ $app->notFound(function () use ($app) {
 
 // handle GET requests for /
 $app->get('/', 'authenticate', function () use ($app) {  
-
 	if ( isset($_SESSION['wordpress']) ) {
 		$app->redirect($app->request->getRootUri().'/home');
 	}
@@ -82,3 +81,4 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 	}
 	$app->render($pagename.'.html', $dati);
 });
+

@@ -11,7 +11,7 @@ function asa($app){
     // Library group
     $app->group('/asa', function () use ($app) {
 
-        // Get user with ID
+        // Get current user
         $app->get('/user/current', function () use ($app) {
             $app->response->setStatus(500);
             if ( !isset($_SESSION['wordpress']) ) {
