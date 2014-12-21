@@ -3,10 +3,13 @@
 if( defined('APPLICATION_PATH') && !defined('BASE_DIR') ) {
     define('BASE_DIR' , APPLICATION_PATH.'/');
 } else {
-    if ( file_exists('../../config.php') ){
+    if ( file_exists('../config.php') ){
+        define('BASE_DIR', '../');
+    } else if ( file_exists('../../config.php') ){
         define('BASE_DIR', '../../');
     } else {
-        define('BASE_DIR', '../');
+        echo '<h1>FILE config.php MANCANTE</h1>';
+        exit;
     }
 }
 
