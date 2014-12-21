@@ -321,6 +321,13 @@ function sfide($app) {
 
                 $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
                 if ( null != $drm_iscrizione_sfida ) {
+
+                    $drm_annullo_sfida = R::dispose('annullosfida');
+                    $drm_annullo_sfida->idsfida = $sfida_id;
+                    $drm_annullo_sfida->permalink = $drm_iscrizione_sfida->permalink;
+                    $drm_annullo_sfida->codicecensimento = $codicecensimento;
+                    R::store($drm_annullo_sfida);
+
                     R::trash($drm_iscrizione_sfida);
                 } else {
                     throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
