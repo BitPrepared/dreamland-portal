@@ -3,6 +3,7 @@
 use Egulias\EmailValidator\EmailValidator;
 use Mailgun\Mailgun;
 use \stdClass;
+use Dreamland\Errori;
 use RedBean_Facade as R;
 
 function validate_email($app,$email){
@@ -125,7 +126,7 @@ function findDatiRagazzo($codicecensimento) {
 
     $find = R::findOne('asa_anagrafica_eg',' codicesocio = ?',array($codicecensimento));
     if ( $find != null ) {
-        $cc = new stdClass;
+        $cc = new \stdClass;
         $cc->nome = $find['nome'];
         $cc->cognome = $find['cognome'];
         $cc->datanascita = $find['datanascita'];

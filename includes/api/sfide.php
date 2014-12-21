@@ -403,13 +403,15 @@ function sfide($app) {
 
         $app->put('/chiusura/:id', function($sfida_id) use ($app) {
 
-
+            $app->response->setStatus(501);
+            $app->response->headers->set('Content-Type', 'application/json');
 
         });
 
         $app->put('/conferma/:id', function($sfida_id) use ($app) {
 
-
+            $app->response->setStatus(501);
+            $app->response->headers->set('Content-Type', 'application/json');
 
         });
 

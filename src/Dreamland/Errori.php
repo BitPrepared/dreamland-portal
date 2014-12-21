@@ -9,6 +9,7 @@ abstract class Errori extends \BitPrepared\Commons\BasicEnum {
 	const FORMATO_MAIL_NON_VALIDO_MAILGUN = 2;
 	const CODICE_CENSIMENTO_NOT_FOUND = 3;
 	const RUOLO_IN_SQUADRIGLIA_ERRATO = 4;
+    const CAMPI_VUOTI = 5;
 
 	// PORTAL
 	const PORTAL_INVALID_TOKEN_STEP = 11;

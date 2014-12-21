@@ -5,7 +5,7 @@ use RedBean_Facade as R;
 use Dreamland\Errori;
 use Dreamland\Ruoli;
 use Mailgun\Mailgun;
-use BitPrepared\Wordpress\ApiClient;
+
 
 function registration($app){
 	// Library group
@@ -143,7 +143,7 @@ function registration($app){
 						$app->log->info('Nuova richiesta di registrazione '.$drm_registration_id.' tipo E/G');
 					}
 
-					$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/wizard?step=1&code='.$token;
+					$urlWithToken = "http://" . $app->request->headers->HTTP_HOST . $app->request->getRootUri().'/#/home/wizard?step=1&code='.$token;
 					$to = array($email => $find['nome'].' '.strtoupper($find['cognome'][0]).'.');
 
 					$message =  'Ciao '.$find['nome'].",\n";
@@ -156,7 +156,7 @@ function registration($app){
 					}
 
 					// json_encode(array('email' => $email,'codcens' => $codicecensimento))
-					$app->response->setBody( json_encode('ok') ); // FIXME: verificare se serve
+					$app->response->setBody('');
                     $app->response->setStatus(201);
 				}
 
@@ -205,6 +205,8 @@ function registration($app){
 
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
+            $body = $app->request->getBody();
+
 			try{
 
 				$findToken = R::findOne('registration',' token = ? and completato = ?',array($token,0));
@@ -233,7 +235,6 @@ function registration($app){
 				$codicecensimento = $findToken['codicecensimento'];
                 $app->log->info('Registrazione Step 2 per '.$codicecensimento);
 
-				$body = $app->request->getBody();
 				$obj_request = json_decode($body);
 				
 				// CAPO REPARTO
@@ -254,6 +255,10 @@ function registration($app){
                 $rinnovospecialitadisquadriglia = $obj_request->rinnovospecialitadisquadriglia;
 
 				$punteggiosquadriglia = $obj_request->punteggiosquadriglia;
+
+                if ( empty($nomesquadriglia) || empty ($ncomponenti) ) {
+                    throw new Exception('Alcuni campi obbligatori sono vuoti',Errori::CAMPI_VUOTI);
+                }
 
                 $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
                 if ( null == $squadriglia ) {
@@ -284,17 +289,10 @@ function registration($app){
 				}
 
 				$app->log->info('Devo registrare un e/g con il ruolo di ' . Ruoli::fromValue($ruolosquadriglia));
-
-                $wordpress = $app->config('wordpress');
-                $url = $wordpress['url'].'wp-json';
-                $app->log->debug('Mi connettero a '.$url);
-
-                $wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
-                $wapi->setRequestOption('timeout',30);
-
+                $app->wapi->setRequestOption('timeout',30);
                 $profileUser = null;
                 try {
-                    $profileUser = $wapi->profiles->get( $codicecensimento );
+                    $profileUser = $app->wapi->profiles->get( $codicecensimento );
                 } catch( Requests_Exception_HTTP_500 $e) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
@@ -358,6 +356,11 @@ function registration($app){
                     $drm_registration->email = $emailCapoReparto;
                     $drm_registration->nome = $nomeCapoReparto;
                     $drm_registration->cognome = $cognomeCapoReparto;
+
+                    if ( empty($nomeCapoReparto) || empty ($cognomeCapoReparto) ) {
+                        throw new Exception('Alcuni campi obbligatori sono vuoti',Errori::CAMPI_VUOTI);
+                    }
+
                     $drm_registration->type = 'CC';
                     $drm_registration->regione = $regione;
                     $drm_registration->zona = $zona;
@@ -369,8 +372,9 @@ function registration($app){
 
                     $app->log->debug('Registrato capo reparto con rowId : ' . $drm_registration_id);
 
+                    $wordpress = $app->config('wordpress');
                     $urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-                    $urlWithToken = "http://" . $_SERVER['HTTP_HOST'] . $app->request->getRootUri() . '/#/home/reg/cc?code=' . $token;
+                    $urlWithToken = "http://" . $app->request->headers->HTTP_HOST . $app->request->getRootUri() . '/#/home/reg/cc?code=' . $token;
                     $to = array($emailCapoReparto => $nomeCapoReparto . ' ' . strtoupper($cognomeCapoReparto[0]) . '.');
 
                     $message = 'Ciao ' . $nomeCapoReparto . ",\n";
@@ -419,7 +423,7 @@ function registration($app){
 
                 $newUser = null;
                 try {
-                    $newUser = $wapi->users->create( $newUserRequest );
+                    $newUser = $app->wapi->users->create( $newUserRequest );
                 } catch( Requests_Exception_HTTP_500 $e) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
@@ -440,7 +444,7 @@ function registration($app){
                 $findToken->completato = true;
                 R::store($findToken);
 
-                $app->response->setBody( json_encode('ok') );
+                $app->response->setBody('');
                 $app->response->setStatus(200);
 
                 $app->log->debug('Completata registrazione token '.$token);
@@ -473,6 +477,11 @@ function registration($app){
                         $testo = 'Invio mail fallito';
                         $warn = false;
                         $status = 500;
+                        break;
+                    case Errori::CAMPI_VUOTI:
+                        $testo = 'Alcuni campi obbligatori sono vuoti';
+                        $warn = true;
+                        $status = 412;
                         break;
                 }
                 if ( !$warn ) {
@@ -559,9 +568,9 @@ function registration($app){
 
 
 				 try {
-				 	$wapi = new ApiClient($url, $wordpress['username'], $wordpress['password']);
-                    $wapi->setRequestOption('timeout',30);
-				 	$newUser = $wapi->users->create( $newUserRequest );
+
+                    $app->wapi->setRequestOption('timeout',30);
+				 	$newUser = $app->wapi->users->create( $newUserRequest );
 
 				 	$app->log->info('Creato utente in wordpress '.$newUser->ID);
 
