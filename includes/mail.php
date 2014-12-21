@@ -24,9 +24,14 @@ function dream_mail($app, $to, $subject, $message, $htmlMessage = '') {
     }
     //->attach(Swift_Attachment::fromPath('my-document.pdf'));
     $smtpConfig = $app->config('smtp');
-    $transport = Swift_SmtpTransport::newInstance($smtpConfig['host'], $smtpConfig['port'], $smtpConfig['security'])
-      ->setUsername($smtpConfig['username'])
-      ->setPassword($smtpConfig['password']);
+
+    if ( empty($smtpConfig['username']) ) {
+        $transport = Swift_SmtpTransport::newInstance($smtpConfig['host'], $smtpConfig['port']);
+    }  else {
+        $transport = Swift_SmtpTransport::newInstance($smtpConfig['host'], $smtpConfig['port'], $smtpConfig['security'])
+          ->setUsername($smtpConfig['username'])
+          ->setPassword($smtpConfig['password']);
+    }
 
     // Create the Mailer using your created Transport
     $mailer = Swift_Mailer::newInstance($transport);

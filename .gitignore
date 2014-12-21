@@ -7,3 +7,5 @@ composer.lock
 config.php
 phpunit.xml
 .sass-cache
+Gemfile.lock
+test.db

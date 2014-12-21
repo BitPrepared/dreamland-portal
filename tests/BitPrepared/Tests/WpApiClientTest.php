@@ -17,7 +17,7 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        include __DIR__.'/../../../../config-test.php';
+        require APPLICATION_PATH.'/config-test.php';
         $url = $config['wordpress']['url'].'wp-json';
         $this->wapi = new ApiClient($url, $config['wordpress']['username'], $config['wordpress']['password']);
     }

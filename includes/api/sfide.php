@@ -1,10 +1,7 @@
 <?php
 
-use \stdClass;
 use RedBean_Facade as R;
 use Dreamland\Errori;
-use Dreamland\Ruoli;
-use Mailgun\Mailgun;
 
 function sfide($app) {
 
@@ -145,7 +142,9 @@ function sfide($app) {
 				} else {
 					$app->log->info('Richiesta iscrizione '.$codicecensimento.' alla sfida '.$idsfida.' gia esistente');
 					throw new Exception("Sfida gia esistente", Errori::SFIDA_GIA_ATTIVA);
-				}    
+				}
+
+                $app->response->setStatus(201);
 
 		    } catch ( Exception $e ) {
                 $testo = 'Internal Error';
@@ -179,8 +178,10 @@ function sfide($app) {
                 $app->response->setStatus($status);
 		    }
 
+            unset($_SESSION['sfide']);
+
 			//devo procedere a compilare il form (http://10.143.90.74:8080/portal/home#/sfide/iscr?id=123)
-		    $app->redirect('/portal/home#/sfide/iscr?id='.$sfida_id);
+		    if ( $app->response->getStatus() == 201 ) $app->redirect('/portal/home#/sfide/iscr?id='.$idsfida);
 
 	    });
 
@@ -189,7 +190,6 @@ function sfide($app) {
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
 
-			$url = $app->config('wordpress')['url'];
 			$body = $app->request->getBody();
 
 			try {
@@ -216,6 +216,8 @@ function sfide($app) {
                     $drm_iscrizione_sfida->attiva = true;
 
 					R::store($drm_iscrizione_sfida);
+
+                    $app->log->info('Richiesta inizio sfida di '.$codicecensimento.' alla sfida '.$sfida_id);
 
 				} else {
                     throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
@@ -256,13 +258,15 @@ function sfide($app) {
 
 
                 if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
-                    //FIXME: errore di maggior impatto da fare!
-                    $app->log->error('Invio mail capo reparto di iscrizione sq. sfida fallita');
+                    throw new Exception('Invio mail capo reparto di iscrizione sq. sfida fallita',Errori::INVIO_MAIL_FALLITO);
                 }
 
                 if ( !isset($_SESSION['portal'])) $_SESSION['portal'] = array();
                 if ( !isset($_SESSION['portal']['request'])) $_SESSION['portal']['request'] = array();
                 $_SESSION['portal']['request']['sfidaid'] = $sfida_id;
+
+                $app->response->setBody("");
+                $app->response->setStatus(204);
 
 			} catch ( Exception $e ) {
                 $testo = 'Internal Error';
@@ -285,6 +289,11 @@ function sfide($app) {
                         $status = 404;
                         $warn = true;
                         break;
+                    case Errori::INVIO_MAIL_FALLITO:
+                        $testo = 'Invio mail fallito';
+                        $status = 500;
+                        $warn = false;
+                        break;
                 }
                 if ( !$warn ) {
                     $app->log->error('Request body: '.$body);
@@ -296,9 +305,6 @@ function sfide($app) {
                 $app->response->setBody( json_encode($testo) );
                 $app->response->setStatus($status);
 		    }
-
-            $app->response->setBody("");
-            $app->response->setStatus(201);
 
 		});
 
@@ -319,16 +325,17 @@ function sfide($app) {
                 $wordpress = $_SESSION['wordpress'];
                 $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-                $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
+                $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ? and attiva = ?', array($codicecensimento,$sfida_id,true) );
                 if ( null != $drm_iscrizione_sfida ) {
 
-                    $drm_annullo_sfida = R::dispose('annullosfida');
+                    $drm_annullo_sfida = R::dispense('annullosfida');
                     $drm_annullo_sfida->idsfida = $sfida_id;
-                    $drm_annullo_sfida->permalink = $drm_iscrizione_sfida->permalink;
                     $drm_annullo_sfida->codicecensimento = $codicecensimento;
                     R::store($drm_annullo_sfida);
 
                     R::trash($drm_iscrizione_sfida);
+
+                    $app->log->info('Abortita sfida di '.$codicecensimento.' alla sfida '.$sfida_id);
                 } else {
                     throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
                 }
@@ -337,7 +344,7 @@ function sfide($app) {
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
 
-                $capoReparto = findDatiCapoReparto($ragazzo['regione'],$ragazzo['gruppo'],$codicecensimento)[0];
+                $capoReparto = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento)[0];
 
                 $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
 
@@ -345,11 +352,14 @@ function sfide($app) {
                 $message .= 'La tua squadriglia '. $squadriglia->nome .' ha rinunciato a partecipare ad una sfida su Dreamland'."\n";
                 $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
 
-                if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
+                if ( !dream_mail($app, $to, 'Rimozione Sfida', $message) ){
                     throw new Exception('Invio mail capo reparto di de-iscrizione sq. sfida fallita',Errori::INVIO_MAIL_FALLITO);
                 }
 
                 $app->log->info('squadriglia di '. $codicecensimento .' di-siscritta da '.$sfida_id);
+
+                $app->response->setBody("");
+                $app->response->setStatus(200);
 
             } catch ( Exception $e ) {
                 $testo = 'Internal Error';
@@ -389,8 +399,17 @@ function sfide($app) {
                 $app->response->setStatus($status);
             }
 
-            $app->response->setBody("");
-            $app->response->setStatus(200);
+        });
+
+        $app->put('/chiusura/:id', function($sfida_id) use ($app) {
+
+
+
+        });
+
+        $app->put('/conferma/:id', function($sfida_id) use ($app) {
+
+
 
         });
 

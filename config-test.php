@@ -14,8 +14,8 @@ $config = array(
         'level' => 'DEBUG'
     ),
     'smtp' => array(
-        'host' => 'localhost',
-        'port' => 25,
+        'host' => '127.0.0.1',
+        'port' => 1025,
         'security' => null, //ssl,tls,null
         'username' => '',
         'password' => ''
@@ -27,7 +27,7 @@ $config = array(
         'upload_dir' => realpath(BASE_DIR.'/resources/uploads/').'/',
     ),
     'wordpress' => array(
-        'url' => 'http://localhost/blog/',
+        'url' => 'http://dreamland.sigmalab.local/blog/',
         'username' => 'admin',
         'password' => 'admin'
     ),

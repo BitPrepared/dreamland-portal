@@ -8,7 +8,7 @@
 
 namespace Integration\Tests;
 
-class GetPageTest extends IntegrationTest
+class PageTest extends IntegrationTest
 {
     public function testRoot()
     {
