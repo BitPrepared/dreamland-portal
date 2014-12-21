@@ -55,7 +55,6 @@ class WPAPI_Profiles implements \WPAPI_Collection {
 
         $response = $this->api->get( $url );
         $response->throw_for_status();
-
         $data = json_decode( $response->body, true );
 
         $has_error = ( function_exists('json_last_error') && json_last_error() !== JSON_ERROR_NONE );

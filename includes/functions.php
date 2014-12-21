@@ -147,21 +147,22 @@ function findDatiRagazzo($codicecensimento) {
 function findDatiCapoReparto($regione,$gruppo,$legame = null) {
     $info_cc = array();
     if ( null != $legame ) {
-
         $legameBean = R::findOne('legami', ' codicecensimento = ? ', array($legame));
-        $emailCapoReparto = $legameBean->emailcaporeparto;
+        if ( null != $legameBean ) {
+            $emailCapoReparto = $legameBean->emailcaporeparto;
 
-        $findMyCCs = R::findAll('registration','regione = ? and gruppo = ? and type = ? and email = ? ',array($regione,$gruppo,'CC',$emailCapoReparto));
-        if ( null != $findMyCCs ) {
-            $i = 0;
-            foreach ($findMyCCs as $findMyCC) {
-                $cc = new stdClass;
-                $cc->nome = $findMyCC['nome'];
-                $cc->cognome = $findMyCC['cognome'];
-                $cc->codicecensimento = $findMyCC['codicecensimento'];
-                $cc->email = $findMyCC['email'];
-                $info_cc[$i] = $cc;
-                $i++;
+            $findMyCCs = R::findAll('registration','regione = ? and gruppo = ? and type = ? and email = ? ',array($regione,$gruppo,'CC',$emailCapoReparto));
+            if ( null != $findMyCCs ) {
+                $i = 0;
+                foreach ($findMyCCs as $findMyCC) {
+                    $cc = new stdClass;
+                    $cc->nome = $findMyCC['nome'];
+                    $cc->cognome = $findMyCC['cognome'];
+                    $cc->codicecensimento = $findMyCC['codicecensimento'];
+                    $cc->email = $findMyCC['email'];
+                    $info_cc[$i] = $cc;
+                    $i++;
+                }
             }
         }
     } else {
@@ -192,6 +193,8 @@ function findDatiCapoReparto($regione,$gruppo,$legame = null) {
 }
 
 function legaCapoRepartoToRagazzo($emailcaporeparto,$codiceRagazzo){
+
+    //FIXME: generare errore se c'è gia un legame in atto con un altro capo reparto...
     $legami = R::dispense('legami');
     $legami->emailcaporeparto = $emailcaporeparto;
     $legami->codicecensimento = $codiceRagazzo;

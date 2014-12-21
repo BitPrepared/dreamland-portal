@@ -18,7 +18,7 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
 
-        include __DIR__.'/../../../config.php';
+        include __DIR__.'/../../../../config.php';
 
         $url = $config['wordpress']['url'].'wp-json';
 
@@ -80,19 +80,21 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 
             $this->wapi->setRequestOption('timeout', 30);
             $res = $this->wapi->profiles->get('11');
-            $this->assertNull($res);
             $this->assertTrue(FALSE);
-        } catch (\Exception $e) {
+        } catch ( \Requests_Exception_HTTP_404 $e ) {
+            echo $e->getMessage();
             $this->assertTrue(TRUE);
+        } catch (\Exception $e) {
+            $this->assertTrue(FALSE);
         }
 
     }
 
 
 
-    public function testRemoteCreate()
-    {
-
+//    public function testRemoteCreate()
+//    {
+//
 //        $email = 'iscrizioni.rtd@agesci.it';
 //        $nome = 'Tester';
 //        $cognome = 'Tester';
@@ -134,7 +136,7 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 //            echo $e->getTraceAsString()."\n";
 //            $this->assertTrue(FALSE);
 //        }
-
-    }
+//
+//    }
 
 }

@@ -195,7 +195,6 @@ function registration($app){
             $app->response->headers->set('Content-Type', 'application/json');
 			try{
 
-				// devo cercare $token nel db e recuperare le varie informazioni
 				$findToken = R::findOne('registration',' token = ? and completato = ?',array($token,0));
 				if ( null == $findToken ){
 					throw new Exception('Token '.$token.' non valido', Errori::PORTAL_INVALID_TOKEN_STEP);
@@ -220,6 +219,7 @@ function registration($app){
 				$email = $findToken['email'];
 
 				$codicecensimento = $findToken['codicecensimento'];
+                $app->log->info('Registrazione Step 2 per '.$codicecensimento);
 
 				$body = $app->request->getBody();
 				$obj_request = json_decode($body);
@@ -273,57 +273,6 @@ function registration($app){
 
 				$app->log->info('Devo registrare un e/g con il ruolo di ' . Ruoli::fromValue($ruolosquadriglia));
 
-				validate_email($app,$ccemail);
-
-				$newUser = null;
-
-				$app->log->debug('Iscrizione capo reparto');
-
-				// CAPO REPARTO
-				$datiCapoReparto = findDatiCapoReparto($regione,$gruppo);
-				$emailCapoReparto = $datiCapoReparto[0]->email;
-				$nomeCapoReparto = $datiCapoReparto[0]->nome;
-				$cognomeCapoReparto = $datiCapoReparto[0]->cognome;
-
-				//VERIFICA CON DATI MANDATI DAL RAGAZZO
-				if ( strcmp($datiCapoReparto[0]->nome, $ccnome) != 0 
-					|| strcmp($datiCapoReparto[0]->cognome, $cccognome) != 0 ) 
-				{
-					$app->log->info('Capo Reparto cambiato nuovo :'.$ccnome.' '.$cccognome. ' ' .$ccemail);
-					$emailCapoReparto = $ccemail;
-					$cognomeCapoReparto = $cccognome;
-					$nomeCapoReparto = $ccnome;
-				}
-
-				$token = '';
-				$findTokenRegistrationCC = R::findOne('registration',' email = ? and type = ?',array($emailCapoReparto,'CC'));
-				if ( $findTokenRegistrationCC != null ) {
-					$token = $findTokenRegistrationCC['token'];
-                    $drm_registration = R::load('registration',$findTokenRegistrationCC['id']);
-                    $app->log->info('Capo Reparto trovato :'.$drm_registration->nome.' '.$drm_registration->cognome. ' ' .$drm_registration->email);
-				} else {
-                    $token = generateToken(18);
-                    $app->log->info('Generato token ' . $token . ' per ' . $emailCapoReparto);
-                    $drm_registration = R::dispense('registration');
-                    // $drm_registration->token = md5(uniqid(rand(), true));
-                    $drm_registration->token = $token;
-                    $drm_registration->completato = false;
-                }
-
-                $drm_registration->email = $emailCapoReparto;
-                $drm_registration->nome = $nomeCapoReparto;
-                $drm_registration->cognome = $cognomeCapoReparto;
-                $drm_registration->type = 'CC';
-                $drm_registration->regione = $regione;
-                $drm_registration->zona = $zona;
-                $drm_registration->gruppo = $gruppo;
-                $drm_registration->legame = null; //ex codicecensimento
-                $drm_registration_id = R::store($drm_registration);
-
-                legaCapoRepartoToRagazzo($emailCapoReparto,$codicecensimento);
-
-                $app->log->info('Nuova richiesta di registrazione capo reparto '.$drm_registration_id);
-
                 $wordpress = $app->config('wordpress');
                 $url = $wordpress['url'].'wp-json';
                 $app->log->debug('Mi connettero a '.$url);
@@ -340,16 +289,12 @@ function registration($app){
                     $app->log->error(var_export($e->getData()->body,true));
                     throw new Exception($e->getMessage(), Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE);
                 } catch ( Requests_Exception_HTTP_404 $e ) {
-                    $app->log->error('Wordpress code : '.$e->getCode());
-                    $app->log->error($e->getTraceAsString());
-                    throw new Exception($e->getMessage(), Errori::WORDPRESS_NOT_FOUND);
+                    $app->log->info('Utente non presente su wordpress, procedo con la registrazione.');
                 } catch ( Requests_Exception_HTTP_403 $e ) {
                     $app->log->error('Wordpress code : '.$e->getCode());
                     $app->log->error($e->getTraceAsString());
                     $app->log->error(var_export($e->getData()->body,true));
                     throw new Exception($e->getMessage(), Errori::WORDPRESS_LOGIN_REQUIRED);
-                } catch (Exception $e) {
-                    $app->log->info('Utente non presente su wordpress, procedo con la registrazione.');
                 }
 
                 if ( null != $profileUser ) {
@@ -359,25 +304,82 @@ function registration($app){
                     throw new Exception('Utente già registrato', Errori::WORDPRESS_UTENTE_GIA_PRESENTE);
                 }
 
-				$urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
-				$urlWithToken = "http://" . $_SERVER['HTTP_HOST']. $app->request->getRootUri().'/#/home/reg/cc?code='.$token;
-				$to = array($emailCapoReparto => $nomeCapoReparto.' '.strtoupper($cognomeCapoReparto[0]).'.');
+                $app->log->debug('Iscrizione capo reparto');
+                $capoRepartoAttualeArray = findDatiCapoReparto($regione,$gruppo,$codicecensimento);
 
-				$message =  'Ciao '.$nomeCapoReparto.",\n";
-				$message .= 'La squadriglia '.$nomesquadriglia.' ha richiesto di partecipare a Return To Dreamland'."\n";
-				if ( !$drm_registration->completato ) {
-                    $message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: '."\n";
-				    $message .= 'Link: '."\n".$urlWithToken."\n";
-				    $message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.'."\n";
+                if ( count($capoRepartoAttualeArray) > 0 ) {
+                    $app->log->warn('Capo reparto gia presente per questo ragazzo '.$codicecensimento);
+                } else {
+
+                    validate_email($app, $ccemail);
+
+                    // CAPO REPARTO
+                    $datiCapoReparto = findDatiCapoReparto($regione, $gruppo);
+                    $emailCapoReparto = $datiCapoReparto[0]->email;
+                    $nomeCapoReparto = $datiCapoReparto[0]->nome;
+                    $cognomeCapoReparto = $datiCapoReparto[0]->cognome;
+
+                    //VERIFICA CON DATI MANDATI DAL RAGAZZO
+                    if (strcmp($datiCapoReparto[0]->nome, $ccnome) != 0
+                        || strcmp($datiCapoReparto[0]->cognome, $cccognome) != 0
+                    ) {
+                        $app->log->info('Capo Reparto cambiato nuovo :' . $ccnome . ' ' . $cccognome . ' ' . $ccemail);
+                        $emailCapoReparto = $ccemail;
+                        $cognomeCapoReparto = $cccognome;
+                        $nomeCapoReparto = $ccnome;
+                    }
+
+                    $findTokenRegistrationCC = R::findOne('registration', ' email = ? and type = ?', array($emailCapoReparto, 'CC'));
+                    if ($findTokenRegistrationCC != null) {
+                        $token = $findTokenRegistrationCC['token'];
+                        $drm_registration = R::load('registration', $findTokenRegistrationCC['id']);
+                        $app->log->info('Capo Reparto trovato :' . $drm_registration->nome . ' ' . $drm_registration->cognome . ' ' . $drm_registration->email);
+                    } else {
+                        $token = generateToken(18);
+                        $app->log->info('Generato token ' . $token . ' per ' . $emailCapoReparto);
+                        $drm_registration = R::dispense('registration');
+                        // $drm_registration->token = md5(uniqid(rand(), true));
+                        $drm_registration->token = $token;
+                        $drm_registration->completato = false;
+                    }
+
+                    $drm_registration->email = $emailCapoReparto;
+                    $drm_registration->nome = $nomeCapoReparto;
+                    $drm_registration->cognome = $cognomeCapoReparto;
+                    $drm_registration->type = 'CC';
+                    $drm_registration->regione = $regione;
+                    $drm_registration->zona = $zona;
+                    $drm_registration->gruppo = $gruppo;
+                    $drm_registration->legame = null; //ex codicecensimento
+                    $drm_registration_id = R::store($drm_registration);
+
+                    legaCapoRepartoToRagazzo($emailCapoReparto, $codicecensimento);
+
+                    $app->log->debug('Registrato capo reparto con rowId : ' . $drm_registration_id);
+
+                    $urlAdminDreamers = $wordpress['url'] . 'wp-admin/admin.php?page=dreamers';
+                    $urlWithToken = "http://" . $_SERVER['HTTP_HOST'] . $app->request->getRootUri() . '/#/home/reg/cc?code=' . $token;
+                    $to = array($emailCapoReparto => $nomeCapoReparto . ' ' . strtoupper($cognomeCapoReparto[0]) . '.');
+
+                    $message = 'Ciao ' . $nomeCapoReparto . ",\n";
+                    $message .= 'La squadriglia ' . $nomesquadriglia . ' ha richiesto di partecipare a Return To Dreamland' . "\n";
+                    if (!$drm_registration->completato) {
+                        $message .= 'Se non hai gia\' completato l\'iscrizione sul portale, segui questo link: ' . "\n";
+                        $message .= 'Link: ' . "\n" . $urlWithToken . "\n";
+                        $message .= 'Una volta completata la registrazione potrai autorizzare le tue squadriglie a partecipare.' . "\n";
+                    }
+                    $message .= 'Link pagine autorizzazioni : ' . "\n" . $urlAdminDreamers . "\n";
+
+                    if (!dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message)) {
+                        $app->log->error('Invio mail capo reparto fallita');
+                        $app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
+                    }
+
                 }
-				$message .= 'Link pagine autorizzazioni : '."\n".$urlAdminDreamers."\n";
-				
-				if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
-                    $app->log->error('Invio mail capo reparto fallita');
-					$app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
-				}
 
-                $newUserRequest = array( 
+                $app->log->info('Procedo a creare nuovo utente su wordpress');
+
+                $newUserRequest = array(
                     'username' => $codicecensimento,
                     'password' => 'DA GENERARE RANDOM',
                     'first_name' => 'Sq. '.$nomesquadriglia,
@@ -404,6 +406,7 @@ function registration($app){
                     )
                 );
 
+                $newUser = null;
                 try {
                     $newUser = $wapi->users->create( $newUserRequest );
                 } catch( Requests_Exception_HTTP_500 $e) {
@@ -429,9 +432,10 @@ function registration($app){
                 $app->response->setBody( json_encode('ok') );
                 $app->response->setStatus(200);
 
-                $app->log->info('Completata registrazione token '.$token);
+                $app->log->debug('Completata registrazione token '.$token);
 
 			} catch(Exception $e) {
+                $app->log->error('Request body: '.$body);
 				$app->log->error($e->getMessage());
 				$testo = 'Dati Non Validi';
 				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
