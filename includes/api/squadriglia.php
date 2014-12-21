@@ -25,31 +25,44 @@ function squadriglia($app) {
 			    $squadriglia = R::findOne('squadriglia','codicecensimento = ?', array($codicecensimento) );
 			    if ( null != $squadriglia ) {
 			    	$app->log->info('trovata squadriglia '.$squadriglia->id);
-
-			    	// {"id":"6","":"88",}
-
 			    	$x = array(
 			    		"codicecensimento" => intval($codicecensimento),
 			    		"componenti" => intval($squadriglia['componenti']),
 			    		"specialita" => intval($squadriglia['specialita']),
 			    		"brevetti" => intval($squadriglia['brevetti'])
 			    	);
-
 			    	$app->response->setBody( json_encode( $x ) );
                     $app->response->setStatus(200);
 			    } else {
                     $app->log->info('Squadriglia non trovata x codcens: '.$codicecensimento);
-			    	$app->halt(404, json_encode('Squadriglia non trovata x codcens: '.$codicecensimento));
+                    throw new Exception('Squadriglia non trovata x codcens: '.$codicecensimento, Errori::SQUADRIGLIA_NON_TROVATA);
 			    }
 
 		    } catch ( Exception $e ) {
-			    if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
-			    	$url_login = $app->config('wordpress')['url'].'wp-login.php';
-			    	$app->halt(403, json_encode('Wordpress login not found - '.$url_login));
-			    }
-			    $app->log->error($e->getMessage());
-			    $app->log->error($e->getTraceAsString());
-			    $app->halt(500, json_encode('Internal error'));
+                $testo = 'Internal Error';
+                $warn = false;
+                $status = 500;
+                switch ($e->getCode()) {
+                    case Errori::WORDPRESS_LOGIN_REQUIRED:
+                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $testo = 'Wordpress login not found - '.$url_login;
+                        $status = 403;
+                        $warn = false;
+                        break;
+                    case Errori::SQUADRIGLIA_NON_TROVATA:
+                        $testo = 'Sfida gia attiva';
+                        $status = 404;
+                        $warn = true;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage());
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
 		    }
 		});
 
@@ -88,18 +101,35 @@ function squadriglia($app) {
 				    $app->log->info('Creata squadriglia : '.'['.$id.'] -> '.$body);
                     $app->response->setStatus(200);
 			    } else {
-					$app->halt(412, json_encode('Squadriglia gia presente'));
+                    throw new Exception('Squadriglia gia presente',Errori::SQUADRIGLIA_GIA_PRESENTE);
 			    }
 
 		    } catch ( Exception $e ) {
-			   	if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
-			    	$url_login = $app->config('wordpress')['url'].'wp-login.php';
-			    	$app->halt(403, json_encode('Wordpress login not found - '.$url_login));
-			    }
-			    $app->log->error($e->getMessage());
-			    $app->log->error($e->getTraceAsString());
-			    $app->log->error($body);
-			    $app->halt(500, json_encode('Internal error'));
+                $testo = 'Internal Error';
+                $warn = false;
+                $status = 500;
+                switch ($e->getCode()) {
+                    case Errori::WORDPRESS_LOGIN_REQUIRED:
+                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $testo = 'Wordpress login not found - '.$url_login;
+                        $status = 403;
+                        $warn = false;
+                        break;
+                    case Errori::SQUADRIGLIA_NON_TROVATA:
+                        $testo = 'Sfida gia attiva';
+                        $status = 404;
+                        $warn = true;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error('Request body: '.$body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage(). ' body: '.$body);
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
 		    }
 		});
 
@@ -141,18 +171,35 @@ function squadriglia($app) {
 				    $app->log->info('Aggiornata squadriglia : '.'['.$squadriglia->id.'] -> '.$body);
 			    } else {
                     $app->log->warn('Squadriglia non trovata x codcens: '.$codicecensimento);
-					$app->halt(404, json_encode('Squadriglia non trovata'));
+					throw new Exception('Squadriglia non trovata',Errori::SQUADRIGLIA_NON_TROVATA);
 			    }
 
 		    } catch ( Exception $e ) {
-			    if ( $e->getCode() == Errori::WORDPRESS_LOGIN_REQUIRED ) {
-			    	$url_login = $app->config('wordpress')['url'].'wp-login.php';
-			    	$app->halt(403, json_encode('Wordpress login not found - '.$url_login)); 
-			    }
-			    $app->log->error($e->getMessage());
-			    $app->log->error($e->getTraceAsString());
-			    $app->log->error($body);
-			    $app->halt(500, json_encode('Internal error'));
+                $testo = 'Internal Error';
+                $warn = false;
+                $status = 500;
+                switch ($e->getCode()) {
+                    case Errori::WORDPRESS_LOGIN_REQUIRED:
+                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $testo = 'Wordpress login not found - '.$url_login;
+                        $status = 403;
+                        $warn = false;
+                        break;
+                    case Errori::SQUADRIGLIA_NON_TROVATA:
+                        $testo = 'Sfida gia attiva';
+                        $status = 404;
+                        $warn = true;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error('Request body: '.$body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage(). ' body: '.$body);
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
 		    }
 		});
 

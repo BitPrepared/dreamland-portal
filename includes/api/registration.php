@@ -41,14 +41,13 @@ function registration($app){
 				$findZona = R::findOne('asa_zone','czona = ? and cregione = ?',array($zona,$regione));
 				$info->zonaNome = trim($findZona['nome']);
 
-				// VANNO PULITI I DATI
 				if ( strpos($info->zonaNome, '\r') != 0 ){
 					$info->zonaNome = str_replace('\r', '', $info->zonaNome);
 				}
 				
 				$info->cc = findDatiCapoReparto($regione,$gruppo);
 
-				$email = $findToken['email'];
+                // $email = $findToken['email'];
 				$codicecensimento = intval($findToken['codicecensimento']);
 				$_SESSION['portalCodiceCensimento'] = $codicecensimento;
 
@@ -60,7 +59,8 @@ function registration($app){
 				$app->log->error($e->getTraceAsString());
 				$testo = 'Dati Non Validi';
 				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-				$app->halt(412, json_encode($testo)); //Precondition Failed
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus(412); //Precondition Failed
 			}
 
         });
@@ -118,7 +118,7 @@ function registration($app){
 						$token = $findToken['token'];
 						if ( $findToken['completato'] ) {
 							$app->log->info('Utente gia registrato');
-                            $app->halt(412, json_encode('Utente gia registrato')); //Precondition Failed
+                            throw new Exception('Utente gia registrato',Errori::ISCRIZIONE_GIA_ATTIVA);
 						}
 					} else {
 						$token = generateToken(18);
@@ -151,7 +151,7 @@ function registration($app){
 					$message .= 'Link: '.$urlWithToken;
 					
 					if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
-						$app->halt(412, json_encode('Invio mail fallito')); //Precondition Failed
+                        throw new Exception('Invio mail registrazione fallito',Errori::INVIO_MAIL_FALLITO);
 					}
 
 					// json_encode(array('email' => $email,'codcens' => $codicecensimento))
@@ -162,28 +162,39 @@ function registration($app){
 			} catch(Exception $e) {
 				$testo = 'Dati Non Validi';
                 $warn = false;
+                $status = 412;
                 switch ($e->getCode()) {
                     case Errori::FORMATO_MAIL_NON_VALIDO:
                         $testo = $e->getMessage();
                         $warn = true;
-                    break;
+                        break;
                     case Errori::FORMATO_MAIL_NON_VALIDO_MAILGUN:
                         $testo = 'mail apparentemente non valida';
                         $warn = true;
-                    break;
+                        break;
                     case Errori::CODICE_CENSIMENTO_NOT_FOUND:
                         $testo = 'codice censimento non valido';
                         $warn = true;
-                    break;
+                        break;
+                    case Errori::ISCRIZIONE_GIA_ATTIVA:
+                        $testo = 'Utente gia registrato';
+                        $warn = true;
+                        break;
+                    case Errori::INVIO_MAIL_FALLITO:
+                        $testo = 'Invio mail fallito';
+                        $status = 500;
+                        $warn = false;
+                        break;
                 }
                 if ( !$warn ) {
-                    $app->log->info($body);
+                    $app->log->error('Request body: '.$body);
                     $app->log->error($e->getMessage());
                     $app->log->error($e->getTraceAsString());
                 } else {
                     $app->log->warn($e->getMessage().' body: '.$body);
                 }
-				$app->halt(412, json_encode($testo)); //Precondition Failed
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
 			}
 
         });
@@ -371,8 +382,7 @@ function registration($app){
                     $message .= 'Link pagine autorizzazioni : ' . "\n" . $urlAdminDreamers . "\n";
 
                     if (!dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message)) {
-                        $app->log->error('Invio mail capo reparto fallita');
-                        $app->halt(412, json_encode('Invio mail capo reparto fallita')); //Precondition Failed
+                        throw new Exception('Invio mail capo reparto fallita', Errori::INVIO_MAIL_FALLITO);
                     }
 
                 }
@@ -435,15 +445,44 @@ function registration($app){
                 $app->log->debug('Completata registrazione token '.$token);
 
 			} catch(Exception $e) {
-                $app->log->error('Request body: '.$body);
-				$app->log->error($e->getMessage());
-				$testo = 'Dati Non Validi';
-				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-                if ( $e->getCode() == Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE ) $testo = 'errore creazione utente';
-                if ( $e->getCode() == Errori::WORDPRESS_NOT_FOUND ) $testo = 'Configurazione wordpress errata';
-                if ( $e->getCode() == Errori::WORDPRESS_UTENTE_GIA_PRESENTE ) $testo = 'Utente gia registrato';
-				else $app->log->error($e->getTraceAsString());
-				$app->halt(412, json_encode($testo)); //Precondition Failed
+
+                $testo = 'Dati Non Validi';
+                $warn = false;
+                $status = 412;
+                switch ($e->getCode()) {
+                    case Errori::FORMATO_MAIL_NON_VALIDO:
+                        $testo = $e->getMessage();
+                        $warn = true;
+                        break;
+                    case Errori::WORDPRESS_PROBLEMA_CREAZIONE_UTENTE:
+                        $testo = 'errore creazione utente';
+                        $warn = false;
+                        $status = 500;
+                        break;
+                    case Errori::WORDPRESS_NOT_FOUND:
+                        $testo = 'Configurazione wordpress errata';
+                        $warn = false;
+                        $status = 500;
+                        break;
+                    case Errori::WORDPRESS_UTENTE_GIA_PRESENTE:
+                        $testo = 'Utente gia registrato';
+                        $warn = true;
+                        break;
+                    case Errori::INVIO_MAIL_FALLITO:
+                        $testo = 'Invio mail fallito';
+                        $warn = false;
+                        $status = 500;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error('Request body: '.$body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage().' body: '.$body);
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
 			}
 
         });
@@ -542,59 +581,30 @@ function registration($app){
 				 }
 
     		} catch(Exception $e) {
-				$app->log->error($e->getMessage());
-				$testo = 'Dati Non Validi';
-				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-				if ( $e->getCode() == Errori::PORTAL_INVALID_TOKEN_STEP ) $testo = 'Token non piu attivo.';
-				else $app->log->error($e->getTraceAsString());
-				$app->halt(412, json_encode($testo)); //Precondition Failed
+                $testo = 'Dati Non Validi';
+                $warn = false;
+                switch ($e->getCode()) {
+                    case Errori::FORMATO_MAIL_NON_VALIDO:
+                        $testo = $e->getMessage();
+                        $warn = true;
+                        break;
+                    case Errori::PORTAL_INVALID_TOKEN_STEP:
+                        $testo = 'Token non piu attivo';
+                        $warn = true;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error('Request body: '.$body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage().' body: '.$body);
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus(412);
 			}
 
         });
-
-//		// Step Registrazione Referente Regionale FAKE (http://10.143.90.74:8080/portal/api/registrazione/referenteregionale)
-//		$app->get('/referenteregionale', function () use ($app) {
-//
-//			try{
-//
-//				$wordpress = $app->config('wordpress');
-//
-//				$url = $wordpress['url'].'wp-json';
-//
-//				$newUserRequest = array(
-//					'username' => 'referenteregionale',
-//					'password' => 'DA GENERARE RANDOM',
-//					'first_name' => 'referente',
-//					'last_name' => 'regionale',
-//					'nickname' => 'refreg',
-//					'email' => 'orset.to@gmail.com',
-//					'meta' => array(
-//						'group' => 2241,
-//						'groupDisplay' => 'BOLOGNA 13',
-//						'zone' => '1',
-//						'zoneDisplay' => 'BOLOGNA',
-//						'region' => 'F',
-//						'regionDisplay' => 'Emilia Romagna',
-//						'codicecensimento' => '123098423',
-//						'ruolocensimento' => 'rr'
-//					)
-//				);
-//
-//				$_SESSION['portal'] = array();
-//				$_SESSION['portal']['request'] = $newUserRequest;
-//
-//			} catch(Exception $e) {
-//				$app->log->error($e->getMessage());
-//				$testo = 'Dati Non Validi';
-//				if ( $e->getCode() == Errori::FORMATO_MAIL_NON_VALIDO ) $testo = $e->getMessage();
-//				if ( $e->getCode() == Errori::PORTAL_INVALID_TOKEN_STEP ) $testo = 'Token non piu attivo.';
-//				else $app->log->error($e->getTraceAsString());
-//				$app->halt(412, json_encode($testo)); //Precondition Failed
-//			}
-//
-//			$app->redirect($url.'/portal/pk');
-//
-//		});
 
     });
 }
