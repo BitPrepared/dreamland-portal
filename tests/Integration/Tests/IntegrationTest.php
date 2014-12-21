@@ -10,6 +10,7 @@ namespace Integration\Tests;
 
 use There4\Slim\Test\WebTestCase;
 use RedBean_Facade as R;
+use BitPrepared\Wordpress\ApiClientMock;
 
 if ( !class_exists('Integration\Tests\IntegrationTest') ) {
 
@@ -22,6 +23,11 @@ if ( !class_exists('Integration\Tests\IntegrationTest') ) {
             extract(configure_slim($config), EXTR_SKIP);
 
             require APPLICATION_PATH.'/includes/app.php';
+
+            // Define wapi resource
+            $app->container->singleton('wapi', function () use ($app,$config) {
+                return new ApiClientMock();
+            });
 
             require APPLICATION_PATH.'/includes/hooks.php';
             require APPLICATION_PATH.'/includes/routes.php';
@@ -37,55 +43,114 @@ if ( !class_exists('Integration\Tests\IntegrationTest') ) {
         public function setUp(){
             parent::setUp();
             $this->mailcatcher = new \Guzzle\Http\Client('http://127.0.0.1:1080');
+
+            R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_anagrafica_eg;')->get();
+            R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_ruolo;')->get();
+            R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_anagrafica_capireparto;')->get();
+            R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_email;')->get();
+
+            R::$f->begin()->addSQL('
+                    CREATE TABLE asa_anagrafica_eg (
+                      id integer PRIMARY KEY NOT NULL,
+                      creg char(1) NOT NULL,
+                      ord char(128) NOT NULL,
+                      cun char(1) NOT NULL,
+                      prog integer NOT NULL,
+                      codicesocio integer NOT NULL,
+                      cognome char(128) NOT NULL,
+                      nome char(128) NOT NULL,
+                      datanascita char(8) NOT NULL,
+                      status char(1) NOT NULL,
+                      czona integer NOT NULL
+                    );
+                ')->get();
+
+            R::$f->begin()->addSQL('
+                    CREATE TABLE asa_capireparto_ruolo (
+                      id integer PRIMARY KEY NOT NULL,
+                      creg char(1) NOT NULL,
+                      ord char(128) NOT NULL,
+                      cun char(1) NOT NULL,
+                      prog integer NOT NULL,
+                      codicesocio integer NOT NULL,
+                      fnz integer NOT NULL
+                    );
+                ')->get();
+
+            R::$f->begin()->addSQL('
+                    CREATE TABLE asa_anagrafica_capireparto (
+                      id integer PRIMARY KEY NOT NULL,
+                      codicesocio integer NOT NULL,
+                      cognome char(128) NOT NULL,
+                      nome char(128) NOT NULL,
+                      status char(1) NOT NULL,
+                      czona integer NOT NULL
+                    );
+                ')->get();
+
+            R::$f->begin()->addSQL('
+                    CREATE TABLE asa_capireparto_email (
+                      id integer PRIMARY KEY NOT NULL,
+                      recapito CHAR(128) NOT NULL,
+                      tipo CHAR(1) NOT NULL,
+                      codicesocio integer NOT NULL
+                    );
+                ')->get();
         }
 
         protected function formPost($path,$data){
-            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'CONTENT_TYPE' => 'application/x-www-form-urlencoded'); //,'SCRIPT_NAME' => 'index.php'
+            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'CONTENT_TYPE' => 'application/x-www-form-urlencoded'); //,'SCRIPT_NAME' => 'index.php'
             $this->client->get($path,$data,$headers);
         }
 
         protected function ajaxGet($path,$data = array()) {
-            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
+            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
             $this->client->get($path,$data,$headers);
         }
 
+        protected function ajaxPost($path,$data) {
+            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
+            $this->client->post($path,$data,$headers);
+        }
+
         protected function ajaxPut($path,$data) {
-            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
+            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
             $this->client->put($path,$data,$headers);
         }
 
         protected function ajaxDelete($path,$data) {
-            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
+            $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
             $this->client->delete($path,$data,$headers);
         }
 
-        protected function creaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
-            $this->createPersona('EG',$codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
-
-            R::$f->begin()->addSQL('
-                DROP TABLE IF EXISTS asa_anagrafica_eg;
-            ')->get();
-
-            R::$f->begin()->addSQL('
-            CREATE TABLE asa_anagrafica_eg (
-              id integer PRIMARY KEY NOT NULL,
-              creg char(1) NOT NULL,
-              ord char(128) NOT NULL,
-              cun char(1) NOT NULL,
-              prog integer NOT NULL,
-              codicesocio integer NOT NULL,
-              cognome char(128) NOT NULL,
-              nome char(128) NOT NULL,
-              datanascita char(8) NOT NULL,
-              status char(1) NOT NULL,
-              czona integer NOT NULL
-            );
-            ')->get();
-
+        protected function creaAsaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
             R::$f->begin()->addSQL('
                 INSERT INTO asa_anagrafica_eg(Id, creg, ord, cun, prog, codicesocio, cognome, nome, datanascita, status, czona)
                 VALUES(1,"'.$codRegione.'","'.$codGruppo.'","O",1,'.$codicecensimento.',"'.$cognome.'","'.$nome.'","20141219","S",'.$codZona.');
             ')->get();
+        }
+
+        protected function creaAsaCapoReparto($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
+            R::$f->begin()->addSQL('
+                INSERT INTO asa_capireparto_ruolo(Id, creg, ord, cun, prog, codicesocio, fnz)
+                VALUES(1,"'.$codRegione.'","'.$codGruppo.'","O",1,'.$codicecensimento.',1);
+            ')->get();
+
+            R::$f->begin()->addSQL('
+                INSERT INTO asa_anagrafica_capireparto(Id, codicesocio, cognome, nome, status, czona)
+                VALUES(1,'.$codicecensimento.',"'.$cognome.'","'.$nome.'","S","'.$codZona.'");
+            ')->get();
+
+            R::$f->begin()->addSQL('
+                INSERT INTO asa_capireparto_email(Id, recapito, tipo, codicesocio)
+                VALUES(1,"'.$email.'","E",'.$codicecensimento.');
+            ')->get();
+
+        }
+
+        protected function creaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
+            $this->createPersona('EG',$codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
+            $this->creaAsaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
         }
 
         protected function creaCapoReparto($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){

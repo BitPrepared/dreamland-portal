@@ -54,7 +54,6 @@ class ApiSfideTest extends IntegrationTest
         $this->assertSame('{"idsfida":1,"titolo":"Sfida Test","permalink":"http:\/\/permalink","categoria":null,"codicecensimento":123123,"startpunteggio":1,"obiettivopunteggio":1,"endpunteggio":0,"sfidaspeciale":false}', $this->client->response->body(),'struttura sfida errata');
     }
 
-
     public function testIniziaGrandeSfida() {
         $this->ajaxPut('/api/sfide/iscrizione/1',
             json_encode(array(
@@ -78,7 +77,6 @@ class ApiSfideTest extends IntegrationTest
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('tipo impresa',$email);
     }
-
 
     public function testIscriviGrandeSfidaMissione()
     {
@@ -206,7 +204,6 @@ class ApiSfideTest extends IntegrationTest
         $this->assertTrue(!isset($_SESSION['sfide']),'Variabile sfide presente in sessione');
     }
 
-
     public function testSfidaCancellataPrimaAttivazione() {
         $this->ajaxGet('/api/sfide/4');
         $this->assertEquals(200, $this->client->response->status(),'Sfida 4 presente, nonostante la cancellazione, perche non attiva');
@@ -259,6 +256,16 @@ class ApiSfideTest extends IntegrationTest
     public function testSfidaCancellata() {
         $this->ajaxGet('/api/sfide/4');
         $this->assertEquals(404, $this->client->response->status(),'Sfida 4 presente, nonostante la cancellazione');
+    }
+
+    public function testChiusuraSfida(){
+        $this->ajaxPut('/api/sfide/chiusura/1',json_encode(''));
+        $this->assertEquals(200, $this->client->response->status(),'Impossibile chiudere la sfida');
+    }
+
+    public function testConfermaChiusuraSfida(){
+        $this->ajaxPut('/api/sfide/conferma/1',json_encode(''));
+        $this->assertEquals(200, $this->client->response->status(),'Impossibile confermare la stida');
     }
 
 

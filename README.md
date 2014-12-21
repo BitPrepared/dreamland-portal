@@ -22,3 +22,16 @@ o
 gem install mailcatcher
 
 la parte web: http://127.0.0.1:1080/, nei test vengono cancellate automaticamente le email!
+
+
+### Come lanciare i test unitari
+
+Caso test specifico
+```
+phpunit --filter testStep1
+```
+
+Caso gruppo di test
+```
+phpunit --group remoteTasks
+```
