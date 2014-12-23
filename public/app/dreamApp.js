@@ -91,7 +91,19 @@ define(['angular','ngDialog','angular-ui-router','ui-bootstrap', 'angular-date',
       abstract: false,
       parent: 'sfide',
       views: {
-        'container@root': { templateUrl : window.baseUrl+"app/Sfide/_iscrizione.html" }
+        'container@root': { templateUrl : window.baseUrl+"app/Sfide/_chiusura.html" }
+      },
+      data: {
+        authorizedRoles: [USER_ROLES.utente_eg]
+      }
+    });
+
+    $stateProvider.state('sfide.iscrizione', {
+      url: '/chiudi?id',
+      abstract: false,
+      parent: 'sfide',
+      views: {
+        'container@root': { templateUrl : window.baseUrl+"app/Sfide/_chiusura.html" }
       },
       data: {
         authorizedRoles: [USER_ROLES.utente_eg]

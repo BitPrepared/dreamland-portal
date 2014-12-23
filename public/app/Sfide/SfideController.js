@@ -45,7 +45,6 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
     $scope.categoriaMissioneSpeciale = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} , {'desc' : 'Altro', 'code' : 3} ];
 
-
     $scope.iscr = {
       tipo : $scope.tipiSfida[1],
       categoriaSfida: $scope.categoriaMissione[0],

@@ -1,0 +1,58 @@
+<div class="col-md-4" ng-controller="ChiusuraController">
+
+    <iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+	<form class="form-reg" role="form" name="iscrizioneForm" ng-submit="chiudi()" form-autofill-fix>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="numerosquadriglieri">Numero componenti squadriglia</label>
+			<div class="controls">
+				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="squadriglia.componenti">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="specialitasquadriglieri">Numero totale Specialit&agrave; possedute dalla Sq</label>
+			<div class="controls">
+				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.specialita">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="brevettisquadriglieri">Numero totale Brevetti posseduti dalla Sq</label>
+			<div class="controls">
+				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.brevetti">
+			</div>
+		</div>
+
+		<h3>
+			Punteggio Totale: 
+			<!-- criterio raggiungimento diverso colore diverso del punteggio totale... -->
+			<span class="label label-info">
+	    		{{iscr.punteggiosquadriglia}}
+			</span>
+		</h3>
+
+		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-show="iscr.punteggiosquadriglia > 0 && ( isMissione() || iscr.descrizione != undefined )" class="animate-if">Conferma</button>
+
+	</form>
+</div>
+
+<div class="col-md-8">
+   <legend>Help in linea</legend>
+   <p>Inserisci/Modifica tutti i dati richiesti per completare la richiesta di termine sfida</p>
+
+    <div class="alert alert-info" role="alert">
+        <p> IMPORTANTE : quando premerai CONFERMA verrai portato/a in una pagina in cui inserire: 
+	        <ol>
+	        	<li>Cosa abbiamo fatto (edit box)</li>
+	        	<li>Caricare foto e video da allegare</li>
+	        </ol>
+        </p>
+    </div>
+
+   <p>In caso di problemi invia una mail al seguente indirizzo <a href="mail:iscrizioni.rtd@agesci.it">iscrizioni.rtd - at - agesci.it</a> </p>
+</div>

@@ -9,3 +9,4 @@ phpunit.xml
 .sass-cache
 Gemfile.lock
 test.db
+build
