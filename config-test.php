@@ -8,7 +8,7 @@ $config = array(
         'type' => 'sqlite',
         'user' => 'dreamland',
         'password' => 'dreamland',
-        'host' => realpath(BASE_DIR.'/resources/tmp/').'/test.db'
+        'host' => ':memory' //realpath(BASE_DIR.'/resources/tmp/').'/test.db'
     ),
     'log' => array(
         'filename' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'.log',

@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/sh
 
 count=`netstat -an | grep 1025 | wc -l`
 

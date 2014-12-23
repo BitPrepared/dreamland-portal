@@ -2,6 +2,7 @@
 <phpunit
         bootstrap="tests/bootstrap.php"
         colors="true"
+        processIsolation="false"
         printerFile="vendor/whatthejeff/nyancat-phpunit-resultprinter/src/NyanCat/PHPUnit/ResultPrinter.php"
         printerClass="NyanCat\PHPUnit\ResultPrinter" >
 
@@ -15,6 +16,12 @@
         </whitelist>
     </filter>
 
+    <groups>
+        <exclude>
+            <group>remoteTasks</group>
+        </exclude>
+    </groups>
+
 
     <logging>
         <log type="coverage-html"
@@ -24,5 +31,6 @@
              highlight="true"
              lowUpperBound="40"
              highLowerBound="70" />
+        <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
 </phpunit>

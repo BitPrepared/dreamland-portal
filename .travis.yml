@@ -7,6 +7,18 @@ before_install:
   - composer self-update
   - composer install --dev -n --prefer-source
 
+before_script:
+  - gem install mailcatcher
+  - phpenv config-add travis.php.ini
+  - mailcatcher
+  - mkdir -p resources/logs resources/tmp
+
 script:
   - phpunit
 
+after_script:
+  - vendor/bin/test-reporter
+
+addons:
+  code_climate:
+    repo_token: 9d650adf32ba072b00e33e49abf052de9de09bb83c1d9569767c3da20c776696

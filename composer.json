@@ -19,7 +19,8 @@
         "guzzle/guzzle": "~3.8",
         "mikey179/vfsStream": "1.2.*",
         "there4/slim-test-helpers": "dev-master",
-        "fzaninotto/faker": "dev-master"
+        "fzaninotto/faker": "dev-master",
+        "codeclimate/php-test-reporter": "dev-master"
     },
     "autoload": {
 	    "psr-0": {
