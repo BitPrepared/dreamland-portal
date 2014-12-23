@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 5.5
+  - 5.4
 
 before_install:
   - composer self-update
@@ -17,8 +17,5 @@ script:
   - phpunit
 
 after_script:
-  - vendor/bin/test-reporter
-
-addons:
-  code_climate:
-    repo_token: 9d650adf32ba072b00e33e49abf052de9de09bb83c1d9569767c3da20c776696
+  - CODECLIMATE_REPO_TOKEN="9d650adf32ba072b00e33e49abf052de9de09bb83c1d9569767c3da20c776696" bin/test-reporter --stdout > codeclimate.json
+  - curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports

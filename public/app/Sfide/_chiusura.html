@@ -14,7 +14,15 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="specialitasquadriglieri">Numero totale Specialit&agrave; possedute dalla Sq</label>
+			<label class="control-label" for="protagonisti">Numero squadriglieri che si sono sentiti protagonisti</label>
+			<div class="controls">
+				<input id="protagonisti" name="protagonisti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="squadriglia.componenti">
+			</div>
+		</div>
+
+		<!-- Text input-->
+		<div class="form-group">
+			<label class="control-label" for="specialitasquadriglieri">Numero totale Specialit&agrave; conquistate</label>
 			<div class="controls">
 				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.specialita">
 			</div>
@@ -22,7 +30,7 @@
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="brevettisquadriglieri">Numero totale Brevetti posseduti dalla Sq</label>
+			<label class="control-label" for="brevettisquadriglieri">Numero totale Brevetti conquistati</label>
 			<div class="controls">
 				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.brevetti">
 			</div>
