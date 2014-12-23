@@ -8,7 +8,9 @@
 
 namespace Integration\Tests;
 
-class PageTest extends IntegrationTest
+use Dreamland\Integration\IntegrationCase;
+
+class PageCase extends IntegrationCase
 {
     public function testRoot()
     {

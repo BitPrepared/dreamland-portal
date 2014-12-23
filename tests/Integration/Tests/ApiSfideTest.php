@@ -9,8 +9,9 @@
 namespace Integration\Tests;
 
 use RedBean_Facade as R;
+use Dreamland\Integration\IntegrationCase;
 
-class ApiSfideTest extends IntegrationTest
+class ApiSfideCase extends IntegrationCase
 {
 
     public function setUp() {
@@ -27,19 +28,24 @@ class ApiSfideTest extends IntegrationTest
         $this->cleanMessages(); // clean emails between tests
     }
 
-    public function testIscriviGrandeSfida()
-    {
+    private function createSfidaMock($id,$sfidaspeciale = false, $categoria = array()){
         $sfida = array();
-        $sfida['sfida_id'] = 1;
+        $sfida['sfida_id'] = $id;
         $sfida['numero_componenti'] = 1;
         $sfida['numero_specialita'] = 0;
         $sfida['numero_brevetti'] = 0;
         $sfida['sfida_titolo'] = 'Sfida Test';
         $sfida['sfida_url'] = 'http://permalink';
         $sfida['punteggio_attuale'] = 1;
-        $sfida['sfidaspeciale'] = false;
-        $sfida['categoria'] = array(); //nelle grandi sfide viene scelto dal ragazzo quando si conferma
-        $_SESSION['sfide'] = $sfida;
+        $sfida['sfidaspeciale'] = $sfidaspeciale;
+        $sfida['categoria'] = $categoria; //nelle grandi sfide viene scelto dal ragazzo quando si conferma
+        return $sfida;
+    }
+
+    public function testIscriviGrandeSfida()
+    {
+
+        $_SESSION['sfide'] = $this->createSfidaMock(1);
 
         $this->client->get('/api/sfide/iscrizione/1');
         $this->assertEquals(302, $this->client->response->status(),'Al termine di una iscrizione ad una sfida ci deve essere un redirect');
@@ -80,17 +86,7 @@ class ApiSfideTest extends IntegrationTest
 
     public function testIscriviGrandeSfidaMissione()
     {
-        $sfida = array();
-        $sfida['sfida_id'] = 2;
-        $sfida['numero_componenti'] = 1;
-        $sfida['numero_specialita'] = 0;
-        $sfida['numero_brevetti'] = 0;
-        $sfida['sfida_titolo'] = 'Sfida Test';
-        $sfida['sfida_url'] = 'http://permalink';
-        $sfida['punteggio_attuale'] = 1;
-        $sfida['sfidaspeciale'] = false;
-        $sfida['categoria'] = array(); //nelle grandi sfide viene scelto dal ragazzo quando si conferma
-        $_SESSION['sfide'] = $sfida;
+        $_SESSION['sfide'] = $this->createSfidaMock(2);
 
         $this->client->get('/api/sfide/iscrizione/2');
         $this->assertEquals(302, $this->client->response->status(),'Al termine di una iscrizione ad una sfida ci deve essere un redirect');
@@ -125,17 +121,7 @@ class ApiSfideTest extends IntegrationTest
 
     public function testIscriviSfidaSpeciale()
     {
-        $sfida = array();
-        $sfida['sfida_id'] = 3;
-        $sfida['numero_componenti'] = 1;
-        $sfida['numero_specialita'] = 0;
-        $sfida['numero_brevetti'] = 0;
-        $sfida['sfida_titolo'] = 'Sfida Speciale Test';
-        $sfida['sfida_url'] = 'http://permalink';
-        $sfida['punteggio_attuale'] = 1;
-        $sfida['sfidaspeciale'] = true;
-        $sfida['categoria'] = array('Altro');
-        $_SESSION['sfide'] = $sfida;
+        $_SESSION['sfide'] = $this->createSfidaMock(3,true,array('Altro'));
 
         $this->client->get('/api/sfide/iscrizione/3');
         $this->assertEquals(302, $this->client->response->status(),'Al termine di una iscrizione ad una sfida ci deve essere un redirect');
@@ -147,7 +133,7 @@ class ApiSfideTest extends IntegrationTest
     public function testInfoSfidaSpeciale() {
         $this->ajaxGet('/api/sfide/3');
         $this->assertEquals(200, $this->client->response->status(),'Sfida 3 non presente');
-        $this->assertSame('{"idsfida":3,"titolo":"Sfida Speciale Test","permalink":"http:\/\/permalink","categoria":{"desc":"Altro","code":-1},"codicecensimento":123123,"startpunteggio":1,"obiettivopunteggio":1,"endpunteggio":0,"sfidaspeciale":true}', $this->client->response->body(),'struttura sfida errata');
+        $this->assertSame('{"idsfida":3,"titolo":"Sfida Test","permalink":"http:\/\/permalink","categoria":{"desc":"Altro","code":-1},"codicecensimento":123123,"startpunteggio":1,"obiettivopunteggio":1,"endpunteggio":0,"sfidaspeciale":true}', $this->client->response->body(),'struttura sfida errata');
     }
 
     public function testIniziaGrandeSfidaSpeciale() {
@@ -176,17 +162,7 @@ class ApiSfideTest extends IntegrationTest
 
     public function testIscriviSfidaDaRimuovere()
     {
-        $sfida = array();
-        $sfida['sfida_id'] = 4;
-        $sfida['numero_componenti'] = 1;
-        $sfida['numero_specialita'] = 0;
-        $sfida['numero_brevetti'] = 0;
-        $sfida['sfida_titolo'] = 'Sfida Test Da Rimuovere';
-        $sfida['sfida_url'] = 'http://permalink';
-        $sfida['punteggio_attuale'] = 1;
-        $sfida['sfidaspeciale'] = false;
-        $sfida['categoria'] = array(); //nelle grandi sfide viene scelto dal ragazzo quando si conferma
-        $_SESSION['sfide'] = $sfida;
+        $_SESSION['sfide'] = $this->createSfidaMock(4);
 
         $this->client->get('/api/sfide/iscrizione/4');
         $this->assertEquals(302, $this->client->response->status(),'Al termine di una iscrizione ad una sfida ci deve essere un redirect');

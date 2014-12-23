@@ -8,7 +8,9 @@
 
 namespace Integration\Tests;
 
-class ApiEditorTest extends IntegrationTest
+use Dreamland\Integration\IntegrationCase;
+
+class ApiEditorCase extends IntegrationCase
 {
 
     public function setUp(){

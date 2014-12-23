@@ -10,8 +10,9 @@ namespace Integration\Tests;
 
 use RedBean_Facade as R;
 use Dreamland\Ruoli;
+use Dreamland\Integration\IntegrationCase;
 
-class ApiIscrizioneTest extends IntegrationTest
+class ApiIscrizioneCase extends IntegrationCase
 {
 
     public function setUp() {

@@ -8,7 +8,9 @@
 
 namespace Integration\Tests;
 
-class ApiAsaTest extends IntegrationTest
+use Dreamland\Integration\IntegrationCase;
+
+class ApiAsaCase extends IntegrationCase
 {
 
     public function testProfileAttivo()
