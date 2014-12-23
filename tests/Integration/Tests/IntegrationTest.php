@@ -48,6 +48,7 @@ if ( !class_exists('Integration\Tests\IntegrationTest') ) {
             R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_ruolo;')->get();
             R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_anagrafica_capireparto;')->get();
             R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_email;')->get();
+            R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_gruppi;')->get();
 
             R::$f->begin()->addSQL('
                     CREATE TABLE asa_anagrafica_eg (

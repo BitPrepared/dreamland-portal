@@ -10,6 +10,7 @@ abstract class Errori extends \BitPrepared\Commons\BasicEnum {
 	const CODICE_CENSIMENTO_NOT_FOUND = 3;
 	const RUOLO_IN_SQUADRIGLIA_ERRATO = 4;
     const CAMPI_VUOTI = 5;
+    const GRUPPO_NON_VALIDO = 6;
 
 	// PORTAL
 	const PORTAL_INVALID_TOKEN_STEP = 11;

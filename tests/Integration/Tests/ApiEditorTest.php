@@ -38,4 +38,22 @@ class ApiEditorTest extends IntegrationTest
 
     }
 
+    public function testNuovoUtenteCC()
+    {
+        $this->creaAsaGruppo('F',1,2241,'TEST');
+        $this->ajaxGet('/api/editor/cc/create/2241');
+        $this->assertEquals(201, $this->client->response->status());
+        // {"nome":"Telly","cognome":"Denesik","codZona":16,"codGruppo":1120,"codRegione":"q","codicecensimento":13413,"datanascita":"19980717"}
+
+        $obj = json_decode($this->client->response->body());
+        $this->assertEquals(2241,$obj->codGruppo);
+        $this->assertEquals(1,$obj->codZona);
+        $this->assertEquals('F',$obj->codRegione);
+
+        $this->assertNotNull($obj->nome);
+        $this->assertNotNull($obj->cognome);
+        $this->assertNotNull($obj->email);
+
+    }
+
 }

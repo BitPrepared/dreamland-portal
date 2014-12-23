@@ -1,4 +1,5 @@
 <?php
+if  (!defined('BETA')) define('BETA',true);
 if  (!defined('DEBUG')) define('DEBUG',true);
 if  (!defined('MAINTENANCE')) define('MAINTENANCE',false);
 $config = array(
