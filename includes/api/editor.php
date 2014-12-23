@@ -26,7 +26,7 @@ function editor($app)
                 if ( defined('BETA') && BETA ){
                     $app->log->info('Richiesta creazione nuovo utente eg per il gruppo '.$gruppoCode);
                 } else {
-                    throw new Exception('Beta non attiva', Errori::WORDPRESS_LOGIN_REQUIRED);
+                    throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);
                 }
 
                 $find = R::findOne('asa_gruppi',' ord = ?',array($gruppoCode));
@@ -84,6 +84,11 @@ function editor($app)
                         $status = 404;
                         $warn = true;
                         break;
+                    case Errori::BETA_NON_ATTIVA:
+                        $testo = 'Beta non attiva';
+                        $status = 403;
+                        $warn = true;
+                        break;
                 }
                 if ( !$warn ) {
                     $app->log->error($e->getMessage());
@@ -109,7 +114,7 @@ function editor($app)
                 if ( defined('BETA') && BETA ){
                     $app->log->info('Richiesta creazione nuovo utente cc per il gruppo '.$gruppoCode);
                 } else {
-                    throw new Exception('Beta non attiva', Errori::WORDPRESS_LOGIN_REQUIRED);
+                    throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);
                 }
 
                 $find = R::findOne('asa_gruppi',' ord = ?',array($gruppoCode));
@@ -172,6 +177,11 @@ function editor($app)
                     case Errori::GRUPPO_NON_VALIDO:
                         $testo = 'Gruppo non valido';
                         $status = 404;
+                        $warn = true;
+                        break;
+                    case Errori::BETA_NON_ATTIVA:
+                        $testo = 'Beta non attiva';
+                        $status = 403;
                         $warn = true;
                         break;
                 }

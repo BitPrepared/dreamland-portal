@@ -36,4 +36,7 @@ abstract class Errori extends \BitPrepared\Commons\BasicEnum {
     const SQUADRIGLIA_NON_TROVATA = 61;
     const SQUADRIGLIA_GIA_PRESENTE = 62;
 
+    //BETA
+    const BETA_NON_ATTIVA = 101;
+
 }
