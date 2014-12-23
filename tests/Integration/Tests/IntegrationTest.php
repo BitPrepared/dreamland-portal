@@ -96,6 +96,17 @@ if ( !class_exists('Integration\Tests\IntegrationTest') ) {
                       codicesocio integer NOT NULL
                     );
                 ')->get();
+
+            R::$f->begin()->addSQL('
+                    CREATE TABLE asa_gruppi (
+                      id integer PRIMARY KEY NOT NULL,
+                      creg char(1) NOT NULL,
+                      ord char(128) NOT NULL,
+                      czona integer NOT NULL,
+                      status char(1) NOT NULL,
+                      nome char(128) NOT NULL
+                    );
+                ')->get();
         }
 
         protected function formPost($path,$data){
@@ -121,6 +132,13 @@ if ( !class_exists('Integration\Tests\IntegrationTest') ) {
         protected function ajaxDelete($path,$data) {
             $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
             $this->client->delete($path,$data,$headers);
+        }
+
+        protected function creaAsaGruppo($codRegione,$codZona,$codGruppo,$nome){
+            R::$f->begin()->addSQL('
+                INSERT INTO asa_gruppi(Id, creg, ord, czona,status, nome)
+                VALUES(1,"'.$codRegione.'","'.$codGruppo.'",'.$codZona.',"S","'.$nome.'");
+            ')->get();
         }
 
         protected function creaAsaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){

@@ -1,0 +1,97 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Stefano "Yoghi" Tamagnini
+ * Date: 22/12/14 - 21:49
+ * 
+ */
+
+use RedBean_Facade as R;
+use Dreamland\Errori;
+
+function editor($app)
+{
+    // Library group
+    $app->group('/editor', function () use ($app) {
+
+        $app->get('/eg/create/:gruppo', function ($gruppoCode) use ($app) {
+            $app->response->setStatus(500);
+            $app->response->headers->set('Content-Type', 'application/json');
+            try {
+
+                if ( !isset($_SESSION['wordpress']) ) {
+                    throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
+                }
+
+                $find = R::findOne('asa_gruppi',' ord = ?',array($gruppoCode));
+
+                if ( null == $find ){
+                    throw new Exception('Gruppo inesistente',Errori::GRUPPO_NON_VALIDO);
+                }
+                while(true){
+                    $faker = Faker\Factory::create();
+                    $user = new \stdClass();
+                    $user->nome = $faker->firstName; // 'Lucy'
+                    $user->cognome = $faker->lastName; // 'Curry'
+
+                    $user->codRegione = $find['creg'];
+                    $user->codGruppo = $gruppoCode;
+                    $user->codZona = $find['czona'];
+
+//                    $user->codZona = $faker->numberBetween(1, 26); //codicezona
+//                    $user->codGruppo = $faker->numberBetween(1, 9000); //codicegruppo
+//                    $user->codRegione = $faker->randomLetter(); //regione
+
+                    $user->codicecensimento = $faker->randomNumber(5); //codicecensimento
+                    $user->datanascita = $faker->date($format = 'Ymd', $max = 'now');
+
+                    if ( null == findDatiRagazzo($user->codicecensimento) ) {
+
+                        R::$f->begin()->addSQL('
+                            INSERT INTO asa_anagrafica_eg(Id, creg, ord, cun, prog, codicesocio, cognome, nome, datanascita, status, czona)
+                            VALUES(1,"'.$user->codRegione.'","'.$user->codGruppo.'","O",1,'.$user->codicecensimento.',"'.$user->cognome.'","'.$user->nome.'","'.$user->datanascita.'","S",'.$user->codZona.');
+                        ')->get();
+
+                        break;
+
+                    }
+
+                }
+
+                $app->response->setBody( json_encode($user) );
+                $app->response->setStatus(201);
+
+            } catch ( Exception $e ) {
+
+                $testo = 'Internal Error';
+                $warn = false;
+                $status = 500;
+                switch ($e->getCode()) {
+                    case Errori::WORDPRESS_LOGIN_REQUIRED:
+                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $testo = 'Wordpress login not found - '.$url_login;
+                        $status = 403;
+                        $warn = false;
+                        break;
+                    case Errori::GRUPPO_NON_VALIDO:
+                        $testo = 'Gruppo non valido';
+                        $status = 404;
+                        $warn = true;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage());
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
+
+            }
+        });
+
+
+    });
+
+}
