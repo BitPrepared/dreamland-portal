@@ -52,9 +52,10 @@ function sfide($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
@@ -150,9 +151,10 @@ function sfide($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
@@ -227,7 +229,8 @@ function sfide($app) {
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
 
-                $capoReparto = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento)[0];
+                $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
+                $capoReparto = $capoRepartoArray[0];
 
                 $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
 
@@ -272,9 +275,10 @@ function sfide($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
@@ -313,7 +317,8 @@ function sfide($app) {
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
 
-            $url = $app->config('wordpress')['url'];
+            $wordpress = $app->config('wordpress');
+            $url = $wordpress['url'];
             $body = $app->request->getBody();
 
             try {
@@ -343,8 +348,10 @@ function sfide($app) {
                 $squadriglia = findDatiSquadriglia($codicecensimento);
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
+                
+                $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
+                $capoReparto = $capoRepartoArray[0];
 
-                $capoReparto = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento)[0];
 
                 $to = array($capoReparto->email => $capoReparto->nome.' '.strtoupper($capoReparto->cognome[0]).'.');
 
@@ -365,9 +372,10 @@ function sfide($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;

@@ -42,9 +42,10 @@ function squadriglia($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
@@ -108,9 +109,10 @@ function squadriglia($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
@@ -178,9 +180,10 @@ function squadriglia($app) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
+                $wordpress = $app->config('wordpress');
                 switch ($e->getCode()) {
                     case Errori::WORDPRESS_LOGIN_REQUIRED:
-                        $url_login = $app->config('wordpress')['url'].'wp-login.php';
+                        $url_login = $wordpress['url'].'wp-login.php';
                         $testo = 'Wordpress login not found - '.$url_login;
                         $status = 403;
                         $warn = false;
