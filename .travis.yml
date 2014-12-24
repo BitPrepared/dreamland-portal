@@ -17,7 +17,7 @@ before_script:
   - mkdir -p resources/logs resources/tmp
 
 script:
-  - phpunit
+  - phpunit -v --debug
 
 addons:
   code_climate:
