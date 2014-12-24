@@ -8,14 +8,14 @@ $config = array(
         'type' => 'sqlite',
         'user' => 'dreamland',
         'password' => 'dreamland',
-        'host' => ':memory' //realpath(BASE_DIR.'/resources/tmp/').'/test.db'
+        'host' => ':memory:' //realpath(BASE_DIR.'/resources/tmp/').'/test.db'
     ),
     'log' => array(
         'filename' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'.log',
         'level' => 'DEBUG'
     ),
     'smtp' => array(
-        'host' => 'localhost',
+        'host' => '', //'localhost',
         'port' => 1025,
         'security' => null, //ssl,tls,null
         'username' => '',
