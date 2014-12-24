@@ -348,7 +348,7 @@ function sfide($app) {
                 $squadriglia = findDatiSquadriglia($codicecensimento);
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
-                
+
                 $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
                 $capoReparto = $capoRepartoArray[0];
 
