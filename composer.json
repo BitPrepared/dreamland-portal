@@ -20,7 +20,8 @@
         "mikey179/vfsStream": "1.2.*",
         "there4/slim-test-helpers": "dev-master",
         "fzaninotto/faker": "dev-master",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "dev-master",
+        "phpmd/phpmd": "*"
     },
     "autoload": {
 	    "psr-0": {
