@@ -151,7 +151,7 @@ function registration($app){
 					$message .= 'Per completare la tua registrazione visita il seguente link e completa la scheda di iscrizione: '."\n";
 					$message .= 'Link: '.$urlWithToken;
 					
-					if ( !dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message) ){
+					if ( !$app->mail->send($to, 'Richiesta registrazione Return To Dreamland', $message) ){
                         throw new Exception('Invio mail registrazione fallito',Errori::INVIO_MAIL_FALLITO);
 					}
 
@@ -386,7 +386,7 @@ function registration($app){
                     }
                     $message .= 'Link pagine autorizzazioni : ' . "\n" . $urlAdminDreamers . "\n";
 
-                    if (!dream_mail($app, $to, 'Richiesta registrazione Return To Dreamland', $message)) {
+                    if (!$app->mail->send($to, 'Richiesta registrazione Return To Dreamland', $message)) {
                         throw new Exception('Invio mail capo reparto fallita', Errori::INVIO_MAIL_FALLITO);
                     }
 

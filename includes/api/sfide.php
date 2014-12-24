@@ -260,7 +260,7 @@ function sfide($app) {
                 $message .= 'Ulteriori dettagli qui: '.$drm_iscrizione_sfida->permalink."\n";
 
 
-                if ( !dream_mail($app, $to, 'Iscrizione Sfida', $message) ){
+                if ( !$app->mail->send($to, 'Iscrizione Sfida', $message) ){
                     throw new Exception('Invio mail capo reparto di iscrizione sq. sfida fallita',Errori::INVIO_MAIL_FALLITO);
                 }
 
@@ -359,7 +359,7 @@ function sfide($app) {
                 $message .= 'La tua squadriglia '. $squadriglia->nome .' ha rinunciato a partecipare ad una sfida su Dreamland'."\n";
                 $message .= 'Titolo : '.$drm_iscrizione_sfida->titolo."\n";
 
-                if ( !dream_mail($app, $to, 'Rimozione Sfida', $message) ){
+                if ( !$app->mail->send($to, 'Rimozione Sfida', $message) ){
                     throw new Exception('Invio mail capo reparto di de-iscrizione sq. sfida fallita',Errori::INVIO_MAIL_FALLITO);
                 }
 

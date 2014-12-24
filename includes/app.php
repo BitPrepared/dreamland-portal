@@ -12,6 +12,7 @@ if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
 
 use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClient;
+use BitPrepared\Mail\Mailer;
 
 if ( strcmp('sqlite',$config['db']['type']) == 0 ){
     $dsn      = $config['db']['type'].':'.$config['db']['host'];
@@ -79,6 +80,11 @@ $app->container->singleton('wapi', function () use ($app,$config) {
     $url = $wordpress['url'].'wp-json';
     $app->log->debug('Mi connettero a '.$url);
     return new ApiClient($url, $wordpress['username'], $wordpress['password']);
+});
+
+
+$app->container->singleton('mail', function () use ($app,$config) {
+    return new Mailer($app->log,$config['email_sender'],$config['smtp']);
 });
 
 
