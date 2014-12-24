@@ -22,7 +22,7 @@ script:
 addons:
   code_climate:
     repo_token:
-      secure: ""Cw8PcwP/1vC0OwHCoXMKh+wSOMzvOZKjgP0w1UbJtZ6SsRZnqilEhPdqbxS04W9BRwuiMAuMQ6wtvUKPkRJA6w9bNaSPfL4kpwz12Q16WIIL3GlH0M7XUrRktStYmtrEPlmRmTWgUWTF8e2g/YCi6HiNyesKNJvLFXZpH4K0zL8=""
+      secure: "Cw8PcwP/1vC0OwHCoXMKh+wSOMzvOZKjgP0w1UbJtZ6SsRZnqilEhPdqbxS04W9BRwuiMAuMQ6wtvUKPkRJA6w9bNaSPfL4kpwz12Q16WIIL3GlH0M7XUrRktStYmtrEPlmRmTWgUWTF8e2g/YCi6HiNyesKNJvLFXZpH4K0zL8="
 
 after_script:
   - php vendor/bin/coveralls
