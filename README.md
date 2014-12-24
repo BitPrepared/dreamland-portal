@@ -1,4 +1,8 @@
-[![Build Status](https://travis-ci.org/BitPrepared/dreamland-portal.svg?branch=master)](https://travis-ci.org/BitPrepared/dreamland-portal) [![Code Climate](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/gpa.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Test Coverage](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/coverage.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Coverage Status](https://coveralls.io/repos/BitPrepared/dreamland-portal/badge.png)](https://coveralls.io/r/BitPrepared/dreamland-portal)
+| Tests | Releases | Downloads | Dependencies |
+| ----- | -------- | ------- | ------------- | --------- | ------------ |
+| [![Build Status](https://travis-ci.org/BitPrepared/dreamland-portal.svg?branch=master)](https://travis-ci.org/BitPrepared/dreamland-portal) [![Code Climate](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/gpa.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Test Coverage](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/coverage.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Coverage Status](https://coveralls.io/repos/BitPrepared/dreamland-portal/badge.png)](https://coveralls.io/r/BitPrepared/dreamland-portal) | B | C | [![Dependency Status](https://www.versioneye.com/user/projects/549a92496b1b81d9a40001ad/badge.svg?style=flat)](https://www.versioneye.com/user/projects/549a92496b1b81d9a40001ad) |
+
+
 
 
 Portale iscrizioni
@@ -41,4 +45,5 @@ phpunit --group remoteTasks
 
 ### Lunk Utili
 
-https://coderwall.com/p/5mtq6q/encrypt-your-code-climate-repo-token-for-public-repositories-on-travis-ci
+* https://coderwall.com/p/5mtq6q/encrypt-your-code-climate-repo-token-for-public-repositories-on-travis-ci
+* http://edorian.github.io/php-coding-standard-generator/#phpmd
