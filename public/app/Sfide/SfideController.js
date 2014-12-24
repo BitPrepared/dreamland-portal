@@ -7,39 +7,6 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     $scope.squadriglia = null;
     $scope.sfida = null;
 
-    Portal.loadSquadriglia(function(squadriglia){
-      // $scope.squadriglia = {
-      //   componenti : parseInt(squadriglia.componenti),
-      //   specialita : parseInt(squadriglia.specialita),
-      //   brevetti : parseInt(squadriglia.brevetti)
-      // }
-      $scope.squadriglia = squadriglia;
-
-      Portal.loadSfida($scope.sfidaid,function(sfida){
-        $scope.sfida = sfida;
-        if ( !sfida.sfidaspeciale ) {
-            if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
-                $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
-            } else { //missione
-                $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
-            }
-        } else {
-            $scope.iscr.categoriaSfida = _.find($scope.categoriaMissioneSpeciale, function(cat){ return sfida.categoria.desc == cat.desc; });
-        }
-
-        $scope.update();
-      },function(errore){
-        $scope.currentError = errore;
-        ngDialog.open({template:'modalDialogId', scope: $scope });
-        $scope.enableButton = true;
-      });
-
-    },function(errore){
-      $scope.currentError = errore;
-      ngDialog.open({template:'modalDialogId', scope: $scope });
-      $scope.enableButton = true;
-    });
-
     $scope.tipiSfida = ['missione','impresa'];
     $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
     $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
@@ -133,6 +100,41 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     $scope.isSfidaSpeciale = function(){
       return null != $scope.sfida && $scope.sfida.sfidaspeciale;
     }
+
+    Portal.loadSquadriglia(function(squadriglia){
+      // $scope.squadriglia = {
+      //   componenti : parseInt(squadriglia.componenti),
+      //   specialita : parseInt(squadriglia.specialita),
+      //   brevetti : parseInt(squadriglia.brevetti)
+      // }
+      $scope.squadriglia = squadriglia;
+
+      Portal.loadSfida($scope.sfidaid,function(sfida){
+        $scope.sfida = sfida;
+        if ( !sfida.sfidaspeciale ) {
+          if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
+            if ( sfida.categoria == null ) $scope.iscr.categoriaSfida = null;
+            else $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
+          } else { //missione
+            $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
+          }
+        } else {
+          $scope.iscr.categoriaSfida = _.find($scope.categoriaMissioneSpeciale, function(cat){ return sfida.categoria.desc == cat.desc; });
+        }
+
+        $scope.update();
+      },function(errore){
+        $scope.currentError = errore;
+        ngDialog.open({template:'modalDialogId', scope: $scope });
+        $scope.enableButton = true;
+      });
+
+    },function(errore){
+      $scope.currentError = errore;
+      ngDialog.open({template:'modalDialogId', scope: $scope });
+      $scope.enableButton = true;
+    });
+
 
   });
 

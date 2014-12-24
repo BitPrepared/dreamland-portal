@@ -75,9 +75,10 @@ requirejs([
   'Registration/CalculatorController',
   'Sfide/SfideController',
   'Sfide/ChiusuraController',
+  'Editor/EditorController',
   'Flash/FlashController'
   ]
-  , function(jQuery,jQueryui,angular,_,dreamApp,portal,appController,header,registration,calc,sfide,sfidechiuse,flash) {
+  , function(jQuery,jQueryui,angular,_,dreamApp,portal,appController,header,registration,calc,sfide,sfidechiuse,editor,flash) {
     angular.element('#spinnerdiv').hide();
     angular.bootstrap(document, ['dreamApp']);  
     // var even = _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });

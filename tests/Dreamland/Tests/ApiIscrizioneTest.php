@@ -6,7 +6,7 @@
  * 
  */
 
-namespace Integration\Tests;
+namespace Dreamland\Tests;
 
 use RedBean_Facade as R;
 use Dreamland\Ruoli;

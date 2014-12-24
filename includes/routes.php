@@ -10,14 +10,14 @@ $app->notFound(function () use ($app) {
 // handle GET requests for /
 $app->get('/', 'authenticate', function () use ($app) {  
 	if ( isset($_SESSION['wordpress']) ) {
-		$app->redirect($app->request->getRootUri().'/home');
+		$app->redirect($app->request->getRootUri().'/home/');
 	}
 	$dati = array();
 	$app->render('index.html', $dati);
 });
 
 // handle GET requests for /
-$app->get('/home', 'authenticate', function () use ($app) {  
+$app->get('/home', 'authenticate', function () use ($app) {
 
 	if ( !isset($_SESSION['wordpress']) ) {
 		$app->log->warn('non autenticato mando in /');
@@ -46,8 +46,8 @@ $app->get('/home', 'authenticate', function () use ($app) {
 		$dati['codicecensimento'] = $codicecensimento;
 
 	} else {
-        if ( isset($wordpress['user_info']['roles ']) ) {
-            $ruolo = $wordpress['user_info']['roles '][0];
+        if ( isset($wordpress['user_info']['roles']) ) {
+            $ruolo = $wordpress['user_info']['roles'][0];
         } else {
             $app->log->error('Sistuazione anomala, distruggo la sessione ' . var_export($_SESSION, true));
             session_destroy();

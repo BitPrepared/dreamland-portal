@@ -14,7 +14,7 @@ function editor($app)
     // Library group
     $app->group('/editor', function () use ($app) {
 
-        $app->get('/eg/create/:gruppo', function ($gruppoCode) use ($app) {
+        $app->post('/eg', function () use ($app) {
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
             try {
@@ -22,6 +22,10 @@ function editor($app)
                 if ( !isset($_SESSION['wordpress']) ) {
                     throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
                 }
+
+                $body = $app->request->getBody();
+                $obj = json_decode($body);
+                $gruppoCode = $obj->gruppo;
 
                 if ( defined('BETA') && BETA ){
                     $app->log->info('Richiesta creazione nuovo utente eg per il gruppo '.$gruppoCode);
@@ -102,7 +106,7 @@ function editor($app)
             }
         });
 
-        $app->get('/cc/create/:gruppo', function ($gruppoCode) use ($app) {
+        $app->post('/cc', function () use ($app) {
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
             try {
@@ -110,6 +114,10 @@ function editor($app)
                 if ( !isset($_SESSION['wordpress']) ) {
                     throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
                 }
+
+                $body = $app->request->getBody();
+                $obj = json_decode($body);
+                $gruppoCode = $obj->gruppo;
 
                 if ( defined('BETA') && BETA ){
                     $app->log->info('Richiesta creazione nuovo utente cc per il gruppo '.$gruppoCode);

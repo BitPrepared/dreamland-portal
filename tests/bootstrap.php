@@ -26,5 +26,4 @@ require APPLICATION_PATH.'/includes/mail.php';
 require APPLICATION_PATH.'/includes/functions.php';
 
 $loader->add('BitPrepared\\Tests\\', APPLICATION_PATH . '/Tests');
-$loader->add('Integration\\Tests\\', APPLICATION_PATH . '/Tests');
 $loader->add('Dreamland\\Tests\\', APPLICATION_PATH . '/Tests');

@@ -6,7 +6,7 @@
  * 
  */
 
-namespace Integration\Tests;
+namespace Dreamland\Tests;
 
 use Dreamland\Integration\IntegrationCase;
 

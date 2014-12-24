@@ -6,7 +6,7 @@
  * 
  */
 
-namespace Integration\Tests;
+namespace Dreamland\Tests;
 
 use Dreamland\Integration\IntegrationCase;
 
@@ -26,7 +26,9 @@ class ApiEditorCase extends IntegrationCase
     public function testNuovoUtenteEG()
     {
         $this->creaAsaGruppo('F',1,2241,'TEST');
-        $this->ajaxGet('/api/editor/eg/create/2241');
+        $this->ajaxPost('/api/editor/eg',json_encode(array(
+            'gruppo' => 2241
+        )));
         $this->assertEquals(201, $this->client->response->status());
         // {"nome":"Telly","cognome":"Denesik","codZona":16,"codGruppo":1120,"codRegione":"q","codicecensimento":13413,"datanascita":"19980717"}
 
@@ -43,7 +45,9 @@ class ApiEditorCase extends IntegrationCase
     public function testNuovoUtenteCC()
     {
         $this->creaAsaGruppo('F',1,2241,'TEST');
-        $this->ajaxGet('/api/editor/cc/create/2241');
+        $this->ajaxPost('/api/editor/cc',json_encode(array(
+            'gruppo' => 2241
+        )));
         $this->assertEquals(201, $this->client->response->status());
         // {"nome":"Telly","cognome":"Denesik","codZona":16,"codGruppo":1120,"codRegione":"q","codicecensimento":13413,"datanascita":"19980717"}
 

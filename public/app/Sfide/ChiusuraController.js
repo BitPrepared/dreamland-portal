@@ -1,7 +1,7 @@
 define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     'use strict';
 
-    var chiusuraController = dreamApp.controller('Chiusuraontroller', function ($scope, $q, $rootScope, $http, $state, ngDialog, $stateParams, Portal, $window) {
+    var chiusuraController = dreamApp.controller('ChiusuraController', function ($scope, $q, $rootScope, $http, $state, ngDialog, $stateParams, Portal, $window) {
 
         $scope.sfidaid = angular.isDefined($stateParams.id) ? $stateParams.id : -1;
         $scope.squadriglia = null;

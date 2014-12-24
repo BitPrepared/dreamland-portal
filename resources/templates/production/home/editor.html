@@ -1,4 +1,38 @@
-<!-- Esploratore\Guida -->
+<!-- Editor -->
 
 <!-- index-html.html -->
-PERFAVORE FAI LOGOUT DA WORDPRESS!!!!
+<div ng-controller="EditorController">
+    <div class="col-md-4">
+
+            <legend>Pulsanti Rapidi (beta only)</legend>
+            <!--<h4></h4>-->
+
+        <iframe src="sink.html" name="sink" style="display:none"></iframe>
+
+        <form class="form-reg" role="form" name="azioniForm" ng-submit="" form-autofill-fix>
+
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="control-label" for="gruppo">Gruppo (1 - 3327)</label>
+                <div class="controls">
+                    <input id="gruppo" name="gruppo" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" max="3327" ng-model="gruppo">
+                </div>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" ng-disabled="!readyGruppo" ng-click="creaEG()" class="animate-if">Crea EG</button>
+            <button class="btn btn-lg btn-primary btn-block" ng-disabled="!readyGruppo" ng-click="creaCC()" class="animate-if">Crea CC</button>
+
+        </form>
+
+    </div>
+
+    <div class="col-md-8">
+        <legend>Risultato</legend>
+
+        <div class="alert" ng-class="stato" role="alert">
+            <p> {{result}} </p>
+        </div>
+
+    </div>
+</div>
+
