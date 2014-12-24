@@ -15,7 +15,7 @@ $config = array(
         'level' => 'DEBUG'
     ),
     'smtp' => array(
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => 1025,
         'security' => null, //ssl,tls,null
         'username' => '',
