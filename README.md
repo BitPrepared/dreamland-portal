@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/BitPrepared/dreamland-portal.svg?branch=master)](https://travis-ci.org/BitPrepared/dreamland-portal) [![Code Climate](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/gpa.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Test Coverage](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/coverage.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal)
+[![Build Status](https://travis-ci.org/BitPrepared/dreamland-portal.svg?branch=master)](https://travis-ci.org/BitPrepared/dreamland-portal) [![Code Climate](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/gpa.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Test Coverage](https://codeclimate.com/github/BitPrepared/dreamland-portal/badges/coverage.svg)](https://codeclimate.com/github/BitPrepared/dreamland-portal) [![Coverage Status](https://coveralls.io/repos/BitPrepared/dreamland-portal/badge.png)](https://coveralls.io/r/BitPrepared/dreamland-portal)
 
 
 Portale iscrizioni
