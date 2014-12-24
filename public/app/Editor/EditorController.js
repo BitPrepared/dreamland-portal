@@ -28,6 +28,22 @@ define(['angular','dreamApp'], function(angular,dreamApp){
                 });
         }
 
+        $scope.creaEG = function() {
+            var gruppo = {};
+            gruppo.gruppo = $scope.gruppo;
+            $http.post('./api/editor/cc',gruppo).
+                success(function(data, status, headers, config) {
+                    $log.info('Utente creato ',data);
+                    $scope.result = data;
+                    $scope.stato = "alert-info";
+                }).
+                error(function(data, status, headers, config) {
+                    $log.error('Problema creazione utente');
+                    $scope.result = data;
+                    $scope.stato = "alert-danger";
+                });
+        }
+
     });
 
     return editorController;

@@ -39,3 +39,7 @@ Caso gruppo di test
 ```
 phpunit --group remoteTasks
 ```
+
+### Lunk Utili
+
+https://coderwall.com/p/5mtq6q/encrypt-your-code-climate-repo-token-for-public-repositories-on-travis-ci
