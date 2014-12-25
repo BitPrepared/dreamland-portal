@@ -28,7 +28,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
                 });
         }
 
-        $scope.creaEG = function() {
+        $scope.creaCC = function() {
             var gruppo = {};
             gruppo.gruppo = $scope.gruppo;
             $http.post('./api/editor/cc',gruppo).

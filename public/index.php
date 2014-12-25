@@ -32,9 +32,60 @@ if ( defined('MAINTENANCE') && MAINTENANCE ) {
 require BASE_DIR.'includes/configuration.php';
 extract(configure_slim($config), EXTR_SKIP);
 
+// error reporting
+//function format_error( $errno, $errstr, $errfile, $errline, $html ) {
+//    $trace = print_r( debug_backtrace( false ), true );
+//    if ($html) {
+//        $content  = "<table><thead bgcolor='#c8c8c8'><th>Item</th><th>Description</th></thead><tbody>";
+//        $content .= "<tr valign='top'><td><b>Error</b></td><td><pre>$errstr</pre></td></tr>";
+//        $content .= "<tr valign='top'><td><b>Errno</b></td><td><pre>$errno</pre></td></tr>";
+//        $content .= "<tr valign='top'><td><b>File</b></td><td>$errfile</td></tr>";
+//        $content .= "<tr valign='top'><td><b>Line</b></td><td>$errline</td></tr>";
+//        $content .= "<tr valign='top'><td><b>Trace</b></td><td><pre>$trace</pre></td></tr>";
+//        $content .= '</tbody></table>';
+//    } else {
+//        $content = json_encode( array(
+//                'no' => $errno,
+//                'str' => $errstr,
+//                'file' => $errfile,
+//                'line' => $errline,
+//                'strace' => $trace
+//            )
+//        );
+//    }
+//
+//    return $content;
+//}
+
+function fatal_handler($config) {
+    $errfile = "unknown file";
+    $errstr  = "shutdown";
+    $errno   = E_CORE_ERROR;
+    $errline = 0;
+
+    $error = error_get_last();
+
+    if( $error !== NULL) {
+        $errfile = $error["file"];
+        $errstr  = $error["message"];
+        $errno   = $error["type"];
+        $errline = $error["line"];
+        $msg = json_encode( array(
+                'no' => $errno,
+                'str' => $errstr,
+                'file' => $errfile,
+                'line' => $errline
+            )
+        );
+        // format_error( $errno, $errstr, $errfile, $errline, false);
+        file_put_contents($config['log']['filename'],$msg."\n");
+    }
+}
+
+register_shutdown_function( "fatal_handler" , $config );
+
 require BASE_DIR.'includes/app.php';
 
-require BASE_DIR.'includes/mail.php';
 require BASE_DIR.'includes/hooks.php';
 require BASE_DIR.'includes/functions.php';
 require BASE_DIR.'includes/routes.php';

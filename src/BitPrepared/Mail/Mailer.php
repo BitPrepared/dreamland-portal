@@ -37,7 +37,7 @@ class Mailer
         }
     }
 
-    public function send($to, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
+    public function send($toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
 
         try {
 
@@ -45,7 +45,7 @@ class Mailer
             $message = Swift_Message::newInstance()
               ->setSubject( $subject )
               ->setFrom( $this->from )
-              ->setTo( $to )
+              ->setTo( $toEmailAddress )
               ->setBody( $txtMessage );
             
             if ( !empty($htmlMessage) ) {
@@ -72,12 +72,12 @@ class Mailer
         catch(Swift_RfcComplianceException $er){
             $this->logger->error($er->getMessage());
             $this->logger->error($er->getTraceAsString());
-            $this->logger->error($logger->dump());
+            $this->logger->error($this->smtpLog->dump());
         }
         catch(Swift_TransportException $e) {
             $this->logger->error($e->getMessage());
             $this->logger->error($e->getTraceAsString());   
-            $this->logger->error($logger->dump());
+            $this->logger->error($this->smtpLog->dump());
         }
 
         return false;

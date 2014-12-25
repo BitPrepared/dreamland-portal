@@ -23,6 +23,16 @@ define(['angular','sharedServices'], function(angular,sharedServicesModule){
           });
     };
 
+      this.chiudiSfida = function (id,x,y) {
+          $http.put('./api/sfide/chiusura/'+id).
+              success(function(data, status, headers, config) {
+                  x(data);
+              }).
+              error(function(data, status, headers, config) {
+                  y(data);
+              });
+      };
+
     this.updateSquadriglia = function (squadriglia,x,y) {
       $http.put('./api/squadriglia/',squadriglia).
           success(function(data, status, headers, config) {

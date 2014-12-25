@@ -2,7 +2,10 @@
 
     <iframe src="sink.html" name="sink" style="display:none"></iframe>
 
-	<form class="form-reg" role="form" name="iscrizioneForm" ng-submit="chiudi()" form-autofill-fix>
+	<form class="form-reg" role="form" name="chiusuraForm" ng-submit="chiudi()" form-autofill-fix>
+
+		<legend>Chiusura Sfida</legend>
+		<h4>{{sfida.titolo}}</h4>
 
 		<!-- Text input-->
 		<div class="form-group">
@@ -16,35 +19,43 @@
 		<div class="form-group">
 			<label class="control-label" for="protagonisti">Numero squadriglieri che si sono sentiti protagonisti</label>
 			<div class="controls">
-				<input id="protagonisti" name="protagonisti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="squadriglia.componenti">
+				<input id="protagonisti" name="protagonisti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="risultato.protagonisti">
 			</div>
 		</div>
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="specialitasquadriglieri">Numero totale Specialit&agrave; conquistate</label>
+			<label class="control-label" for="nuovespecialita">Numero totale Specialit&agrave; conquistate</label>
 			<div class="controls">
-				<input id="specialitasquadriglieri" name="specialitasquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.specialita">
+				<input id="nuovespecialita" name="nuovespecialita" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovespecialita">
 			</div>
 		</div>
 
 		<!-- Text input-->
 		<div class="form-group">
-			<label class="control-label" for="brevettisquadriglieri">Numero totale Brevetti conquistati</label>
+			<label class="control-label" for="nuovibrevetti">Numero totale Brevetti conquistati</label>
 			<div class="controls">
-				<input id="brevettisquadriglieri" name="brevettisquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="squadriglia.brevetti">
+				<input id="nuovibrevetti" name="nuovibrevetti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovibrevetti">
+			</div>
+		</div>
+
+		<!-- Checkbox input-->
+		<div class="form-group">
+			<label class="control-label" for="provasuperata">Ritengo di aver superato la prova</label>
+			<div class="controls">
+				<input id="provasuperata" type="checkbox" ng-model="risultato.provasuperata" ng-change="update()">
 			</div>
 		</div>
 
 		<h3>
-			Punteggio Totale: 
+			Punteggio Totale:
 			<!-- criterio raggiungimento diverso colore diverso del punteggio totale... -->
-			<span class="label label-info">
-	    		{{iscr.punteggiosquadriglia}}
+			<span class="label" ng-class="valutaSuccesso">
+	    		{{risultato.punteggiosquadriglia}} / {{iscr.obiettivo}}
 			</span>
 		</h3>
 
-		<button class="btn btn-lg btn-success btn-block" ng-disabled="!enableButton" type="submit" ng-show="iscr.punteggiosquadriglia > 0 && ( isMissione() || iscr.descrizione != undefined )" class="animate-if">Conferma</button>
+		<button class="btn btn-lg btn-primary btn-block" ng-disabled="!enableButton" type="submit" ng-show="risultato.punteggiosquadriglia > 0" class="animate-if">Conferma</button>
 
 	</form>
 </div>
@@ -57,7 +68,7 @@
         <p> IMPORTANTE : quando premerai CONFERMA verrai portato/a in una pagina in cui inserire: 
 	        <ol>
 	        	<li>Cosa abbiamo fatto (edit box)</li>
-	        	<li>Caricare foto e video da allegare</li>
+	        	<li>Caricare foto e video attraverso la Media Library</li>
 	        </ol>
         </p>
     </div>

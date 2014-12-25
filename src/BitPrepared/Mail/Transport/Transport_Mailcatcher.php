@@ -75,7 +75,7 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
     	$result = stream_get_contents($pipes[2]);
     	fclose($pipes[2]);
 
-    	$count = proc_close($process);
+    	proc_close($process);
         return 1;
     }
 

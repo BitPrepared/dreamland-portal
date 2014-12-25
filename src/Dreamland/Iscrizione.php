@@ -22,11 +22,10 @@ class Iscrizione
     // -- config --
 
     private $log;
-    private $db;
+    private $database;
 
     // -- esterne --
-
-    private $update = false;
+//    private $update = false;
 
     // -- interne --
 
@@ -36,10 +35,10 @@ class Iscrizione
      */
     private $profili;
 
-    public function __construct(Logger $logger,RedBean_Facade $db)
+    public function __construct(Logger $logger,RedBean_Facade $dbSrc)
     {
         $this->log = $logger;
-        $this->db = $db;
+        $this->database = $dbSrc;
         $this->profili = array();
     }
 

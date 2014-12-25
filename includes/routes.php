@@ -10,7 +10,7 @@ $app->notFound(function () use ($app) {
 // handle GET requests for /
 $app->get('/', 'authenticate', function () use ($app) {  
 	if ( isset($_SESSION['wordpress']) ) {
-		$app->redirect($app->request->getRootUri().'/home/');
+		$app->redirect($app->request->getRootUri().'/home');
 	}
 	$dati = array();
 	$app->render('index.html', $dati);

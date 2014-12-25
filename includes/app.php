@@ -6,13 +6,12 @@
  * 
  */
 
-
-// error reporting
-if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
-
 use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClient;
 use BitPrepared\Mail\Mailer;
+
+// GESTITO VIA APACHE
+//if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
 
 if ( strcmp('sqlite',$config['db']['type']) == 0 ){
     $dsn      = $config['db']['type'].':'.$config['db']['host'];
@@ -33,7 +32,6 @@ $app = new \Slim\Slim(array(
     'mode' => $config['enviroment']
 ));
 
-# Instantiate the client
 $app->config(array(
     'log.enabled' => $log_enable,
     'log.level' => $log_level,
@@ -81,7 +79,6 @@ $app->container->singleton('wapi', function () use ($app,$config) {
     $app->log->debug('Mi connettero a '.$url);
     return new ApiClient($url, $wordpress['username'], $wordpress['password']);
 });
-
 
 $app->container->singleton('mail', function () use ($app,$config) {
     return new Mailer($app->log,$config['email_sender'],$config['smtp']);

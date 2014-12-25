@@ -44,11 +44,11 @@ class WPAPI_Profiles implements \WPAPI_Collection {
      *
      * @throws Requests_Exception Failed to retrieve the user
      * @throws Exception Failed to decode JSON
-     * @param int $id User ID
+     * @param int $userId User ID
      * @return WPAPI_User
      */
-    public function get($id, $will_edit = false) {
-        $url = sprintf( WPAPI_Profiles::ROUTE_PROFILE_SEARCH, $id );
+    public function get($userId, $will_edit = false) {
+        $url = sprintf( WPAPI_Profiles::ROUTE_PROFILE_SEARCH, $userId );
         if ($will_edit) {
             $url .= '?context=edit';
         }

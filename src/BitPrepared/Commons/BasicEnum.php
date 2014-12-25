@@ -33,13 +33,13 @@ abstract class BasicEnum {
 
     public static function isValidValue($value) {
         $values = array_values(self::getConstants());
-        return in_array($value, $values, $strict = true);
+        return in_array($value, $values, true);
     }
 
-    public static function fromValue($i){
+    public static function fromValue($number){
         $consts = self::getConstants();
         foreach ($consts as $key => $value) {
-            if ( $value == $i ) {
+            if ( $value == $number ) {
                 return $key;
             }
         }

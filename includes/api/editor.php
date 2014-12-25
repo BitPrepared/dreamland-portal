@@ -8,6 +8,7 @@
 
 use RedBean_Facade as R;
 use Dreamland\Errori;
+use Faker\Factory;
 
 function editor($app)
 {
@@ -27,7 +28,7 @@ function editor($app)
                 $obj = json_decode($body);
                 $gruppoCode = $obj->gruppo;
 
-                if ( defined('BETA') && BETA ){
+                if ( defined('BETA') and BETA ){
                     $app->log->info('Richiesta creazione nuovo utente eg per il gruppo '.$gruppoCode);
                 } else {
                     throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);
@@ -39,7 +40,7 @@ function editor($app)
                     throw new Exception('Gruppo inesistente',Errori::GRUPPO_NON_VALIDO);
                 }
                 while(true){
-                    $faker = Faker\Factory::create();
+                    $faker = Factory::create();
                     $user = new \stdClass();
                     $user->nome = $faker->firstName; // 'Lucy'
                     $user->cognome = $faker->lastName; // 'Curry'
@@ -120,7 +121,7 @@ function editor($app)
                 $obj = json_decode($body);
                 $gruppoCode = $obj->gruppo;
 
-                if ( defined('BETA') && BETA ){
+                if ( defined('BETA') and BETA ){
                     $app->log->info('Richiesta creazione nuovo utente cc per il gruppo '.$gruppoCode);
                 } else {
                     throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);

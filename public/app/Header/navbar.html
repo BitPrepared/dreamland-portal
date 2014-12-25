@@ -19,6 +19,10 @@
             <a href="{{wordpressUrl}}">Home</a>
           </li>
 
+          <li ng-show="isAuthenticated() && !isGuest()">
+            <a href="{{wordpressUrl}}wp-admin/">Bacheca</a>
+          </li>
+
           <li ng-show="isGuest()">
             <a ui-sref="home.registration">Registrazione Utente</a>
           </li>
@@ -32,7 +36,7 @@
           <!--</li>-->
 
           <li ng-show="isAuthenticated() && !isGuest()">
-            <a href="#/profilo">Profilo Utente</a>
+            <a href="#/profilo">Profilo Sognatore</a>
           </li>
 
           <li class="dropdown" ng-class="{ active: isActive('/admin') }" ng-show="isAuthorized(userRoles.administrator)">

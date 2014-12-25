@@ -1,12 +1,5 @@
 <?php
 
-use \stdClass;
-use RedBean_Facade as R;
-use Dreamland\Errori;
-use Dreamland\Ruoli;
-use Mailgun\Mailgun;
-use BitPrepared\Wordpress\ApiClient;
-
 require_once('api/asa.php');
 require_once('api/registration.php');
 require_once('api/sfide.php');

@@ -73,7 +73,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         $scope.iscr.punteggiosquadriglia = $scope.squadriglia.componenti 
                                             + 2 * $scope.squadriglia.specialita
                                             + (6 * $scope.squadriglia.brevetti)
-                                            + (3 * $scope.iscr.numeroprotagonisti);
+                                            + (3 * $scope.iscr.numeroprotagonisti) + 20; //20 mi auguro il successo
         if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) {
           $scope.iscr.punteggiosquadriglia = $scope.iscr.punteggiosquadriglia 
                                             + 2 * $scope.iscr.specialitasquadriglierinuove

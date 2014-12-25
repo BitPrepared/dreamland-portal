@@ -22,7 +22,6 @@ require APPLICATION_PATH.'/config-test.php';
 $loader = require APPLICATION_PATH . '/vendor/autoload.php';
 
 require APPLICATION_PATH.'/includes/configuration.php';
-require APPLICATION_PATH.'/includes/mail.php';
 require APPLICATION_PATH.'/includes/functions.php';
 
 $loader->add('BitPrepared\\Tests\\', APPLICATION_PATH . '/Tests');

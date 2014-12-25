@@ -236,8 +236,16 @@ class ApiSfideCase extends IntegrationCase
 
     public function testChiusuraSfida(){
         $this->markTestIncomplete('This test has not been implemented yet.');
-//        $this->ajaxPut('/api/sfide/chiusura/1',json_encode(''));
-//        $this->assertEquals(200, $this->client->response->status(),'Impossibile chiudere la sfida');
+//        $this->ajaxPut('/api/sfide/chiusura/1',json_encode(array(
+//            'protagonisti' => 2,
+//            'nuovespecialita' => 3,
+//            'nuovibrevetti' => 1,
+//            'punteggiosquadriglia' => 100,
+//            'provasuperata' => true
+//        )));
+//        $this->assertEquals(204, $this->client->response->status(),'Impossibile chiudere la sfida');
+//        $this->assertSame('', $this->client->response->body(),'struttura sfida errata');
+//        $this->assertEmailIsSent();
     }
 
     public function testConfermaChiusuraSfida(){

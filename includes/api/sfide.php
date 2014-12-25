@@ -264,9 +264,12 @@ function sfide($app) {
                     throw new Exception('Invio mail capo reparto di iscrizione sq. sfida fallita',Errori::INVIO_MAIL_FALLITO);
                 }
 
-                if ( !isset($_SESSION['portal'])) $_SESSION['portal'] = array();
-                if ( !isset($_SESSION['portal']['request'])) $_SESSION['portal']['request'] = array();
-                $_SESSION['portal']['request']['sfidaid'] = $sfida_id;
+                // sovrascrivo tutto per sicurezza
+                $_SESSION['portal'] = array(
+                    'request' => array(
+                        'sfidaid' => $sfida_id
+                    )
+                );
 
                 $app->response->setBody("");
                 $app->response->setStatus(204);
@@ -342,7 +345,7 @@ function sfide($app) {
 
                     $app->log->info('Abortita sfida di '.$codicecensimento.' alla sfida '.$sfida_id);
                 } else {
-                    throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
+                    throw new Exception('Sfida non trovata di '.$codicecensimento.' id '.$sfida_id,Errori::SFIDA_NON_TROVATA);
                 }
 
                 $squadriglia = findDatiSquadriglia($codicecensimento);
@@ -413,6 +416,107 @@ function sfide($app) {
 
             $app->response->setStatus(501);
             $app->response->headers->set('Content-Type', 'application/json');
+
+//            protagonisti : 0,
+//            nuovespecialita : 0,
+//            nuovibrevetti : 0,
+//            punteggiosquadriglia : 0,
+//            provasuperata : true
+
+            $body = $app->request->getBody();
+
+            try {
+
+                if ( !isset($_SESSION['wordpress']) ) {
+                    throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
+                }
+
+                $obj_request = json_decode($body);
+
+                $wordpress = $_SESSION['wordpress'];
+                $codicecensimento = $wordpress['user_info']['codicecensimento'];
+
+                $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
+                if ( null != $drm_iscrizione_sfida ) {
+
+                    $drm_chiusura_sfida = R::dispense('chiusurasfida');
+
+                    //PK
+                    $drm_chiusura_sfida->idsfida = $sfida_id;
+                    $drm_chiusura_sfida->codicecensimento = $codicecensimento;
+
+                    //nuovi
+                    $drm_chiusura_sfida->protagonisti = $obj_request->protagonisti;
+                    $drm_chiusura_sfida->nuovespecialita = $obj_request->nuovespecialita;
+                    $drm_chiusura_sfida->nuovibrevetti = $obj_request->nuovibrevetti;
+
+                    //da capire
+                    $drm_chiusura_sfida->provasuperata = $obj_request->provasuperata;
+
+                    //gia presente
+                    $drm_chiusura_sfida->punteggiosquadriglia= $obj_request->punteggiosquadriglia;
+
+                    $drm_chiusura_sfida->protagonisti = $obj_request->protagonisti;
+
+                    $id_drm_chiusura_sfida = R::store($drm_chiusura_sfida);
+
+                    $app->log->info('Chiusa sfida '.$sfida_id.' da parte di '.$codicecensimento.' creato rapporto '.$id_drm_chiusura_sfida);
+
+                    //aggiorno iscrizione sfida
+                    $drm_iscrizione_sfida->endpunteggio = $obj_request->punteggiosquadriglia;
+                    R::store($drm_iscrizione_sfida);
+
+                    $app->log->info('Aggiornata iscrizione sfida '.$sfida_id.' da parte di '.$codicecensimento);
+
+
+                    //FIXME: logica invio mail caporeparto
+
+                    $app->response->setBody("");
+                    $app->response->setStatus(204);
+
+                } else {
+                    throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
+                }
+
+            } catch ( Exception $e ) {
+                $testo = 'Internal Error';
+                $warn = false;
+                $status = 500;
+                $wordpress = $app->config('wordpress');
+                switch ($e->getCode()) {
+                    case Errori::WORDPRESS_LOGIN_REQUIRED:
+                        $url_login = $wordpress['url'].'wp-login.php';
+                        $testo = 'Wordpress login not found - '.$url_login;
+                        $status = 403;
+                        $warn = false;
+                        break;
+                    case Errori::SFIDA_GIA_ATTIVA:
+                        $testo = 'Sfida gia attiva';
+                        $status = 412;
+                        $warn = true;
+                        break;
+                    case Errori::SFIDA_NON_TROVATA:
+                        $testo = 'Sfida non trovata';
+                        $status = 404;
+                        $warn = true;
+                        break;
+                    case Errori::INVIO_MAIL_FALLITO:
+                        $testo = 'Invio mail fallito';
+                        $status = 500;
+                        $warn = false;
+                        break;
+                }
+                if ( !$warn ) {
+                    $app->log->error('Request body: '.$body);
+                    $app->log->error($e->getMessage());
+                    $app->log->error($e->getTraceAsString());
+                } else {
+                    $app->log->warn($e->getMessage().' body: '.$body);
+                }
+                $app->response->setBody( json_encode($testo) );
+                $app->response->setStatus($status);
+            }
+
 
         });
 
