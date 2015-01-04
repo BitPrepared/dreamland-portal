@@ -78,7 +78,7 @@ function fatal_handler($config) {
             )
         );
         // format_error( $errno, $errstr, $errfile, $errline, false);
-        file_put_contents($config['log']['filename'],$msg."\n");
+        file_put_contents($config['log']['filename'],$msg."\n",'a+');
     }
 }
 
