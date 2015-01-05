@@ -11,7 +11,7 @@
 		<div class="form-group">
 			<label class="control-label" for="numerosquadriglieri">Numero componenti squadriglia</label>
 			<div class="controls">
-				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="squadriglia.componenti">
+				<input id="numerosquadriglieri" name="numerosquadriglieri" ng-change="update()" placeholder="0" class="form-control input-sm" required type="number" min="1" ng-model="squadriglia.componenti">
 			</div>
 		</div>
 
@@ -19,29 +19,36 @@
 		<div class="form-group">
 			<label class="control-label" for="protagonisti">Numero squadriglieri che si sono sentiti protagonisti</label>
 			<div class="controls">
-				<input id="protagonisti" name="protagonisti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="1" ng-model="risultato.protagonisti">
+				<input id="protagonisti" name="protagonisti" ng-change="update()" placeholder="0" class="form-control input-sm" required type="number" min="1" ng-model="risultato.protagonisti">
 			</div>
 		</div>
 
-		<!-- Text input-->
-		<div class="form-group">
-			<label class="control-label" for="nuovespecialita">Numero totale Specialit&agrave; conquistate</label>
-			<div class="controls">
-				<input id="nuovespecialita" name="nuovespecialita" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovespecialita">
+
+		<div ng-if="!isSfidaSpeciale()">
+			
+			<!-- Text input-->
+			<div class="form-group">
+				<label class="control-label" for="nuovespecialita">Numero totale Specialit&agrave; conquistate</label>
+				<div class="controls">
+					<input id="nuovespecialita" name="nuovespecialita" ng-change="update()" placeholder="0" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovespecialita">
+				</div>
 			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+				<label class="control-label" for="nuovibrevetti">Numero totale Brevetti conquistati</label>
+				<div class="controls">
+					<input id="nuovibrevetti" name="nuovibrevetti" ng-change="update()" placeholder="0" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovibrevetti">
+				</div>
+			</div>
+
 		</div>
 
-		<!-- Text input-->
-		<div class="form-group">
-			<label class="control-label" for="nuovibrevetti">Numero totale Brevetti conquistati</label>
-			<div class="controls">
-				<input id="nuovibrevetti" name="nuovibrevetti" ng-change="update()" placeholder="8" class="form-control input-sm" required type="number" min="0" ng-model="risultato.nuovibrevetti">
-			</div>
-		</div>
+
 
 		<!-- Checkbox input-->
 		<div class="form-group">
-			<label class="control-label" for="provasuperata">Ritengo di aver superato la prova</label>
+			<label class="control-label" for="provasuperata">Ritengo di aver superato la sfida</label>
 			<div class="controls">
 				<input id="provasuperata" type="checkbox" ng-model="risultato.provasuperata" ng-change="update()">
 			</div>

@@ -468,7 +468,6 @@ function sfide($app) {
 
                     $app->log->info('Aggiornata iscrizione sfida '.$sfida_id.' da parte di '.$codicecensimento);
 
-
                     //FIXME: logica invio mail caporeparto
 
                     $app->response->setBody("");

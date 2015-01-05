@@ -95,9 +95,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
 
             var sfida = $scope.risultato;
             Portal.chiudiSfida($scope.sfidaid,function(sfida){
-
-
-
+                $window.location.href = $scope.sfida.permalink+'?completa';
             },function(errore){
                 $scope.currentError = errore;
                 ngDialog.open({template:'modalDialogId', scope: $scope });
