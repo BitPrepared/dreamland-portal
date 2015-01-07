@@ -17,7 +17,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             nuovespecialita : 0,
             nuovibrevetti : 0,
             punteggiosquadriglia : 0,
-            provasuperata : true
+            provasuperata : undefined
         }
 
         $scope.iscr = {
