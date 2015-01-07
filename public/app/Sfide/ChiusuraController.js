@@ -40,6 +40,10 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             return null != $scope.sfida && $scope.sfida.sfidaspeciale;
         }
 
+        $scope.abilitaSpecBrev = function() {
+            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.iscr.tipo != $scope.tipiSfida[0];
+        }
+
         Portal.loadSquadriglia(function(squadriglia){
             $scope.squadriglia = squadriglia;
 
