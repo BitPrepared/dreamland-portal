@@ -23,6 +23,19 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
       punteggiosquadriglia : 0
     };
 
+    $scope.categoriaSfidaDesc = '';
+
+    var descArrayCategorieDiSfida = [
+    //Avventura:
+    'il Sogno che si concretizzerà in un impresa o missione, dovrà caratterizzarsi per lo spirito d’avventura, dovrà essere avvincente, entusiasmante e sfidante, qualcosa che sia degno di un vero avventuriere',
+    //Originalità:
+    'il Sogno che si concretizzerà in un impresa o missione, dovrà caratterizzarsi per la sua originalità, non le solite idee per imprese e missioni, ma qualcosa che riesca a stupire, insomma che sia speciale, che abbia quel tocco di creatività e ingegno fuori dal comune.',
+    //'Traccia nel Mondo':
+    'il Sogno che si concretizzerà in un impresa o missione, dovrà caratterizzarsi per il segno lasciato, per la traccia, per il cambiamento apportato sia nel mondo, nella realtà, nel territorio, sia in sé stessi, negli altri, nelle persone incontrate, un cambiamento che sia sfida vera.',
+    //Grande Impresa:
+    'il Sogno che si concretizzerà in un impresa o missione, dovrà caratterizzarsi per il suo puntare in alto. Fondamentali saranno impegno, costanza e tenacia da parte di tutti. Fatica e sforzo e cura dei particolari, saranno i mezzi necessari per realizzare quella che verrà ricordata nel tempo come la grande Impresa (Missione) della Squadriglia.'
+    ];
+
     $scope.step = angular.isDefined($stateParams.step) ? $stateParams.step : 1;
 
     $scope.caratteriMancanti = function() {
@@ -81,6 +94,10 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
                                             + (6 * $scope.iscr.brevettisquadriglierinuove);
         }
       }
+      if ( $scope.iscr.categoriaSfida !== undefined ) {
+        $scope.categoriaSfidaDesc = descArrayCategorieDiSfida[$scope.iscr.categoriaSfida.code];
+      }
+
     };
 
     $scope.updateSfida = function() {

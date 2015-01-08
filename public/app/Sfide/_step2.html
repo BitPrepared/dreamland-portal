@@ -32,9 +32,11 @@
             <div class="form-group">
                 <label class="control-label" for="categoriaSfida">Categoria</label>
                 <div class="controls">
-                    <select id="categoriaSfida" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>
+                    <select id="categoriaSfida" ng-change="update()" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>
                 </div>
-            </div>
+				<div class="alert alert-info" role="alert">attenzione a scegliere la categoria che rappresenterà la vostra sfida</div>
+				<div ng-value="categoriaSfidaDesc"></div>
+			</div>
         </div>
 
 		<div ng-if="!isMissione()">
