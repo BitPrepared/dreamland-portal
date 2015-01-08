@@ -32,7 +32,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             obiettivo : 0
         };
 
-        $scope.enableButton = true;
+        $scope.enableButton = false;
 
         $scope.isMissione = function(){
             return $scope.iscr.tipo == $scope.tipiSfida[0];
@@ -94,8 +94,13 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
                 } else {
                     $scope.valutaSuccesso = 'label-warning';
                 }
-
                 // in area tolleranza : label-default
+            }
+
+            if ( risultato.provasuperata !== undefined ){
+                $scope.enableButton = true;
+            } else {
+                $scope.enableButton = false;
             }
         };
 
@@ -105,6 +110,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
 
             var sfida = $scope.risultato;
             Portal.chiudiSfida($scope.sfidaid,function(sfida){
+                $('#spinnerdiv').show();
                 $window.location.href = $scope.sfida.permalink+'?completa';
             },function(errore){
                 $scope.currentError = errore;

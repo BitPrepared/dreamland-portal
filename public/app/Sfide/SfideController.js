@@ -51,6 +51,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         $http.put('./api/sfide/iscrizione/'+$scope.sfidaid, newRequest).
           success(function(data, status, headers, config) {
             // $state.go('home.registration.ok',{ msg : 'Iscrizione alla sfida completata con successo'},{reload : true});
+            $('#spinnerdiv').show();
             $window.location.href = $scope.sfida.permalink+'?iscritto';
           }).
           error(function(data, status, headers, config) {
