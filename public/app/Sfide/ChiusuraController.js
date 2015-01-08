@@ -8,11 +8,13 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         $scope.sfida = null;
 
         $scope.tipiSfida = ['missione','impresa'];
+        $scope.possibiliAutovalutazioni = ['insufficiente','sufficiente','buona','ottima'];
         $scope.categoriaImpresa = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2}, {'desc' : 'Grande Impresa', 'code' : 3} ];
         $scope.categoriaMissione = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} ];
         $scope.categoriaMissioneSpeciale = [ {'desc' : 'Avventura' , 'code' : 0}, {'desc' : 'Originalita', 'code' : 1}, {'desc' : 'Traccia nel Mondo', 'code' : 2} , {'desc' : 'Altro', 'code' : 3} ];
 
         $scope.risultato = {
+            autovalutazione: $scope.possibiliAutovalutazioni[1],
             protagonisti : 0,
             nuovespecialita : 0,
             nuovibrevetti : 0,
@@ -42,6 +44,10 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
 
         $scope.abilitaSpecBrev = function() {
             return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.iscr.tipo != $scope.tipiSfida[0];
+        }
+
+        $scope.abilitaAutovalutazione = function() {
+            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.iscr.tipo == $scope.tipiSfida[0];
         }
 
         Portal.loadSquadriglia(function(squadriglia){

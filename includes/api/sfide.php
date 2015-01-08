@@ -417,6 +417,7 @@ function sfide($app) {
             $app->response->setStatus(501);
             $app->response->headers->set('Content-Type', 'application/json');
 
+//            autovalutazione: 'insufficiente',
 //            protagonisti : 0,
 //            nuovespecialita : 0,
 //            nuovibrevetti : 0,
@@ -452,6 +453,7 @@ function sfide($app) {
 
                     //da capire
                     $drm_chiusura_sfida->provasuperata = $obj_request->provasuperata;
+                    $drm_chiusura_sfida->autovalutazione = $obj_request->autovalutazione;
 
                     //gia presente
                     $drm_chiusura_sfida->punteggiosquadriglia= $obj_request->punteggiosquadriglia;
