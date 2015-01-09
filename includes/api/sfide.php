@@ -32,6 +32,7 @@ function sfide($app) {
 					$x = array(
 						'idsfida' => intval($drm_iscrizione_sfida->idsfida),
 						'titolo' => $drm_iscrizione_sfida->titolo,
+                        'tipo' => $drm_iscrizione_sfida->tipo,
 						'permalink' => $drm_iscrizione_sfida->permalink,
                         'categoria' => $categoria_sfida,
 						'codicecensimento' => intval($drm_iscrizione_sfida->codicecensimento),

@@ -35,7 +35,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         $scope.enableButton = false;
 
         $scope.isMissione = function(){
-            return $scope.iscr.tipo == $scope.tipiSfida[0];
+            return $scope.sfida.tipo == $scope.tipiSfida[0];
         }
 
         $scope.isSfidaSpeciale = function(){
@@ -43,11 +43,11 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         }
 
         $scope.abilitaSpecBrev = function() {
-            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.iscr.tipo != $scope.tipiSfida[0];
+            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.sfida.tipo != $scope.tipiSfida[0];
         }
 
         $scope.abilitaAutovalutazione = function() {
-            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.iscr.tipo == $scope.tipiSfida[0];
+            return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.sfida.tipo == $scope.tipiSfida[0];
         }
 
         Portal.loadSquadriglia(function(squadriglia){
@@ -58,7 +58,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             Portal.loadSfida($scope.sfidaid,function(sfida){
                 $scope.sfida = sfida;
                 if ( !sfida.sfidaspeciale ) {
-                    if ( $scope.iscr.tipo != $scope.tipiSfida[0] ) { //impresa
+                    if ( $scope.sfida.tipo != $scope.tipiSfida[0] ) { //impresa
                         $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return sfida.categoria.desc == cat.desc; });
                     } else { //missione
                         $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
