@@ -101,12 +101,14 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
     };
 
     $scope.updateSfida = function() {
-      if ( $scope.iscr.tipo == $scope.tipiSfida[0] ) { 
-        //missione
-        $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return $scope.sfida.categoria.desc == cat.desc; });
-      } else { 
-        //impresa
-        $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return $scope.sfida.categoria.desc == cat.desc; });
+      if ( $scope.sfida.categoria != null ) {
+        if ( $scope.iscr.tipo == $scope.tipiSfida[0] ) {
+          //missione
+          $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return $scope.sfida.categoria.desc == cat.desc; });
+        } else {
+          //impresa
+          $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return $scope.sfida.categoria.desc == cat.desc; });
+        }
       }
       $scope.update();
     }
