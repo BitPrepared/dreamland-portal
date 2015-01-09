@@ -97,7 +97,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
                 // in area tolleranza : label-default
             }
 
-            if ( risultato.provasuperata !== undefined ){
+            if ( $scope.risultato.provasuperata !== undefined ){
                 $scope.enableButton = true;
             } else {
                 $scope.enableButton = false;
