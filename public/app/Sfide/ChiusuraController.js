@@ -43,10 +43,12 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         }
 
         $scope.abilitaSpecBrev = function() {
+            if ( null == $scope.sfida ) return false;
             return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.sfida.tipo != $scope.tipiSfida[0];
         }
 
         $scope.abilitaAutovalutazione = function() {
+            if ( null == $scope.sfida ) return false;
             return !(null != $scope.sfida && $scope.sfida.sfidaspeciale) && $scope.sfida.tipo == $scope.tipiSfida[0];
         }
 
