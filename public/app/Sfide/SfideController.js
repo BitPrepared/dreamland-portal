@@ -110,6 +110,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
           $scope.iscr.categoriaSfida = _.find($scope.categoriaImpresa, function(cat){ return $scope.sfida.categoria.desc == cat.desc; });
         }
       }
+      $scope.categoriaSfidaDesc = '';
       $scope.update();
     }
 

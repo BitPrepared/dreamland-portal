@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label class="control-label" for="categoriaSfidaImpr">Categoria</label>
                 <div class="controls">
-                    <select id="categoriaSfidaImpr" name="categoriaSfidaImpr" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaImpresa"></select>
+                    <select id="categoriaSfidaImpr" ng-change="update()" name="categoriaSfidaImpr" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaImpresa"></select>
                 </div>
 				<div class="alert alert-info" role="alert">{{categoriaSfidaDesc}}</div>
             </div>
