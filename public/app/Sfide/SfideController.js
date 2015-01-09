@@ -142,6 +142,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             $scope.iscr.categoriaSfida = _.find($scope.categoriaMissione, function(cat){ return sfida.categoria.desc == cat.desc; });
           }
         } else {
+          $scope.iscr.tipo = $scope.tipiSfida[0];
           $scope.iscr.categoriaSfida = _.find($scope.categoriaMissioneSpeciale, function(cat){ return sfida.categoria.desc == cat.desc; });
         }
 

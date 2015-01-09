@@ -215,6 +215,13 @@ function sfide($app) {
                     $drm_iscrizione_sfida->descrizione = $obj_request->descrizione;
                     $drm_iscrizione_sfida->categoriasfida = $obj_request->categoriaSfida->desc;
                     $drm_iscrizione_sfida->numeroprotagonisti = $obj_request->numeroprotagonisti;
+
+                    if ( $drm_iscrizione_sfida->sfidaspeciale ) {
+                        if ( $obj_request->tipo != 'missione' ){
+                            $app->log->warn('Tipologia sfida in caso di sfida speciale deve essere missione, invece e\' '.$obj_request->tipo);
+                        }
+                    }
+
                     $drm_iscrizione_sfida->tipo = $obj_request->tipo;
                     $drm_iscrizione_sfida->attiva = true;
 
