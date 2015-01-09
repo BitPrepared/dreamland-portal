@@ -34,8 +34,7 @@
                 <div class="controls">
                     <select id="categoriaSfida" ng-change="update()" name="categoriaSfida" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaMissione"></select>
                 </div>
-				<div class="alert alert-info" role="alert">attenzione a scegliere la categoria che rappresenterà la vostra sfida</div>
-				<div ng-value="categoriaSfidaDesc"></div>
+				<div class="alert alert-info" role="alert">{{categoriaSfidaDesc}}</div>
 			</div>
         </div>
 
@@ -47,6 +46,7 @@
                 <div class="controls">
                     <select id="categoriaSfidaImpr" name="categoriaSfidaImpr" ng-model="iscr.categoriaSfida" required ng-options="r.desc for r in categoriaImpresa"></select>
                 </div>
+				<div class="alert alert-info" role="alert">{{categoriaSfidaDesc}}</div>
             </div>
 
 			<!-- Select input-->
