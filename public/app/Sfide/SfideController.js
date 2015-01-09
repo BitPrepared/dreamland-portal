@@ -94,7 +94,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
                                             + (6 * $scope.iscr.brevettisquadriglierinuove);
         }
       }
-      if ( $scope.iscr.categoriaSfida !== undefined ) {
+      if ( $scope.iscr.categoriaSfida != null ) {
         $scope.categoriaSfidaDesc = descArrayCategorieDiSfida[$scope.iscr.categoriaSfida.code];
       }
 
