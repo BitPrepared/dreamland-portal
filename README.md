@@ -47,3 +47,22 @@ phpunit --group remoteTasks
 
 * https://coderwall.com/p/5mtq6q/encrypt-your-code-climate-repo-token-for-public-repositories-on-travis-ci
 * http://edorian.github.io/php-coding-standard-generator/#phpmd
+
+### Php.ini
+
+```
+php -i | grep 'Configuration File'
+```
+
+result: 
+
+```
+Configuration File (php.ini) Path => /usr/local/etc/php/5.4
+Loaded Configuration File => /usr/local/etc/php/5.4/php.ini
+```
+
+nel file /usr/local/etc/php/5.4/php.ini assicurarsi che ci sia : 
+
+```
+sendmail_path = /usr/bin/env catchmail -f from@example.com
+```

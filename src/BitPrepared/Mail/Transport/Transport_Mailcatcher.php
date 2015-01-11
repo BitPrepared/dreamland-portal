@@ -62,7 +62,12 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
         mb_internal_encoding('UTF-8');
 
         if ( is_array($message->getTo()) ) {
-            $to = implode(",", $message->getTo());
+
+            $m = array();
+            foreach($message->getTo() as $address => $nome) {
+                $m[] = $nome.' <'.$address.'>';
+            }
+            $to = implode(",", $m);
         } else {
             $to = $message->getTo();
         }

@@ -3,7 +3,7 @@
 namespace BitPrepared\Mail;
 
 use Swift_SmtpTransport;
-use Swift_SendmailTransport;
+use Swift_Encoding;
 use Swift_Plugins_Loggers_ArrayLogger;
 use Swift_Message;
 use Swift_Mailer;
@@ -45,6 +45,7 @@ class Mailer
             $message = Swift_Message::newInstance()
               ->setSubject( $subject )
               ->setFrom( $this->from )
+              ->setEncoder(Swift_Encoding::get8BitEncoding())
               ->setTo( $toEmailAddress )
               ->setBody( $txtMessage );
             
