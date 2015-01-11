@@ -58,7 +58,7 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
     	
         $failedRecipients = (array) $failedRecipients;
 
-        mb_language('it');
+        mb_language('uni');
         mb_internal_encoding('UTF-8');
         mb_send_mail($message->getTo(), $message->getSubject(), $message->getBody());
 
