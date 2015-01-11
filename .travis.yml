@@ -19,7 +19,7 @@ before_script:
   - gem install mailcatcher
   - phpenv config-add travis.php.ini
   - mkdir -p resources/logs resources/tmp
-  - mailcatcher --http-ip 0.0.0.0 --smtp-ip 0.0.0.0
+  - mailcatcher
 
 script:
   - phpunit

@@ -57,25 +57,29 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
     {
     	
         $failedRecipients = (array) $failedRecipients;
-        
-        $descriptorspec = array(
-		   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
-		   1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
-		   2 => array("pipe", "w") // stderr is a pipe
-		);
 
-        $process = proc_open($this->getCommand(), $descriptorspec,$pipes);
-        fwrite($pipes[0], $message);
-        flush($pipes[0]);
-        fclose($pipes[0]);
+        mb_language('it');
+        mb_internal_encoding('UTF-8');
+        mb_send_mail($message->getTo(), $message->getSubject(), $message->getBody());
 
-        $result = stream_get_contents($pipes[1]);
-    	fclose($pipes[1]);
-
-    	$result = stream_get_contents($pipes[2]);
-    	fclose($pipes[2]);
-
-    	proc_close($process);
+//        $descriptorspec = array(
+//		   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
+//		   1 => array("pipe", "w"),  // stdout is a pipe that the child will write to
+//		   2 => array("pipe", "w") // stderr is a pipe
+//		);
+//
+//        $process = proc_open($this->getCommand(), $descriptorspec,$pipes);
+//        fwrite($pipes[0], $message);
+//        flush($pipes[0]);
+//        fclose($pipes[0]);
+//
+//        $result = stream_get_contents($pipes[1]);
+//    	fclose($pipes[1]);
+//
+//    	$result = stream_get_contents($pipes[2]);
+//    	fclose($pipes[2]);
+//
+//    	proc_close($process);
         return 1;
     }
 

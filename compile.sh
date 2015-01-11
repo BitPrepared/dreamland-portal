@@ -43,7 +43,7 @@ cp bower_components/angular-animate/*.min.js.map public/assets/js/dist/
 cp bower_components/moment/min/moment-with-locales.min.js public/assets/js/dist/
 cp bower_components/requirejs/require.js public/assets/js/dist/
 
-cp bower_components/tinysort/dist/jquery.tinysort.min.js public/assets/js/dist/
+cp bower_components/tinysort/dist/tinysort.min.js public/assets/js/dist/
 cp bower_components/jquery-ui/jquery-ui.min.js public/assets/js/dist/
 
 
