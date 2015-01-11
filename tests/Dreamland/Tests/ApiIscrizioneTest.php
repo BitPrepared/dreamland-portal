@@ -27,6 +27,7 @@ class ApiIscrizioneCase extends IntegrationCase
 
     /**
      * @group iscrizione
+     * @slowThreshold 2000
      */
     public function testStep1(){
         $this->ajaxPost('/api/registrazione/step1',json_encode(array(
@@ -105,6 +106,7 @@ class ApiIscrizioneCase extends IntegrationCase
 
     /**
      * @group iscrizione
+     * @slowThreshold 2000
      */
     public function testStep2(){
 
