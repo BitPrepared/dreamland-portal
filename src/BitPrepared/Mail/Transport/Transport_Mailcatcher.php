@@ -60,7 +60,14 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
 
         mb_language('uni');
         mb_internal_encoding('UTF-8');
-        mb_send_mail($message->getTo(), $message->getSubject(), $message->toString());
+
+        if ( is_array($message->getTo()) ) {
+            $to = implode(",", $message->getTo());
+        } else {
+            $to = $message->getTo();
+        }
+
+        mb_send_mail($to, $message->getSubject(), $message->toString());
 
 //        $descriptorspec = array(
 //		   0 => array("pipe", "r"),  // stdin is a pipe that the child will read from
