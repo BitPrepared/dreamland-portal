@@ -89,8 +89,8 @@ function registration($app){
 				} else {
 
 					//19990324 - Ricerca ASA E/G
-					$find = R::findOne('asa_anagrafica_eg',' codicesocio = ? and datanascita = ?',array($codicecensimento,$datanascita));
-					if ( $find == null ) {
+					$egAsa = R::findOne('asa_anagrafica_eg',' codicesocio = ? and datanascita = ?',array($codicecensimento,$datanascita));
+					if ( $egAsa == null ) {
 						throw new Exception('Codice censimento '.$codicecensimento.' e Data Nascita : '.$datanascita .' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
 					}
 
@@ -113,29 +113,34 @@ function registration($app){
                     }
 
                     // RICERCA REGISTRAZIONE PRECEDENTE E/G
-					$token = '';
-					$findToken = R::findOne('registration',' codicecensimento = ? and type = ?',array($find['codicesocio'],'EG'));
-					if ( $findToken != null ) {
-						$token = $findToken['token'];
-						if ( $findToken['completato'] ) {
+					$drm_registration_prev = R::findOne('registration',' codicecensimento = ? and type = ?',array($egAsa->codicesocio,'EG'));
+					if ( $drm_registration_prev != null ) {
+						$token = $drm_registration_prev->token;
+						if ( $drm_registration_prev->completato ) {
 							$app->log->info('Utente gia registrato');
                             throw new Exception('Utente gia registrato',Errori::ISCRIZIONE_GIA_ATTIVA);
-						}
+						} else {
+                            if ( $drm_registration_prev->email != $email ) {
+                                $app->log->warn('Cambio mail in step1 da '.$drm_registration_prev->email.' a '.$email);
+                                $drm_registration_prev->email = $email;
+                            }
+                            R::store($drm_registration_prev);
+                        }
 					} else {
 						$token = generateToken(18);
-						$app->log->info('Generato token '.$token.' per '.$find['codicesocio'].' tipo E/G');
+						$app->log->info('Generato token '.$token.' per '.$egAsa->codicesocio.' tipo E/G');
 
 						$drm_registration = R::dispense('registration');
 						// $drm_registration->token = md5(uniqid(rand(), true));
 						$drm_registration->token = $token;
-						$drm_registration->codicecensimento = $find['codicesocio'];
+						$drm_registration->codicecensimento = $egAsa->codicesocio;
                         $drm_registration->type = 'EG';
 						$drm_registration->email = $email;
-						$drm_registration->nome = $find['nome'];
-						$drm_registration->cognome = $find['cognome'];
-						$drm_registration->regione = $find['creg'];
-						$drm_registration->zona = $find['czona'];
-						$drm_registration->gruppo = $find['ord'];
+						$drm_registration->nome = $egAsa->nome;
+						$drm_registration->cognome = $egAsa->cognome;
+						$drm_registration->regione = $egAsa->creg;
+						$drm_registration->zona = $egAsa->czona;
+						$drm_registration->gruppo = $egAsa->ord;
                         $drm_registration->legame = null;
                         $drm_registration->completato = false;
 						$drm_registration_id = R::store($drm_registration);
@@ -144,9 +149,9 @@ function registration($app){
 					}
 
 					$urlWithToken = "http://" . $app->request->headers->HTTP_HOST . $app->request->getRootUri().'/#/home/wizard?step=1&code='.$token;
-					$to = array($email => $find['nome'].' '.strtoupper($find['cognome'][0]).'.');
+					$to = array($email => $egAsa->nome.' '.strtoupper($egAsa->cognome[0]).'.');
 
-					$message =  'Ciao '.$find['nome'].",\n";
+					$message =  'Ciao '.$egAsa->nome.",\n";
 					$message .= 'Hai richiesto di partecipare a Return To Dreamland'."\n";
 					$message .= 'Per completare la tua registrazione visita il seguente link e completa la scheda di iscrizione: '."\n";
 					$message .= 'Link: '.$urlWithToken;
@@ -155,7 +160,6 @@ function registration($app){
                         throw new Exception('Invio mail registrazione fallito',Errori::INVIO_MAIL_FALLITO);
 					}
 
-					// json_encode(array('email' => $email,'codcens' => $codicecensimento))
 					$app->response->setBody('');
                     $app->response->setStatus(201);
 				}
