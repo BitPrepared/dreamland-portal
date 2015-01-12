@@ -122,7 +122,10 @@ function registration($app){
 						} else {
                             if ( $drm_registration_prev->email != $email ) {
                                 $app->log->warn('Cambio mail in step1 da '.$drm_registration_prev->email.' a '.$email);
+                                $token = generateToken(18);
+                                $app->log->info('Generato token '.$token.' per '.$egAsa->codicesocio.' tipo E/G');
                                 $drm_registration_prev->email = $email;
+                                $drm_registration_prev->token = $token;
                             }
                             R::store($drm_registration_prev);
                         }
