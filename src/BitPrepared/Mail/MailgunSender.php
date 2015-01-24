@@ -3,6 +3,7 @@
 namespace BitPrepared\Mail;
 
 use Mailgun\Mailgun;
+use Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters;
 
 class MailgunSender
 {
@@ -38,20 +39,28 @@ class MailgunSender
 //            )
 //        );
 
-        $result = $mgClient->sendMessage($this->domain,
-            array(
-                'from' => $this->from,
-                'to' => $toEmailAddress,
-                'subject' => $subject,
-                'text' => $txtMessage,
-                'bcc' => 'Staff Dreamland <return2dreamland@gmail.com>',
-                'o:tag' => array('portal')
-            )
-        );
+        try {
 
-        if ( is_object($result) ) {
-            $this->log->info('Invio: '.var_export($result,true));
-            return true;
+            $result = $mgClient->sendMessage($this->domain,
+                array(
+                    'from' => $this->from,
+                    'to' => $toEmailAddress,
+                    'subject' => $subject,
+                    'text' => $txtMessage,
+                    'bcc' => 'Staff Dreamland <return2dreamland@gmail.com>',
+                    'o:tag' => array('portal')
+                )
+            );
+
+            if ( is_object($result) ) {
+                $this->log->info('Invio: '.var_export($result,true));
+                return true;
+            }
+
+        } catch (MissingRequiredMIMEParameters $e) {
+            $this->log->error('Invio fallito : '.$e->getMessage());
+        } catch (\Exception $e){
+            $this->log->error('Invio fallito : '.var_export($e,true));
         }
 
         $this->log->info('Invio fallito');
