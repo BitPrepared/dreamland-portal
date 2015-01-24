@@ -16,7 +16,8 @@ class MailgunSender
         $this->log = $logger;
         $fromKeys = array_keys($from);
         $fromvalues = array_values($from);
-        $this->from = '\''.$fromvalues[0].' <'.$fromKeys[0].'>\'';
+//        $this->from = '\''.$fromvalues[0].' <'.$fromKeys[0].'>\'';
+        $this->from = $fromKeys[0];
         $this->pubKey = $mailgunConfig['pubkey'];
         $this->domain = $mailgunConfig['domain'];
         $this->apikey = $mailgunConfig['key'];
@@ -55,7 +56,8 @@ class MailgunSender
 
             $fromKeys = array_keys($toEmailAddress);
             $fromvalues = array_values($toEmailAddress);
-            $toEmailAddress = '\''.$fromvalues[0].' <'.$fromKeys[0].'>\'';
+//            $toEmailAddress = '\''.$fromvalues[0].' <'.$fromKeys[0].'>\'';
+            $toEmailAddress = $fromKeys[0];
 
             $this->log->info('From mail : '.$this->from.' => TO => '.$toEmailAddress);
 
