@@ -3,18 +3,17 @@
 namespace BitPrepared\Mail;
 
 use Mailgun\Mailgun;
-use Mailgun\Messages\Exceptions\MissingRequiredMIMEParameters;
 
 class MailgunSender
 {
-    private $logger;
+    private $log;
     private $from;
     private $pubKey;
     private $domain;
     private $apikey;
 
     public function __construct($logger,$from,$mailgunConfig){
-        $this->logger = $logger;
+        $this->log = $logger;
         $this->from = $from;
         $this->pubKey = $mailgunConfig['pubkey'];
         $this->domain = $mailgunConfig['domain'];
