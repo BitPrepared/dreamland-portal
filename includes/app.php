@@ -9,6 +9,7 @@
 use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClient;
 use BitPrepared\Mail\Mailer;
+use BitPrepared\Mail\MailgunSender;
 
 // GESTITO VIA APACHE
 //if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
@@ -81,7 +82,8 @@ $app->container->singleton('wapi', function () use ($app,$config) {
 });
 
 $app->container->singleton('mail', function () use ($app,$config) {
-    return new Mailer($app->log,$config['email_sender'],$config['smtp']);
+    return new MailgunSender($app->log,$config['email_sender'],$config['mailgun']);
+    //return new Mailer($app->log,$config['email_sender'],$config['smtp']);
 });
 
 
