@@ -57,10 +57,8 @@ class MailgunSender
                 return true;
             }
 
-        } catch (MissingRequiredMIMEParameters $e) {
-            $this->log->error('Invio fallito : '.$e->getMessage());
         } catch (\Exception $e){
-            $this->log->error('Invio fallito : '.var_export($e,true));
+            $this->log->error('Invio fallito : '.$e->getMessage());
         }
 
         $this->log->info('Invio fallito');
