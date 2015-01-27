@@ -234,6 +234,12 @@ function sfide($app) {
                     throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);
 			    }
 
+                if ( $drm_iscrizione_sfida->tipo == "impresa" ) {
+                    if (empty($drm_iscrizione_sfida->descrizione)) {
+                        throw new Exception('Sfida tipo impresa senza descrizione', Errori::CAMPI_VUOTI);
+                    }
+                }
+
                 $squadriglia = findDatiSquadriglia($codicecensimento);
 
                 $ragazzo = findDatiRagazzo($codicecensimento);
