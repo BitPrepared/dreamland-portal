@@ -161,7 +161,7 @@ function sfide($app) {
                         $warn = false;
                         break;
                     case Errori::SFIDA_GIA_ATTIVA:
-                        $testo = 'Sfida gia attiva';
+                        $testo = 'Risultate gia\' iscritti a questa sfida';
                         $status = 412;
                         $warn = true;
                         break;

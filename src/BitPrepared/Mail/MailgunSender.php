@@ -71,7 +71,8 @@ class MailgunSender
             );
 
             if ( is_object($result) ) {
-                $this->log->info('Invio: '.var_export($result,true));
+                //$this->log->info('Invio: '.var_export($result,true));
+                // FIXME : LOGGARE BENE IL CONTENUTO vedi sui log cosa c'è in caso di successo
                 return true;
             }
 
