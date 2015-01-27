@@ -194,6 +194,7 @@ function sfide($app) {
             $app->response->headers->set('Content-Type', 'application/json');
 
 			$body = $app->request->getBody();
+            $app->log->info('richiesta iscrizione sfida body: '.$body);
 
 			try {
 
