@@ -113,7 +113,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
             var sfida = $scope.risultato;
             Portal.chiudiSfida($scope.sfidaid,function(sfida){
                 $('#spinnerdiv').show();
-                $window.location.href = $scope.sfida.permalink+'?completa&sfida='+$scope.sfida.sfidaspeciale+'&tipo='+$scope.sfida.tipo;
+                $window.location.href = $scope.sfida.permalink+'?completa&sfida='+$scope.sfida.sfidaspeciale+'&tipo='+$scope.sfida.tipo+'&successo='+$scope.risultato.provasuperata;
             },function(errore){
                 $scope.currentError = errore;
                 ngDialog.open({template:'modalDialogId', scope: $scope });
