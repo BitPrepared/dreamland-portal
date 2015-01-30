@@ -2,7 +2,6 @@
 
 use Egulias\EmailValidator\EmailValidator;
 use Mailgun\Mailgun;
-use \stdClass;
 use Dreamland\Errori;
 use RedBean_Facade as R;
 

@@ -57,7 +57,7 @@ class MailgunSender
             $tovalues = array_values($toEmailAddress);
             $toEmailAddress = $tovalues[0].' <'.$toKeys[0].'>';
 
-            $this->log->info('From mail : '.$this->from.' => TO => '.$toEmailAddress);
+            $this->log->info('From mail : '.$this->from.' => TO => '.$toEmailAddress.' MSG: '.$txtMessage);
 
             $result = $mgClient->sendMessage($this->domain,
                 array(
@@ -65,6 +65,7 @@ class MailgunSender
                     'to' => $toEmailAddress,
                     'subject' => $subject,
                     'text' => $txtMessage,
+//                    FIXME: rimuovi quando hai un sistema di log decente
                     'bcc' => 'Staff Dreamland <return2dreamland@gmail.com>',
                     'o:tag' => array('portal')
                 )
