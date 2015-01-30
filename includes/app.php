@@ -29,6 +29,10 @@ if ( DEBUG ) {
     R::freeze(true);
 }
 
+$queryLogger = RedBean_Plugin_QueryLogger::getInstanceAndAttach(
+    R::getDatabaseAdapter()
+);
+
 $app = new \Slim\Slim(array(
     'mode' => $config['enviroment']
 ));
@@ -37,6 +41,8 @@ $app->config(array(
     'log.enabled' => $log_enable,
     'log.level' => $log_level,
     'log.writer' => $logger,
+    'logquery' => $loggerQuery,
+    'adapterlogquery' => $queryLogger,
     'templates.path' => realpath($config['template_dir']."/".$config['enviroment']),
     'title' => $config['title'],
     'import' => $config['import'],

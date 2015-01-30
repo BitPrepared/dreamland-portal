@@ -24,6 +24,14 @@ function configure_slim($config){
                 new Monolog\Processor\WebProcessor($_SERVER),
             )
 		));
+
+		$streamToFileQuery = new \Monolog\Handler\StreamHandler( $config['log']['filenameQuery'] );
+		$loggerQuery = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
+			'handlers' => array(
+				$streamToFileQuery
+			)
+		));
+
 		switch ($config['log']['level']) {
 			case "EMERGENCY" 	:
 				$log_level = \Slim\Log::EMERGENCY;
@@ -58,6 +66,7 @@ function configure_slim($config){
 	return array(
 		'log_enable' => $log_enable,
 		'log_level' => $log_level,
-		'logger' => isset($logger) ? $logger : null
+		'logger' => isset($logger) ? $logger : null,
+		'loggerQuery' => isset($loggerQuery) ? $loggerQuery : null
 	);
 }
