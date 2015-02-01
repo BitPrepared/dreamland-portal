@@ -4,13 +4,19 @@ namespace BitPrepared\Mail;
 
 use Mailgun\Mailgun;
 
-class MailgunSender
+class MailgunSender implements Sender
 {
+
+    //QUALE LOGGER?? FIXME: tipizziare
     private $log;
+
     private $from;
     private $pubKey;
     private $domain;
     private $apikey;
+    private $salt;
+
+    private $lastId;
 
     public function __construct($logger,$from,$mailgunConfig){
         $this->log = $logger;
@@ -20,6 +26,7 @@ class MailgunSender
         $this->pubKey = $mailgunConfig['pubkey'];
         $this->domain = $mailgunConfig['domain'];
         $this->apikey = $mailgunConfig['key'];
+        $this->salt = $mailgunConfig['salt'];
     }
 
     /**
@@ -30,12 +37,15 @@ class MailgunSender
      * @param null $attachment
      * @return bool
      *
-     * FIXME: supporto multi TO address e CC address
+     * FIXME: supporto CC address
      *
      */
-    public function send($toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
+    public function send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
+
+        $this->lastId = -1;
 
         $mgClient = new Mailgun($this->apikey);
+
 //        $mgClient->sendMessage($this->domain,
 //            array(
 //                'from' => $this->from,
@@ -65,15 +75,17 @@ class MailgunSender
                     'to' => $toEmailAddress,
                     'subject' => $subject,
                     'text' => $txtMessage,
-//                    FIXME: rimuovi quando hai un sistema di log decente
-                    'bcc' => 'Staff Dreamland <return2dreamland@gmail.com>',
+                    //h: prefix followed by an arbitrary value allows to append a custom MIME
+                    //header to the message (X-My-Header in this case).
+                    //For example, h:Reply-To to specify Reply-To address.
+                    'h:X-unique-reference'=>  hash('sha256',$this->salt.$referenceCode,false),
                     'o:tag' => array('portal')
                 )
             );
 
             if ( is_object($result) ) {
-                //$this->log->info('Invio: '.var_export($result,true));
-                // FIXME : LOGGARE BENE IL CONTENUTO vedi sui log cosa c'è in caso di successo
+                $this->log->info('Invio id: '.$result->http_response_body->id); //ID MAIL: 20150201133546.34392.43643@returntodreamland.it
+                $this->lastId = $result->http_response_body->id;
                 return true;
             }
 
@@ -84,6 +96,10 @@ class MailgunSender
         $this->log->info('Invio fallito');
         return false;
 
+    }
+
+    public function getLastMessageId(){
+        return $this->lastId;
     }
 
 

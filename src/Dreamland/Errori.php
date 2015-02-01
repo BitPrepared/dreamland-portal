@@ -2,7 +2,9 @@
 
 namespace Dreamland;
 
-abstract class Errori extends \BitPrepared\Commons\BasicEnum {
+use \BitPrepared\Commons\BasicEnum;
+
+abstract class Errori extends BasicEnum {
 
 	// INPUT DATA VALIDATION
 	const FORMATO_MAIL_NON_VALIDO = 1;

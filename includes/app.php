@@ -8,8 +8,13 @@
 
 use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClient;
-use BitPrepared\Mail\Mailer;
+use BitPrepared\Mail\Async;
+
+
+use BitPrepared\Mail\Swift;
 use BitPrepared\Mail\MailgunSender;
+use BitPrepared\Mail\SendPolicy;
+use BitPrepared\Mail\Pipe;
 
 // GESTITO VIA APACHE
 //if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
@@ -29,29 +34,25 @@ if ( DEBUG ) {
     R::freeze(true);
 }
 
-$queryLogger = RedBean_Plugin_QueryLogger::getInstanceAndAttach(
-    R::getDatabaseAdapter()
-);
-
 $app = new \Slim\Slim(array(
     'mode' => $config['enviroment']
 ));
+
+if ( DEBUG && isset($loggerQuery) ) R::debug(true,new \BitPrepared\RedBean\Logger($loggerQuery));
 
 $app->config(array(
     'log.enabled' => $log_enable,
     'log.level' => $log_level,
     'log.writer' => $logger,
-    'logquery' => $loggerQuery,
-    'adapterlogquery' => $queryLogger,
     'templates.path' => realpath($config['template_dir']."/".$config['enviroment']),
     'title' => $config['title'],
     'import' => $config['import'],
     'cookies.lifetime' => $config['cookies.lifetime'],
     'security.salt' => $config['security.salt'],
-    'mailgun' => isset($config['mailgun']) ? $config['mailgun'] : array(),
+    'mailgun' => isset($config['mailgun']) ? $config['mailgun'] : null,
     'wordpress' => $config['wordpress'],
     'email_sender' => $config['email_sender'],
-    'smtp' => $config['smtp'],
+    'smtp' => isset($config['smtp']) ? $config['smtp'] : null,
     'sfide' => $config['sfide'],
     'google' => $config['google']
 ));
@@ -88,8 +89,20 @@ $app->container->singleton('wapi', function () use ($app,$config) {
 });
 
 $app->container->singleton('mail', function () use ($app,$config) {
-    return new MailgunSender($app->log,$config['email_sender'],$config['mailgun']);
-    //return new Mailer($app->log,$config['email_sender'],$config['smtp']);
+    return new Async($app->log,$config['email_sender']);
 });
 
+/*
+ *     $pipe = new Pipe();
 
+    if ( isset($config['mailgun']) ){
+        $pipe->add(new MailgunSender($app->log,$config['email_sender'],$config['mailgun']));
+    }
+
+    if ( isset($config['smtp']) ) {
+        $pipe->add(new Swift($app->log, $config['email_sender'], $config['smtp']));
+    }
+
+    $pipe->setPolicy(SendPolicy::STOP_ON_SUCCESS);
+    return $pipe;
+ */

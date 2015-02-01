@@ -2,6 +2,9 @@
 if  (!defined('BETA')) define('BETA',true);
 if  (!defined('DEBUG')) define('DEBUG',true);
 if  (!defined('MAINTENANCE')) define('MAINTENANCE',false);
+
+$travis = getenv('TRAVIS');
+
 $config = array(
     'enviroment' => 'production',
     'db' => array(
@@ -13,13 +16,6 @@ $config = array(
     'log' => array(
         'filename' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'.log',
         'level' => 'DEBUG'
-    ),
-    'smtp' => array(
-        'host' => '', //'localhost',
-        'port' => 1025,
-        'security' => null, //ssl,tls,null
-        'username' => '',
-        'password' => ''
     ),
     'email_sender' => array('test@test' => 'Test Return To Dreamland'),
     'title' => 'Test - Return To Dreamland',
@@ -42,4 +38,15 @@ $config = array(
     'cookies.secret_key' => 'HELPME',
     'security.salt' => '123123'
 );
+
+if ( !$travis ) {
+    $config['smtp'] = array(
+        'host' => '', //'localhost',
+        'port' => 1025,
+        'security' => null, //ssl,tls,null
+        'username' => '',
+        'password' => ''
+    );
+}
+
 ?>

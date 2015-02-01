@@ -10,12 +10,15 @@ use Swift_Mailer;
 use Swift_Plugins_LoggerPlugin;
 use BitPrepared\Mail\Transport\Mailcatcher;
 
-class Mailer
+class Swift implements Sender
 {
     private $logger;
     private $smtpLog;
     private $from;
     private $transport;
+    private $salt;
+
+    private $lastId;
     
     public function __construct($logger,$from,$smtpConfig){
         $this->logger = $logger;
@@ -37,7 +40,9 @@ class Mailer
         }
     }
 
-    public function send($toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
+    public function send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null){
+
+        $this->lastId = -1;
 
         try {
 
@@ -48,6 +53,7 @@ class Mailer
               ->setEncoder(Swift_Encoding::get8BitEncoding())
               ->setTo( $toEmailAddress )
               ->setBody( $txtMessage );
+
             
             if ( !empty($htmlMessage) ) {
               $message->addPart($htmlMessage, 'text/html');
@@ -57,17 +63,21 @@ class Mailer
                 $message->attach(Swift_Attachment::fromPath($attachment)); //'my-document.pdf'
             }
 
+            $headers = $message->getHeaders();
+            $headers->addTextHeader('X-unique-reference', hash('sha256',$this->salt.$referenceCode,false));
+
             // Create the Mailer using your created Transport
             $mailer = Swift_Mailer::newInstance($this->transport);
             $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($this->smtpLog));
             $failures = array();
             if (!$mailer->send($message, $failures))
             {
-              $this->logger->error('Fallito l\'invio : '.json_encode($failures));
-              return false;
+                $this->logger->error('Fallito l\'invio : '.json_encode($failures));
+                return false;
             } else {
-              $this->logger->info('Mail correttamente invata');
-              return true;
+                $this->lastId = $message->getHeaders()->get('Message-ID');
+                $this->logger->info('Mail correttamente invata');
+                return true;
             }
         }
         catch(Swift_RfcComplianceException $er){
@@ -85,5 +95,8 @@ class Mailer
 
     }
 
+    public function getLastMessageId(){
+        return $this->lastId;
+    }
 
 }

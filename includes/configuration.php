@@ -25,12 +25,15 @@ function configure_slim($config){
             )
 		));
 
-		$streamToFileQuery = new \Monolog\Handler\StreamHandler( $config['log']['filenameQuery'] );
-		$loggerQuery = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
-			'handlers' => array(
-				$streamToFileQuery
-			)
-		));
+		if ( isset($filenameQuery) ) {
+			$streamToFileQuery = new \Monolog\Handler\StreamHandler( $config['log']['filenameQuery'] );
+			$streamToFileQuery->setFormatter($formatter);
+
+			$loggerQuery = new \Monolog\Logger('queryLog');
+			$loggerQuery->pushHandler($streamToFileQuery);
+			$loggerQuery->pushProcessor(new Monolog\Processor\UidProcessor());
+			$loggerQuery->pushProcessor(new \Monolog\Processor\WebProcessor($_SERVER));
+		}
 
 		switch ($config['log']['level']) {
 			case "EMERGENCY" 	:

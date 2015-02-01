@@ -30,8 +30,11 @@ class ApiIscrizioneCase extends IntegrationCase
      * @slowThreshold 2000
      */
     public function testStep1(){
+
+        $emailEG = 'eg@localhost';
+
         $this->ajaxPost('/api/registrazione/step1',json_encode(array(
-            'email' => 'eg@localhost',
+            'email' => $emailEG,
             'codicecensimento' => '123123',
             'datanascita' => 20141219
         )));
@@ -41,12 +44,11 @@ class ApiIscrizioneCase extends IntegrationCase
         $this->assertEmailIsSent();
         $email = $this->getLastMessage();
 
-//        NON RIESCO A FARE L'ASSERT IN QUANTO STO USANDO SENDMAIL E QUINDI IL FROM E' DETTATO DALL'ESTERNO
-//        $email_sender = $this->app->config('email_sender');
-//        $keys = array_keys($email_sender);
-//        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
+        $email_sender = $this->app->config('email_sender');
+        $keys = array_keys($email_sender);
+        $this->assertEmailSenderEquals($keys[0], $email,' Invece di '.$keys[0].' abbiamo trovato '.var_export($email,true));
 
-        $this->assertEmailRecipientsContain('<eg@localhost>', $email,' Invece di eg@localhost abbiamo trovato '.var_export($email,true));
+        $this->assertEmailRecipientsContain($emailEG, $email,' Invece di eg@localhost abbiamo trovato '.var_export($email,true));
         $this->assertEmailSubjectEquals('Richiesta registrazione Return To Dreamland', $email);
         $this->assertEmailTextContains('http://localhost/#/home/wizard?step=1&code=',$email);
 
@@ -112,10 +114,12 @@ class ApiIscrizioneCase extends IntegrationCase
 
         $findToken = R::findOne('registration',' email = ?',array('eg@localhost'));
 
+        $emailCapoReparto = 'cc@localhost';
+
         $this->ajaxPost('/api/registrazione/step2/'.$findToken->token,json_encode(array(
             'nomecaporeparto' => 'Repart',
             'cognomecaporeparto' => 'Tino',
-            'emailcaporeparto' => 'cc@localhost',
+            'emailcaporeparto' => $emailCapoReparto,
             'nomesq' => 'Aquile',
             'ruolosq' => array('code' => Ruoli::CAPO_SQUADRIGLIA),
             'numerosquadriglieri'  => 1,
@@ -135,7 +139,7 @@ class ApiIscrizioneCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain($emailCapoReparto, $email);
         $this->assertEmailSubjectEquals('Richiesta registrazione Return To Dreamland', $email);
         $this->assertEmailTextContains('/#/home/reg/cc?code=',$email);
         $this->assertEmailTextContains('/blog/wp-admin/admin.php?page=dreamers',$email);

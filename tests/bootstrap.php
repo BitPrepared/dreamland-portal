@@ -22,7 +22,20 @@ require APPLICATION_PATH.'/config-test.php';
 $loader = require APPLICATION_PATH . '/vendor/autoload.php';
 
 require APPLICATION_PATH.'/includes/configuration.php';
+//require APPLICATION_PATH.'/includes/functions.php';
+
+extract(configure_slim($config), EXTR_SKIP);
+require APPLICATION_PATH.'/includes/app.php';
+
+require APPLICATION_PATH.'/includes/hooks.php';
 require APPLICATION_PATH.'/includes/functions.php';
+require APPLICATION_PATH.'/includes/routes.php';
+require APPLICATION_PATH.'/includes/api.php';
+
+if ( DEBUG ) {
+    require APPLICATION_PATH.'/includes/development.php';
+}
+
 
 $loader->add('BitPrepared\\Tests\\', APPLICATION_PATH . '/Tests');
 $loader->add('Dreamland\\Tests\\', APPLICATION_PATH . '/Tests');

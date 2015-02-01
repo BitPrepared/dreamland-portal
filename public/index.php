@@ -4,9 +4,9 @@ if( defined('APPLICATION_PATH') && !defined('BASE_DIR') ) {
     define('BASE_DIR' , APPLICATION_PATH.'/');
 } else {
     if ( file_exists(__DIR__.'/../config.php') ){
-        define('BASE_DIR', __DIR__.'/../');
+        define('BASE_DIR', realpath(__DIR__.'/../').'/');
     } else if ( file_exists(__DIR__.'/../../config.php') ){
-        define('BASE_DIR', __DIR__.'/../../');
+        define('BASE_DIR', realpath(__DIR__.'/../../').'/');
     } else {
         echo '<h1>FILE config.php MANCANTE</h1>';
         exit;

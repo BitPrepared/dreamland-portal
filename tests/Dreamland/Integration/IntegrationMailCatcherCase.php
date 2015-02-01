@@ -13,7 +13,9 @@ use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClientMock;
 
 
-abstract class IntegrationCase extends WebTestCase {
+abstract class IntegrationMailCatcherCase extends WebTestCase {
+
+    protected $mailcatcher;
 
     public function getSlimInstance() {
         require APPLICATION_PATH . '/config-test.php';
@@ -39,6 +41,7 @@ abstract class IntegrationCase extends WebTestCase {
 
     public function setUp(){
         parent::setUp();
+        $this->mailcatcher = new \Guzzle\Http\Client('http://127.0.0.1:1080');
 
         R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_anagrafica_eg;')->get();
         R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_ruolo;')->get();
@@ -224,7 +227,7 @@ abstract class IntegrationCase extends WebTestCase {
     // api calls
     protected function cleanMessages()
     {
-        R::wipe( 'mailqueue' );
+        $this->mailcatcher->delete('/messages')->send();
     }
 
     public function getLastMessage()
@@ -234,13 +237,15 @@ abstract class IntegrationCase extends WebTestCase {
             $this->fail("No messages received");
         }
         // messages are in descending order
+
         return array_pop($messages);
 
     }
 
     public function getMessages()
     {
-        return R::findAll('mailqueue');
+        $jsonResponse = $this->mailcatcher->get('/messages')->send();
+        return json_decode($jsonResponse->getBody());
     }
 
     // assertions
@@ -261,22 +266,26 @@ abstract class IntegrationCase extends WebTestCase {
 
     public function assertEmailHtmlContains($needle, $email, $description = '')
     {
-        $this->assertContains($needle, $email->html, $description);
+        $response = $this->mailcatcher->get("/messages/{$email->id}.html")->send();
+        $this->assertContains($needle, (string)$response->getBody(), $description);
     }
 
     public function assertEmailTextContains($needle, $email, $description = '')
     {
-        $this->assertContains($needle, $email->txt, $description);
+        $response = $this->mailcatcher->get("/messages/{$email->id}.plain")->send();
+        $this->assertContains($needle, (string)$response->getBody(), $description);
     }
 
     public function assertEmailSenderEquals($expected, $email, $description = '')
     {
-        $this->assertEquals($expected, $email->fromEmailAddress, $description);
+        $response = $this->mailcatcher->get("/messages/{$email->id}.json")->send();
+        $email = json_decode($response->getBody());
     }
 
     public function assertEmailRecipientsContain($needle, $email, $description = '')
     {
-        $this->assertContains($needle, $email->toEmailAddress, $description);
+        $response = $this->mailcatcher->get("/messages/{$email->id}.json")->send();
+        $email = json_decode($response->getBody());
     }
 
     /* <!-- MAIL -->  */

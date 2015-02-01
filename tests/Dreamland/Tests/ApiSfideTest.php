@@ -86,7 +86,7 @@ class ApiSfideCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('tipo impresa',$email);
     }
@@ -127,7 +127,7 @@ class ApiSfideCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('Ricordiamo',$email);
     }
@@ -177,7 +177,7 @@ class ApiSfideCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('Si tratta di una sfida speciale',$email);
     }
@@ -232,7 +232,7 @@ class ApiSfideCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('tipo impresa',$email);
     }
@@ -254,7 +254,7 @@ class ApiSfideCase extends IntegrationCase
 //        $keys = array_keys($email_sender);
 //        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
 
-        $this->assertEmailRecipientsContain('<cc@localhost>', $email);
+        $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Rimozione Sfida', $email);
         $this->assertEmailTextContains('ha rinunciato',$email);
 
