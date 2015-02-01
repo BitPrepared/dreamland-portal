@@ -111,10 +111,6 @@ foreach($result->http_response_body->items as $item){
 //$task_list = R::find('task','status = ?', array(\Rescue\RequestStatus::QUEUE));
 
 
-# Instantiate the client.
-$mgClient = new Mailgun('key-82d61ef51a09818167a7dc655cf89ea3');
-$domain = 'returntodreamland.it';
-
 # Issue the call to the client.
 $result = $mgClient->get("$domain/bounces", array('skip' => 0, 'limit' => 5));
 
