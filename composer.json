@@ -38,12 +38,12 @@
         "codeclimate/php-test-reporter": "dev-master",
         "satooshi/php-coveralls": "0.6.1",
 
-        "fabpot/php-cs-fixer": "~0.3",
+        "fabpot/php-cs-fixer": "1.4.*",
         "sensiolabs/security-checker": "~2.0",
 
         "clue/graph-composer": "dev-master",
 
-        "symfony/process": "2.3.*",
+        "symfony/process": "2.6.*",
         "ext-pcntl": "*",
         "ext-posix": "*"
     },
