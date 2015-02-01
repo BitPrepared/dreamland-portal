@@ -14,9 +14,6 @@
         "mailgun/mailgun-php": "1.7.2",
         "wp-cli/php-cli-tools": "0.10.3",
         "fzaninotto/faker": "dev-master",
-        "symfony/process": "2.3.*",
-        "ext-pcntl": "*",
-        "ext-posix": "*",
         "php": ">=5.3.7"
     },
     "require-dev": {
@@ -44,7 +41,11 @@
         "fabpot/php-cs-fixer": "~0.3",
         "sensiolabs/security-checker": "~2.0",
 
-        "clue/graph-composer": "dev-master"
+        "clue/graph-composer": "dev-master",
+
+        "symfony/process": "2.3.*",
+        "ext-pcntl": "*",
+        "ext-posix": "*",
     },
     "autoload": {
 	    "psr-0": {

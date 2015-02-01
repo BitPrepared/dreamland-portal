@@ -30,6 +30,9 @@ gem install mailcatcher
 
 la parte web: http://127.0.0.1:1080/, nei test vengono cancellate automaticamente le email!
 
+Da provare come alternativa: https://github.com/mailhog/MailHog forse funziona meglio con travis (sample: https://gist.github.com/varghesejacob/68caf7aeee53305a1ffa#file-mailhog-bash-script)
+oppure https://github.com/alexandresalome/mailcatcher alcuni stanno integrando mailcatcher con behat 
+
 
 ### Come lanciare i test unitari
 
@@ -65,4 +68,10 @@ nel file /usr/local/etc/php/5.4/php.ini assicurarsi che ci sia :
 
 ```
 sendmail_path = /usr/bin/env catchmail -f from@example.com
+```
+
+### Dipendenze
+
+```
+php vendor/clue/graph-composer/bin/graph-composer export . --format=png export.png
 ```
