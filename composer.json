@@ -45,7 +45,7 @@
 
         "symfony/process": "2.3.*",
         "ext-pcntl": "*",
-        "ext-posix": "*",
+        "ext-posix": "*"
     },
     "autoload": {
 	    "psr-0": {
