@@ -7,7 +7,7 @@
         "daviddeutsch/redbean-prefix": "dev-master",
         "raveren/kint": "0.9.*",
         "swiftmailer/swiftmailer": "5.3.1",
-        "egulias/email-validator": "1.2.6",
+        "egulias/email-validator": "1.2.7",
         "doctrine/lexer": "1.0.*@dev",
         "flynsarmy/slim-monolog": "dev-master",
         "google/apiclient": "1.1.2",

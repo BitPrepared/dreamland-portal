@@ -27,7 +27,6 @@ class ApiIscrizioneCase extends IntegrationCase
 
     /**
      * @group iscrizione
-     * @slowThreshold 2000
      */
     public function testStep1(){
 
@@ -108,7 +107,6 @@ class ApiIscrizioneCase extends IntegrationCase
 
     /**
      * @group iscrizione
-     * @slowThreshold 2000
      */
     public function testStep2(){
 

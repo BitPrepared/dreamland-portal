@@ -61,9 +61,6 @@ class ApiSfideCase extends IntegrationCase
 
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testIniziaGrandeSfida() {
         $this->ajaxPut('/api/sfide/iscrizione/1',
             json_encode(array(
@@ -101,9 +98,6 @@ class ApiSfideCase extends IntegrationCase
 
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testIniziaGrandeSfidaMissione() {
         $this->ajaxPut('/api/sfide/iscrizione/2',
             json_encode(array(
@@ -130,9 +124,6 @@ class ApiSfideCase extends IntegrationCase
         $this->assertEmailTextContains('Ricordiamo',$email);
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testIscriviSfidaSpeciale()
     {
         $_SESSION['sfide'] = $this->createSfidaMock(3,true,array('Altro'));
@@ -150,9 +141,6 @@ class ApiSfideCase extends IntegrationCase
         $this->assertSame('{"idsfida":3,"titolo":"Sfida Test","tipo":null,"permalink":"http:\/\/permalink","categoria":{"desc":"Altro","code":-1},"codicecensimento":123123,"startpunteggio":1,"obiettivopunteggio":1,"endpunteggio":0,"sfidaspeciale":true}', $this->client->response->body(),'struttura sfida errata');
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testIniziaGrandeSfidaSpeciale() {
         $this->ajaxPut('/api/sfide/iscrizione/3',
             json_encode(array(
@@ -204,9 +192,6 @@ class ApiSfideCase extends IntegrationCase
         $this->assertEquals(200, $this->client->response->status(),'Sfida 4 presente, nonostante la cancellazione, perche non attiva');
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testIniziaSfidaDaRimuovere() {
         $this->ajaxPut('/api/sfide/iscrizione/4',
             json_encode(array(
@@ -233,9 +218,6 @@ class ApiSfideCase extends IntegrationCase
         $this->assertEmailTextContains('tipo impresa',$email);
     }
 
-    /**
-     * @slowThreshold 2000
-     */
     public function testRimuoviSfidaAttivata() {
         $this->ajaxDelete('/api/sfide/iscrizione/4',json_encode(''));
 

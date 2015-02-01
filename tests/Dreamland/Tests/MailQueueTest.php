@@ -63,6 +63,14 @@ class MailQueueTest extends \PHPUnit_Framework_TestCase {
 
     }
 
+    public static function tearDownAfterClass() {
+        self::cleanupDatabase();
+    }
+
+    private static function cleanupDatabase() {
+        R::nuke(); //CLEAN DB
+    }
+
     /* <!-- MAIL -->  */
 
     // api calls
@@ -131,25 +139,19 @@ class MailQueueTest extends \PHPUnit_Framework_TestCase {
 
     /* <!-- MAIL -->  */
 
-
-    public function testFindQueueMail()
-    {
-        $messageTxt = 'test';
-        $this->assertTrue($this->mail->send('123456789', array('eg@test' => 'EG'), 'Test Accodamento Mail', $messageTxt));
-        $emails = R::findAll('mailqueue');
-        $this->assertNotEmpty($emails);
-        $this->assertCount(1,$emails);
-
-    }
-
     /**
      * @group mailcatcher
+     * @slowThreshold 2000
      */
     public function testSendQueuedMail(){
 
         $messageTxt = 'test';
         $subject = 'Test Accodamento Mail';
         $this->assertTrue($this->mail->send('123456789', array('eg@test' => 'EG'), $subject, $messageTxt));
+        $emails = R::findAll('mailqueue');
+        $this->assertNotEmpty($emails);
+        $this->assertCount(1,$emails);
+
         $spooler = new Spooler($this->logger,$this->config);
         $this->assertEquals(1,$spooler->flushQueue());
 
