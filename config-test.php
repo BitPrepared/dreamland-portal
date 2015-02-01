@@ -40,6 +40,7 @@ $config = array(
 );
 
 if ( !$travis ) {
+    //mailcatcher
     $config['smtp'] = array(
         'host' => '', //'localhost',
         'port' => 1025,

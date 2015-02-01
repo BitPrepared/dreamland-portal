@@ -1,6 +1,6 @@
 <?php
 
-namespace BitPrepared\Mail;
+namespace BitPrepared\Mail\Sender;
 
 use Swift_SmtpTransport;
 use Swift_Encoding;
@@ -9,10 +9,15 @@ use Swift_Message;
 use Swift_Mailer;
 use Swift_Plugins_LoggerPlugin;
 use BitPrepared\Mail\Transport\Mailcatcher;
+use BitPrepared\Mail\Sender;
 
 class Swift implements Sender
 {
+    /**+
+     * @var \Slim\Log
+     */
     private $logger;
+
     private $smtpLog;
     private $from;
     private $transport;
@@ -20,7 +25,7 @@ class Swift implements Sender
 
     private $lastId;
     
-    public function __construct($logger,$from,$smtpConfig){
+    public function __construct(\Slim\Log $logger,$from,$smtpConfig){
         $this->logger = $logger;
         $this->from = $from;
 

@@ -50,6 +50,7 @@
     <groups>
         <exclude>
             <group>remoteTasks</group>
+            <group>mailcatcher</group>
         </exclude>
     </groups>
 

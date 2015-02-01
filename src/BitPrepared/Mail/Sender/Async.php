@@ -6,8 +6,9 @@
  * 
  */
 
-namespace BitPrepared\Mail;
+namespace BitPrepared\Mail\Sender;
 use RedBean_Facade as R;
+use BitPrepared\Mail\Sender;
 
 class Async implements Sender
 {

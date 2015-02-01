@@ -10,14 +10,13 @@ function configure_slim($config){
 			$handlers[] = new \Monolog\Handler\HipChatHandler($hipchat['token'], $hipchat['room'], $hipchat['name'], $hipchat['notify'], \Monolog\Logger::INFO, $hipchat['bubble'], $hipchat['useSSL']);
 		}
         $streamToFile = new \Monolog\Handler\StreamHandler( $config['log']['filename'] );
-
         //@See https://github.com/Seldaek/monolog/blob/master/doc/usage.md
         // DEFAULT: "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
         $output = "[%datetime%] [%level_name%] [%extra%] : %message% %context%\n";
         $formatter = new Monolog\Formatter\LineFormatter($output);
         $streamToFile->setFormatter($formatter);
 		$handlers[] = $streamToFile;
-		$logger = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
+		$logger_writer = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
 		    'handlers' => $handlers,
             'processors' => array(
                 new Monolog\Processor\UidProcessor(),
@@ -69,7 +68,7 @@ function configure_slim($config){
 	return array(
 		'log_enable' => $log_enable,
 		'log_level' => $log_level,
-		'logger' => isset($logger) ? $logger : null,
+		'logger_writer' => isset($logger_writer) ? $logger_writer : null,
 		'loggerQuery' => isset($loggerQuery) ? $loggerQuery : null
 	);
 }

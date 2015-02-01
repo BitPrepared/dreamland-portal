@@ -1,13 +1,15 @@
 <?php
 
-namespace BitPrepared\Mail;
+namespace BitPrepared\Mail\Sender;
 
-use Mailgun\Mailgun;
+use BitPrepared\Mail\Sender;
 
-class MailgunSender implements Sender
+class Mailgun implements Sender
 {
 
-    //QUALE LOGGER?? FIXME: tipizziare
+    /**
+     * @var \Slim\Log
+     */
     private $log;
 
     private $from;
@@ -18,7 +20,7 @@ class MailgunSender implements Sender
 
     private $lastId;
 
-    public function __construct($logger,$from,$mailgunConfig){
+    public function __construct(\Slim\Log $logger,$from,$mailgunConfig){
         $this->log = $logger;
         $fromKeys = array_keys($from);
         $fromvalues = array_values($from);
@@ -44,7 +46,7 @@ class MailgunSender implements Sender
 
         $this->lastId = -1;
 
-        $mgClient = new Mailgun($this->apikey);
+        $mgClient = new \Mailgun\Mailgun($this->apikey);
 
 //        $mgClient->sendMessage($this->domain,
 //            array(

@@ -8,13 +8,7 @@
 
 use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClient;
-use BitPrepared\Mail\Async;
-
-
-use BitPrepared\Mail\Swift;
-use BitPrepared\Mail\MailgunSender;
-use BitPrepared\Mail\SendPolicy;
-use BitPrepared\Mail\Pipe;
+use BitPrepared\Mail\Sender\Async;
 
 // GESTITO VIA APACHE
 //if ( DEBUG ) { ini_set('display_errors',1); error_reporting(E_ALL); }
@@ -43,7 +37,7 @@ if ( DEBUG && isset($loggerQuery) ) R::debug(true,new \BitPrepared\RedBean\Logge
 $app->config(array(
     'log.enabled' => $log_enable,
     'log.level' => $log_level,
-    'log.writer' => $logger,
+    'log.writer' => $logger_writer,
     'templates.path' => realpath($config['template_dir']."/".$config['enviroment']),
     'title' => $config['title'],
     'import' => $config['import'],
@@ -92,17 +86,3 @@ $app->container->singleton('mail', function () use ($app,$config) {
     return new Async($app->log,$config['email_sender']);
 });
 
-/*
- *     $pipe = new Pipe();
-
-    if ( isset($config['mailgun']) ){
-        $pipe->add(new MailgunSender($app->log,$config['email_sender'],$config['mailgun']));
-    }
-
-    if ( isset($config['smtp']) ) {
-        $pipe->add(new Swift($app->log, $config['email_sender'], $config['smtp']));
-    }
-
-    $pipe->setPolicy(SendPolicy::STOP_ON_SUCCESS);
-    return $pipe;
- */

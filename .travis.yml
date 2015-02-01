@@ -19,8 +19,6 @@ before_install:
 
 before_script:
   - gem install mailcatcher
-  - phpenv config-add travis.php.ini
-  - /usr/bin/env $(which mailcatcher) --ip=0.0.0.0
   - mkdir -p resources/logs resources/tmp
 
 script:

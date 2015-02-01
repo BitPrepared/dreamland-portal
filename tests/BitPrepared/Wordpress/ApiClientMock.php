@@ -13,7 +13,6 @@ class ApiClientMock {
 
     public function setRequestOption() {}
 
-
     public function __get($key) {
         $classes = array(
             'users' => 'BitPrepared\Wordpress\WPAPI_Users_Mock',

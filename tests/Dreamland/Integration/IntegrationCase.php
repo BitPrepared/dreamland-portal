@@ -17,22 +17,23 @@ abstract class IntegrationCase extends WebTestCase {
 
     public function getSlimInstance() {
         require APPLICATION_PATH . '/config-test.php';
+
         extract(configure_slim($config), EXTR_SKIP);
 
         require APPLICATION_PATH . '/includes/app.php';
+
+        require APPLICATION_PATH.'/includes/hooks.php';
+        require APPLICATION_PATH.'/includes/routes.php';
+        require APPLICATION_PATH.'/includes/api.php';
+
+        if ( DEBUG ) {
+            require APPLICATION_PATH.'/includes/development.php';
+        }
 
         // Define wapi resource
         $app->container->singleton('wapi', function () use ($app,$config) {
             return new ApiClientMock();
         });
-
-        require APPLICATION_PATH . '/includes/hooks.php';
-        require APPLICATION_PATH . '/includes/routes.php';
-        require APPLICATION_PATH . '/includes/api.php';
-
-        if ( DEBUG ) {
-            require BASE_DIR . 'includes/development.php';
-        }
 
         return $app;
     }

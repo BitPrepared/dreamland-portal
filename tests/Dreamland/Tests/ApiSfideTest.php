@@ -81,10 +81,9 @@ class ApiSfideCase extends IntegrationCase
         $this->assertEmailIsSent();
         $email = $this->getLastMessage();
 
-//        NON RIESCO A FARE L'ASSERT IN QUANTO STO USANDO SENDMAIL E QUINDI IL FROM E' DETTATO DALL'ESTERNO
-//        $email_sender = $this->app->config('email_sender');
-//        $keys = array_keys($email_sender);
-//        $this->assertEmailSenderEquals('<'.$keys[0].'>', $email);
+        $email_sender = $this->app->config('email_sender');
+        $keys = array_keys($email_sender);
+        $this->assertEmailSenderEquals($keys[0], $email);
 
         $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);

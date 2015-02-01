@@ -1,8 +1,10 @@
 <?php
 
-namespace BitPrepared\Mail;
+namespace BitPrepared\Mail\Sender;
 
 use Symfony\Component\Config\Definition\Exception\Exception;
+use BitPrepared\Mail\Sender;
+use BitPrepared\Mail\SendPolicy;
 
 /**
  * Created by PhpStorm.
@@ -19,21 +21,30 @@ class Pipe implements Sender
     private $policy;
 
     /**
+     * @var \Slim\Log
+     */
+    private $logger;
+
+    private $lastId;
+
+    /**
      * @var \BitPrepared\Mail\Sender[]
      */
     private $pipe = array();
 
-    public function __construct()
+    public function __construct(\Slim\Log $logger)
     {
         $this->policy = SendPolicy::ALL;
 
         if ( func_num_args() < 1 ) return;
 
         foreach ( func_get_args() as $argument ) {
-            if ( is_object($argument) && is_subclass_of($argument,'Sender') ){ //@From php 5.3.7
+            if ( is_object($argument) && is_subclass_of($argument,'Sender') ){ //@From php 5.3.7 check interface
                 $pipe[] = $argument;
             }
         }
+
+        $this->logger = $logger;
     }
 
     public function add(Sender $s){
@@ -52,6 +63,7 @@ class Pipe implements Sender
 
     public function send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null)
     {
+        $this->lastId = -1;
         $result = false;
         foreach($this->pipe as $sender){
             try {
@@ -61,17 +73,22 @@ class Pipe implements Sender
                         return false;
                     }
                 } else {
+                    $this->lastId = $sender->getLastMessageId();
                     if ( SendPolicy::STOP_ON_SUCCESS == $this->policy ){
                         return true;
                     }
                 }
             } catch (Exception $e){
-                //FIXME: logger???
+                $this->logger->error('Pipe inceppata: '.$e->getMessage());
                 if ( SendPolicy::STOP_ON_FAILURE == $this->policy ){
                     return false;
                 }
             }
         }
         return $result;
+    }
+
+    public function getLastMessageId(){
+        return $this->lastId;
     }
 }
