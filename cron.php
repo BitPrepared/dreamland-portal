@@ -39,34 +39,36 @@ function fatal_handler($config) {
 
 use RedBean_Facade as R;
 
-$strict = in_array('--strict', $_SERVER['argv']);
-$arguments = new \cli\Arguments(compact('strict'));
+//$strict = in_array('--strict', $_SERVER['argv']);
+//$arguments = new \cli\Arguments(compact('strict'));
+//
+//$arguments->addFlag(array('verbose', 'v'), 'Turn on verbose output');
+//$arguments->addFlag('version', 'Display the version');
+//$arguments->addFlag(array('quiet', 'q'), 'Disable all output');
+//$arguments->addFlag(array('help', 'h'), 'Show this help screen');
+//
+//$arguments->addOption(array('configfile','c'), array(
+//    'default' => BASE_DIR.'config.php',
+//    'description' => 'Setta la posizione del file di config'));
+//
+//$arguments->addFlag(array('mail', 'm'), 'Invia mail in coda');
+//
+//$arguments->parse();
+//if ($arguments['help']) {
+//    echo $arguments->getHelpScreen();
+//    echo "\n\n";
+//}
+//
+//$arguments_parsed = $arguments->getArguments();
+//
+//if ( isset($arguments_parsed['configfile']) ) {
+//    require $arguments_parsed['configfile'];
+//} else {
+//    \cli\err('Parametro -c config mancante');
+//    exit -1;
+//}
 
-$arguments->addFlag(array('verbose', 'v'), 'Turn on verbose output');
-$arguments->addFlag('version', 'Display the version');
-$arguments->addFlag(array('quiet', 'q'), 'Disable all output');
-$arguments->addFlag(array('help', 'h'), 'Show this help screen');
-
-$arguments->addOption(array('configfile','c'), array(
-    'default' => BASE_DIR.'config.php',
-    'description' => 'Setta la posizione del file di config'));
-
-$arguments->addFlag(array('mail', 'm'), 'Invia mail in coda');
-
-$arguments->parse();
-if ($arguments['help']) {
-    echo $arguments->getHelpScreen();
-    echo "\n\n";
-}
-
-$arguments_parsed = $arguments->getArguments();
-
-if ( isset($arguments_parsed['configfile']) ) {
-    require $arguments_parsed['configfile'];
-} else {
-    \cli\err('Parametro -c config mancante');
-    exit -1;
-}
+require '../config.php';
 
 require BASE_DIR.'includes/configuration.php';
 extract(configure_slim($config), EXTR_SKIP);
@@ -107,7 +109,7 @@ if ( DEBUG ) {
     R::freeze(true);
 }
 
-if ( isset($arguments_parsed['mail']) ){
+//if ( isset($arguments_parsed['mail']) ){
 
     $logger->info('Cron start send mail');
 
@@ -117,4 +119,4 @@ if ( isset($arguments_parsed['mail']) ){
 
     $logger->info('Cron end send mail');
 
-}
+//}
