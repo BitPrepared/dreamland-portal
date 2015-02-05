@@ -6,27 +6,11 @@
  * 
  */
 
-if( defined('APPLICATION_PATH') && !defined('BASE_DIR') ) {
-    define('BASE_DIR' , APPLICATION_PATH.'/');
-} else {
-    if ( file_exists(__DIR__.'/../config.php') ){
-        define('BASE_DIR', realpath(__DIR__.'/../').'/');
-    } else if ( file_exists(__DIR__.'/../../config.php') ){
-        define('BASE_DIR', realpath(__DIR__.'/../../').'/');
-    } else {
-        echo '<h1>FILE config.php MANCANTE</h1>';
-        exit;
-    }
-}
+
+define('BASE_DIR', realpath(__DIR__).'/');
 
 date_default_timezone_set('Europe/Rome');
-
 require BASE_DIR.'vendor/autoload.php';
-
-require BASE_DIR . 'config.php';
-
-require BASE_DIR.'includes/configuration.php';
-extract(configure_slim($config), EXTR_SKIP);
 
 function fatal_handler($config) {
     $errfile = "unknown file";
@@ -53,7 +37,7 @@ function fatal_handler($config) {
     }
 }
 
-register_shutdown_function( "fatal_handler" , $config );
+use RedBean_Facade as R;
 
 $strict = in_array('--strict', $_SERVER['argv']);
 $arguments = new \cli\Arguments(compact('strict'));
@@ -63,12 +47,11 @@ $arguments->addFlag('version', 'Display the version');
 $arguments->addFlag(array('quiet', 'q'), 'Disable all output');
 $arguments->addFlag(array('help', 'h'), 'Show this help screen');
 
-$arguments->addOption(array('export-csv','e'), array(
-    'default' => getcwd(),
-    'description' => 'Setta la  directory dove esportare i soci come csv'));
+$arguments->addOption(array('configfile','c'), array(
+    'default' => BASE_DIR.'config.php',
+    'description' => 'Setta la posizione del file di config'));
 
-$arguments->addFlag(array('update-db', 'u'), 'Abilita la sovra-scrittura su db');
-
+$arguments->addFlag(array('mail', 'm'), 'Invia mail in coda');
 
 $arguments->parse();
 if ($arguments['help']) {
@@ -78,32 +61,60 @@ if ($arguments['help']) {
 
 $arguments_parsed = $arguments->getArguments();
 
-if ( isset($arguments_parsed['verbose']) ) {
-    define("VERBOSE",true);
+if ( isset($arguments_parsed['configfile']) ) {
+    require $arguments_parsed['configfile'];
 } else {
-    define("VERBOSE",false);
+    \cli\err('Parametro -c config mancante');
+    exit -1;
 }
 
-use Mailgun\Mailgun;
+require BASE_DIR.'includes/configuration.php';
+extract(configure_slim($config), EXTR_SKIP);
+register_shutdown_function( "fatal_handler" , $config );
 
-# Instantiate the client.
-$mgClient = new Mailgun($config['mailgun']['apikey']);
-$domain = 'returntodreamland.it';
-$queryString = array('event' => 'rejected OR failed');
-//$queryString = array(
-//    'begin'        => 'Fri, 3 May 2013 09:00:00 -0000',
-//    'ascending'    => 'yes',
-//    'limit'        =>  25,
-//    'pretty'       => 'yes',
-//    'subject'      => 'test'
-//);
+$streamToFile = new \Monolog\Handler\StreamHandler( $config['log']['filenameCron'] );
+$output = "[%datetime%] [%level_name%] [%extra%] : %message% %context%\n";
+$formatter = new Monolog\Formatter\LineFormatter($output);
+$streamToFile->setFormatter($formatter);
+$handlers[] = $streamToFile;
 
-# Make the call to the client.
-$result = $mgClient->get("$domain/events", $queryString);
-
-foreach($result->items as $item){
-    print_r($item);
+if ( isset($config['loggy']) ){
+    $handlers[] = new \Monolog\Handler\LogglyHandler($config['loggy']['token'].'/tag/cron', \Monolog\Logger::INFO);
 }
 
-//use RedBean_Facade as R;
-//$task_list = R::find('task','status = ?', array(\Rescue\RequestStatus::QUEUE));
+$logger_writer = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
+    'handlers' => $handlers,
+    'processors' => array(
+        new Monolog\Processor\UidProcessor(),
+        new Monolog\Processor\WebProcessor($_SERVER),
+    )
+));
+
+$logger = new \Slim\Log($logger_writer);
+
+if ( strcmp('sqlite',$config['db']['type']) == 0 ){
+    $dsn      = $config['db']['type'].':'.$config['db']['host'];
+} else {
+    $dsn      = $config['db']['type'].':host='.$config['db']['host'].';dbname='.$config['db']['database'];
+}
+$username = $config['db']['user'];
+$password = $config['db']['password'];
+
+R::setup($dsn,$username,$password);
+if ( DEBUG ) {
+    R::freeze(false);
+} else {
+    R::freeze(true);
+}
+
+if ( isset($arguments_parsed['mail']) ){
+
+    $logger->info('Cron start send mail');
+
+    $spooler = new \BitPrepared\Mail\Spooler($logger,$config);
+
+    $spooler->flushQueue();
+
+    $logger->info('Cron end send mail');
+
+}

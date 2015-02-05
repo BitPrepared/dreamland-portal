@@ -1,5 +1,8 @@
 <?php
 
+use Monolog\Handler\LogglyHandler;
+use Monolog\Logger;
+
 function configure_slim($config){
 	$log_level = \Slim\Log::WARN;
 	$log_enable = false;
@@ -16,6 +19,11 @@ function configure_slim($config){
         $formatter = new Monolog\Formatter\LineFormatter($output);
         $streamToFile->setFormatter($formatter);
 		$handlers[] = $streamToFile;
+
+		if ( isset($config['loggy']) ){
+			$handlers[] = new LogglyHandler($config['loggy']['token'].'/tag/portal', Logger::INFO);
+		}
+
 		$logger_writer = new \Flynsarmy\SlimMonolog\Log\MonologWriter(array(
 		    'handlers' => $handlers,
             'processors' => array(

@@ -10,6 +10,7 @@ use Swift_Mailer;
 use Swift_Plugins_LoggerPlugin;
 use BitPrepared\Mail\Transport\Mailcatcher;
 use BitPrepared\Mail\Sender;
+use Slim\Log;
 
 class Swift implements Sender
 {
@@ -25,7 +26,7 @@ class Swift implements Sender
 
     private $lastId;
     
-    public function __construct(\Slim\Log $logger,$from,$smtpConfig){
+    public function __construct(Log $logger,$from,$smtpConfig){
         $this->logger = $logger;
         $this->from = $from;
 

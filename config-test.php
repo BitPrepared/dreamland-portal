@@ -15,6 +15,8 @@ $config = array(
     ),
     'log' => array(
         'filename' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'.log',
+        'filenameQuery' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'-query.log',
+        'filenameCron' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'-cron.log',
         'level' => 'DEBUG'
     ),
     'email_sender' => array('test@test' => 'Test Return To Dreamland'),

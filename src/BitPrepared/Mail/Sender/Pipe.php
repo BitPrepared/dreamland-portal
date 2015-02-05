@@ -79,7 +79,7 @@ class Pipe implements Sender
                     }
                 }
             } catch (Exception $e){
-                $this->logger->error('Pipe inceppata: '.$e->getMessage());
+                $this->logger->error('Pipe exception: '.$e->getMessage());
                 if ( SendPolicy::STOP_ON_FAILURE == $this->policy ){
                     return false;
                 }

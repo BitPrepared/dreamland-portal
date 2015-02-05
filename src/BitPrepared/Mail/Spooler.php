@@ -7,11 +7,13 @@
  */
 
 namespace BitPrepared\Mail;
+
 use RedBean_Facade as R;
 use BitPrepared\Mail\Sender\Swift;
 use BitPrepared\Mail\Sender\Mailgun;
-use BitPrepared\Mail\SendPolicy;
 use BitPrepared\Mail\Sender\Pipe;
+use BitPrepared\Mail\SendPolicy;
+use \Slim\Log;
 
 class Spooler {
 
@@ -30,7 +32,7 @@ class Spooler {
      * @param $config array
      * @param int $policy @see \BitPrepared\Mail\SendPolicy
      */
-    public function __construct(\Slim\Log $logger,$config,$policy = SendPolicy::STOP_ON_SUCCESS){
+    public function __construct(Log $logger,$config,$policy = SendPolicy::STOP_ON_SUCCESS){
 
         $this->logger = $logger;
         $pipe = new Pipe($logger);
@@ -50,25 +52,35 @@ class Spooler {
     public function flushQueue(){
 
         $count = 0;
+
+        //FIXME: devo fare in modo che 2 processi non entrino nella stessa sezione critica a pestarsi i piedi anche con un rate alto.
         $emails = R::findAll('mailqueue');
-        foreach($emails as $email){
 
-            $referenceCode = $email->code;
+        $this->logger->info('Trovate '.count($emails).' da inviare');
 
-            $toEmailAddress = array($email->toEmailAddress => $email->toNameReceiver);
-            $fromEmailAddress = array($email->fromEmailAddress => $email->fromNameSender);
+        foreach($emails as $emailqueued){
 
-            $subject = $email->subject;
-            $txtMessage = $email->txt;
-            $htmlMessage = $email->html;
+            $referenceCode = $emailqueued->code;
 
-            //FIXME: non supportato per ora
-            $attachment = null;
+            $toEmailAddress = array($emailqueued->toEmailAddress => $emailqueued->toNameReceiver);
+
+            //FIXME: in futuro deve gestirlo!
+            $fromEmailAddress = array($emailqueued->fromEmailAddress => $emailqueued->fromNameSender);
+
+            $emailObj = json_decode($emailqueued->email);
+
+            $subject = $emailObj->subject;
+            $txtMessage = $emailObj->message;
+            $htmlMessage = $emailObj->html;
+
+            //FIXME: non supportato per ora, andrà decodificato dal formato base64
+            $attachment = $emailObj->attachment;
 
             //PER OGNI MAIL FACCIO LA PIPE
             if ( $this->pipe->send($referenceCode,$toEmailAddress,$subject,$txtMessage,$htmlMessage,$attachment) ) {
                 // OK
-                $this->logger->info('ok');
+                $this->logger->info('invio mail ok');
+                R::trash($emailqueued);
                 $count++;
             } else {
                 // KO

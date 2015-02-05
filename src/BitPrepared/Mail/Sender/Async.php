@@ -36,8 +36,11 @@ class Async implements Sender
 
         try {
             $mailqueue = R::dispense('mailqueue');
+
+            // <!-- IDENTIFICAZIONE -->
             $mailqueue->code = $referenceCode;
             $mailqueue->logtime = R::isoDateTime();
+            // <!-- IDENTIFICAZIONE -->
 
             $emails = array_keys($toEmailAddress);
             $receivers = array_values($toEmailAddress);
@@ -50,15 +53,23 @@ class Async implements Sender
             $mailqueue->fromNameSender = $senders[0];
 
             $mailqueue->subject = $subject;
-            $mailqueue->txt = $txtMessage;
-            $mailqueue->html = $htmlMessage;
 
-            //ATTACHMENT COME VIENE GESTITO??? clob/blob???
+            $email = new \stdClass();
+            $email->to = $toEmailAddress;
+            $email->from = $this->from;
+            $email->subject = $subject;
+            $email->message = $txtMessage;
+            $email->html = $htmlMessage;
+
+            //TODO: ATTACHMENT COME VIENE GESTITO??? clob/blob??? o direttamente dentro come B64?
+            $email->attachment = $attachment;
+
+            $mailqueue->email = json_encode($email);
 
             $this->lastId = R::store($mailqueue);
             return true;
         } catch (\Exception $e ){
-            $this->log->error('Errore accodamento messaggio mail: '.$e->getMessage());
+            $this->log->error('Errore accodamento messaggio mail: '.$e->getMessage().' '.$e->getTraceAsString());
             return false;
         }
 

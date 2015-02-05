@@ -3,6 +3,7 @@
 namespace BitPrepared\Mail\Sender;
 
 use BitPrepared\Mail\Sender;
+use Slim\Log;
 
 class Mailgun implements Sender
 {
@@ -20,7 +21,7 @@ class Mailgun implements Sender
 
     private $lastId;
 
-    public function __construct(\Slim\Log $logger,$from,$mailgunConfig){
+    public function __construct(Log $logger,$from,$mailgunConfig){
         $this->log = $logger;
         $fromKeys = array_keys($from);
         $fromvalues = array_values($from);
@@ -71,6 +72,10 @@ class Mailgun implements Sender
 
             $this->log->info('From mail : '.$this->from.' => TO => '.$toEmailAddress.' MSG: '.$txtMessage);
 
+            $referenceUniqueGenerated = hash('sha256',$this->salt.$referenceCode,false);
+
+            $this->log->info('Reference generated: '.$referenceUniqueGenerated);
+
             $result = $mgClient->sendMessage($this->domain,
                 array(
                     'from' => $this->from,
@@ -80,7 +85,7 @@ class Mailgun implements Sender
                     //h: prefix followed by an arbitrary value allows to append a custom MIME
                     //header to the message (X-My-Header in this case).
                     //For example, h:Reply-To to specify Reply-To address.
-                    'h:X-unique-reference'=>  hash('sha256',$this->salt.$referenceCode,false),
+                    'h:X-unique-reference'=>  $referenceUniqueGenerated,
                     'o:tag' => array('portal')
                 )
             );
