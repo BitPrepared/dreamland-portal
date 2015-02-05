@@ -9,6 +9,7 @@
 namespace Dreamland\Tests;
 
 use RedBean_Facade as R;
+use BitPrepared\Event\EventManager;
 use BitPrepared\Mail\Sender\Async;
 use \BitPrepared\Mail\Spooler;
 
@@ -147,13 +148,17 @@ class MailQueueTest extends \PHPUnit_Framework_TestCase {
 
         $messageTxt = 'test';
         $subject = 'Test Accodamento Mail';
-        $this->assertTrue($this->mail->send('123456789', array('eg@test' => 'EG'), $subject, $messageTxt));
+        $codCens = 123456789;
+        $this->assertTrue($this->mail->send($codCens, array('eg@test' => 'EG'), $subject, $messageTxt));
         $emails = R::findAll('mailqueue');
         $this->assertNotEmpty($emails);
         $this->assertCount(1,$emails);
 
         $spooler = new Spooler($this->logger,$this->config);
         $this->assertEquals(1,$spooler->flushQueue());
+
+        $eventi = EventManager::getEvents($codCens);
+        $this->assertCount(2,$eventi);
 
         $mail = $this->getLastMessage();
         $this->assertNotNull($mail);

@@ -2,7 +2,11 @@
 
 namespace BitPrepared\Mail\Sender;
 
+use BitPrepared\Event\EventType;
 use BitPrepared\Mail\Sender;
+use BitPrepared\Event\EventManager;
+use BitPrepared\Event\EventElement;
+use BitPrepared\Event\Category\Mail;
 use Slim\Log;
 
 class Mailgun implements Sender
@@ -94,13 +98,16 @@ class Mailgun implements Sender
                 $this->log->info('Invio id: '.$result->http_response_body->id); //ID MAIL: 20150201133546.34392.43643@returntodreamland.it
                 $this->lastId = $result->http_response_body->id;
 
-                //FIXME: va loggato meglio il $referenceUniqueGenerated e il lastId!
+                EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::ACCODATO_MAILGUN,array('subject' => $subject, 'mailgun-id' => $this->lastId)));
 
                 return true;
             }
 
         } catch (\Exception $e){
             $this->log->error('Invio fallito : '.$e->getMessage());
+
+            EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::ACCODAMENTO_MAILGUN_FALLITO,array('subject' => $subject)));
+
         }
 
         $this->log->info('Invio fallito');

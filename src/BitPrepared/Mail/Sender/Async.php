@@ -8,7 +8,11 @@
 
 namespace BitPrepared\Mail\Sender;
 use RedBean_Facade as R;
+use BitPrepared\Event\EventType;
 use BitPrepared\Mail\Sender;
+use BitPrepared\Event\EventManager;
+use BitPrepared\Event\EventElement;
+use BitPrepared\Event\Category\Mail;
 
 class Async implements Sender
 {
@@ -67,6 +71,9 @@ class Async implements Sender
             $mailqueue->email = json_encode($email);
 
             $this->lastId = R::store($mailqueue);
+
+            EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::ACCODATO ,array('subject' => $subject, 'email' => $email)));
+
             return true;
         } catch (\Exception $e ){
             $this->log->error('Errore accodamento messaggio mail: '.$e->getMessage().' '.$e->getTraceAsString());

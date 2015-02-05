@@ -10,6 +10,10 @@ use Swift_Mailer;
 use Swift_Plugins_LoggerPlugin;
 use BitPrepared\Mail\Transport\Mailcatcher;
 use BitPrepared\Mail\Sender;
+use BitPrepared\Event\EventType;
+use BitPrepared\Event\EventManager;
+use BitPrepared\Event\EventElement;
+use BitPrepared\Event\Category\Mail;
 use Slim\Log;
 
 class Swift implements Sender
@@ -83,6 +87,9 @@ class Swift implements Sender
             } else {
                 $this->lastId = $message->getHeaders()->get('Message-ID');
                 $this->logger->info('Mail correttamente invata');
+
+                EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::SPEDITO,array('subject' => $subject, 'mail-id' => $this->lastId)));
+
                 return true;
             }
         }
@@ -96,6 +103,8 @@ class Swift implements Sender
             $this->logger->error($e->getTraceAsString());   
             $this->logger->error($this->smtpLog->dump());
         }
+
+        EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::FALLITA_SPEDIZIONE,array('subject' => $subject, 'mail-id' => $this->lastId)));
 
         return false;
 

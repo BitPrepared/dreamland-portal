@@ -9,6 +9,7 @@
 namespace Dreamland\Tests;
 
 use RedBean_Facade as R;
+use BitPrepared\Event\EventManager;
 use Dreamland\Ruoli;
 use Dreamland\Integration\IntegrationCase;
 
@@ -31,10 +32,11 @@ class ApiIscrizioneCase extends IntegrationCase
     public function testStep1(){
 
         $emailEG = 'eg@localhost';
+        $codCens = 123123;
 
         $this->ajaxPost('/api/registrazione/step1',json_encode(array(
             'email' => $emailEG,
-            'codicecensimento' => '123123',
+            'codicecensimento' => $codCens,
             'datanascita' => 20141219
         )));
         $this->assertEquals(201, $this->client->response->status(),'Impossibile completare step1');
@@ -50,6 +52,9 @@ class ApiIscrizioneCase extends IntegrationCase
         $this->assertEmailRecipientsContain($emailEG, $email,' Invece di eg@localhost abbiamo trovato '.var_export($email,true));
         $this->assertEmailSubjectEquals('Richiesta registrazione Return To Dreamland', $email);
         $this->assertEmailTextContains('http://localhost/#/home/wizard?step=1&code=',$email);
+
+        $eventi = EventManager::getEvents($codCens);
+        $this->assertCount(1,$eventi);
 
     }
 
