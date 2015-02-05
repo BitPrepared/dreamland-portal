@@ -86,3 +86,7 @@ $app->container->singleton('mail', function () use ($app,$config) {
     return new Async($app->log,$config['email_sender']);
 });
 
+$app->container->singleton('spooler',function() use ($app,$config) {
+    $spooler = new \BitPrepared\Mail\Spooler($app->log,$config);
+    return $spooler;
+});
