@@ -38,8 +38,8 @@ class ApiIscrizioneCase extends IntegrationCase
             'datanascita' => 20141219
         )));
         $this->assertEquals(201, $this->client->response->status(),'Impossibile completare step1');
-
         $this->assertSame('', $this->client->response->body(),'struttura registration errata');
+
         $this->assertEmailIsSent();
         $email = $this->getLastMessage();
 

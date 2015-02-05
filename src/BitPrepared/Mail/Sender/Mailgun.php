@@ -93,6 +93,9 @@ class Mailgun implements Sender
             if ( is_object($result) ) {
                 $this->log->info('Invio id: '.$result->http_response_body->id); //ID MAIL: 20150201133546.34392.43643@returntodreamland.it
                 $this->lastId = $result->http_response_body->id;
+
+                //FIXME: va loggato meglio il $referenceUniqueGenerated e il lastId!
+
                 return true;
             }
 

@@ -15,10 +15,14 @@ use BitPrepared\Wordpress\ApiClientMock;
 
 abstract class IntegrationCase extends WebTestCase {
 
+    private $config;
+
     public function getSlimInstance() {
         require APPLICATION_PATH . '/config-test.php';
 
         extract(configure_slim($config), EXTR_SKIP);
+
+        $this->config = $config;
 
         require APPLICATION_PATH . '/includes/app.php';
 
@@ -267,7 +271,8 @@ abstract class IntegrationCase extends WebTestCase {
 
     public function assertEmailTextContains($needle, $email, $description = '')
     {
-        $this->assertContains($needle, $email->txt, $description);
+        $email = json_decode($email->email);
+        $this->assertContains($needle, $email->message, $description);
     }
 
     public function assertEmailSenderEquals($expected, $email, $description = '')
