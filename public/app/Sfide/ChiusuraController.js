@@ -111,7 +111,7 @@ define(['angular','dreamApp','underscore'], function(angular,dreamApp,_){
         $scope.chiudi = function(){
 
             var sfida = $scope.risultato;
-            Portal.chiudiSfida($scope.sfidaid,function(sfida){
+            Portal.chiudiSfida($scope.sfidaid,sfida,function(){    
                 $('#spinnerdiv').show();
                 $window.location.href = $scope.sfida.permalink+'?completa&sfida='+$scope.sfida.sfidaspeciale+'&tipo='+$scope.sfida.tipo+'&successo='+$scope.risultato.provasuperata;
             },function(errore){
