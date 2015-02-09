@@ -464,11 +464,15 @@ function sfide($app) {
                 $drm_iscrizione_sfida = R::findOne('iscrizionesfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
                 if ( null != $drm_iscrizione_sfida ) {
 
-                    $drm_chiusura_sfida = R::dispense('chiusurasfida');
-
-                    //PK
-                    $drm_chiusura_sfida->idsfida = $sfida_id;
-                    $drm_chiusura_sfida->codicecensimento = $codicecensimento;
+                    $drm_chiusura_sfida = R::findOne('chiusurasfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
+                    if ( null == $drm_chiusura_sfida ) {
+                        $drm_chiusura_sfida = R::dispense('chiusurasfida');
+                        //PK
+                        $drm_chiusura_sfida->idsfida = $sfida_id;
+                        $drm_chiusura_sfida->codicecensimento = $codicecensimento;
+                    } else {
+                        $app->log->info('Retry chiusura sfida '.$sfida_id.' da parte di '.$codicecensimento.' old data '.json_encode($drm_chiusura_sfida));
+                    }
 
                     //nuovi
                     $drm_chiusura_sfida->protagonisti = $obj_request->protagonisti;
