@@ -23,7 +23,7 @@ define(['angular','sharedServices'], function(angular,sharedServicesModule){
           });
     };
 
-      this.chiudiSfida = function (id,x,y) {
+      this.chiudiSfida = function (id,sfida,x,y) {
           $http.put('./api/sfide/chiusura/'+id,sfida).
               success(function(data, status, headers, config) {
                   x(data);
