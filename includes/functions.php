@@ -121,6 +121,36 @@ function findDatiSquadriglia($codicecensimento) {
 
 }
 
+/**
+ * @param $codicecensimento codice del rappresentante squadriglia
+ * @param $specialita specialita o nuove specialita a seconda di replace
+ * @param $brevetti brevetti o nuovi brevetti a seconda di replace
+ * @param bool $replace , se vero rimpiazzo il valore di specialita e brevetti
+ */
+function aggiornaDatiSquadriglia($codicecensimento,$specialita,$brevetti,$replace = false){
+    $squadriglia = R::findOne('squadriglia',' codicecensimento = ?',array($codicecensimento));
+    if ( null != $squadriglia ) {
+
+        $sqversion = R::dispense('sqversion');
+        $sqversion->idsq = $squadriglia->id;
+        $sqversion->componenti = $squadriglia->componenti;
+        $sqversion->specialita = $squadriglia->specialita;
+        $sqversion->brevetti = $squadriglia->brevetti;
+        R::store($sqversion);
+
+        if ( $replace ){
+            $squadriglia->specialita = $specialita;
+            $squadriglia->brevetti = $brevetti;
+        } else {
+            $squadriglia->specialita = intval($squadriglia->specialita) + $specialita;
+            $squadriglia->brevetti = intval($squadriglia->brevetti) + $brevetti;
+        }
+
+        return R::store($squadriglia);
+    }
+    return -1;
+}
+
 function findDatiRagazzo($codicecensimento) {
 
     $find = R::findOne('asa_anagrafica_eg',' codicesocio = ?',array($codicecensimento));

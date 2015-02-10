@@ -476,8 +476,8 @@ function sfide($app) {
 
                     //nuovi
                     $drm_chiusura_sfida->protagonisti = $obj_request->protagonisti;
-                    $drm_chiusura_sfida->nuovespecialita = $obj_request->nuovespecialita;
-                    $drm_chiusura_sfida->nuovibrevetti = $obj_request->nuovibrevetti;
+                    $drm_chiusura_sfida->nuovespecialita = intval($obj_request->nuovespecialita);
+                    $drm_chiusura_sfida->nuovibrevetti = intval($obj_request->nuovibrevetti);
 
                     //da capire
                     $drm_chiusura_sfida->provasuperata = $obj_request->provasuperata;
@@ -498,7 +498,9 @@ function sfide($app) {
 
                     $app->log->info('Aggiornata iscrizione sfida '.$sfida_id.' da parte di '.$codicecensimento);
 
-                    //FIXME: logica invio mail caporeparto
+                    $q = aggiornaDatiSquadriglia($codicecensimento,$drm_chiusura_sfida->nuovespecialita,$drm_chiusura_sfida->nuovibrevetti,false);
+
+                    if ( $q >= 0 ) $app->log->info('Aggiornata squadriglia rappresentata da '.$codicecensimento);
 
                     $app->response->setBody("");
                     $app->response->setStatus(204);
