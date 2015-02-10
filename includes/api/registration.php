@@ -126,6 +126,7 @@ function registration($app){
                                 $drm_registration_prev->email = $email;
                                 $drm_registration_prev->token = $token;
                             }
+                            $drm_registration_prev->update = R::isoDateTime();
                             R::store($drm_registration_prev);
                         }
 					} else {
@@ -145,6 +146,8 @@ function registration($app){
 						$drm_registration->gruppo = $egAsa->ord;
                         $drm_registration->legame = null;
                         $drm_registration->completato = false;
+                        $drm_registration->create = R::isoDateTime();
+                        $drm_registration->update = R::isoDateTime();
 						$drm_registration_id = R::store($drm_registration);
 
 						$app->log->info('Nuova richiesta di registrazione '.$drm_registration_id.' tipo E/G');
@@ -316,6 +319,7 @@ function registration($app){
                 if ( null != $profileUser ) {
                     $app->log->info('Utente in wordpress gia presente '.$profileUser->user_id.' quindi setto a completata l\'iscrizione. ');
                     $findToken->completato = true;
+                    $findToken->update = R::isoDateTime();
                     R::store($findToken);
                     throw new Exception('Utente già registrato', Errori::WORDPRESS_UTENTE_GIA_PRESENTE);
                 }
@@ -372,6 +376,8 @@ function registration($app){
                     $drm_registration->zona = $zona;
                     $drm_registration->gruppo = $gruppo;
                     $drm_registration->legame = null; //ex codicecensimento
+                    $drm_registration->create = R::isoDateTime();
+                    $drm_registration->update = R::isoDateTime();
                     $drm_registration_id = R::store($drm_registration);
 
                     legaCapoRepartoToRagazzo($emailCapoReparto, $codicecensimento);
@@ -448,6 +454,7 @@ function registration($app){
 
                 $app->log->info('Creato utente in wordpress '.$newUser->ID);
                 $findToken->completato = true;
+                $findToken->update = R::isoDateTime();
                 R::store($findToken);
 
                 $app->response->setBody('');
@@ -581,6 +588,7 @@ function registration($app){
 
 				 	$findToken->completato = true;
                     $findToken->codicecensimento = $codicecensimento;
+                    $findToken->update = R::isoDateTime();
 				 	R::store($findToken);
 
                      $app->response->setStatus(200);
