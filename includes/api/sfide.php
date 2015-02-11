@@ -551,7 +551,7 @@ function sfide($app) {
 
         });
 
-        $app->put('/conferma/:id/:cc', function($sfida_id,$codicecc) use ($app) {
+        $app->put('/conferma/:id/:cc', function($sfida_id,$codicecensimentoeg) use ($app) {
 
             $app->response->setStatus(501);
             $app->response->headers->set('Content-Type', 'application/json');
@@ -565,13 +565,13 @@ function sfide($app) {
                 $wordpress = $_SESSION['wordpress'];
                 $codicecensimento = $wordpress['user_info']['codicecensimento'];
 
-                $drm_chiusura_sfida = R::findOne('chiusurasfida','codicecensimento = ? and idsfida = ?', array($codicecensimento,$sfida_id) );
+                $drm_chiusura_sfida = R::findOne('chiusurasfida','codicecensimento = ? and idsfida = ?', array($codicecensimentoeg,$sfida_id) );
                 if ( null != $drm_chiusura_sfida ) {
 
                     $drm_chiusura_sfida->conferma = true;
                     R::store($drm_chiusura_sfida);
 
-                    $app->log->info('Sfida '.$sfida_id.' fatta da '.$codicecensimento.' confermata dal capo reparto '.$codicecc);
+                    $app->log->info('Sfida '.$sfida_id.' fatta da '.$codicecensimentoeg.' confermata dal capo reparto '.$codicecensimento);
 
                 } else {
                     throw new Exception('Sfida non trovata',Errori::SFIDA_NON_TROVATA);

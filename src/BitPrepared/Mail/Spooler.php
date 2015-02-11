@@ -84,7 +84,7 @@ class Spooler {
                 $count++;
             } else {
                 // KO
-                $this->logger->warn('ko');
+                $this->logger->warn('ko per '.$referenceCode.' destinatario '.$toEmailAddress);
             }
 
         }
