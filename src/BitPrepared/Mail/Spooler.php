@@ -12,7 +12,7 @@ use RedBean_Facade as R;
 use BitPrepared\Mail\Sender\Swift;
 use BitPrepared\Mail\Sender\Mailgun;
 use BitPrepared\Mail\Sender\Pipe;
-use BitPrepared\Mail\SendPolicy;
+use BitPrepared\Mail\Sender\Conditional\OnlyKnow;
 use \Slim\Log;
 
 class Spooler {
@@ -36,6 +36,13 @@ class Spooler {
 
         $this->logger = $logger;
         $pipe = new Pipe($logger);
+
+        if ( isset($config['mailgun']) && isset($config['smtp']) ) {
+            $smtpSender = new Swift($logger, $config['email_sender'], $config['smtp']);
+            $mailgun = new Mailgun($logger,$config['email_sender'],$config['mailgun']);
+            $mail = new OnlyKnow($logger,$smtpSender, $mailgun);
+            $pipe->add($mail);
+        }
 
         if ( isset($config['mailgun']) ){
             $pipe->add(new Mailgun($logger,$config['email_sender'],$config['mailgun']));

@@ -33,6 +33,12 @@ $config = array(
     'sfide' => array(
         'secret' => 'dasdasds'
     ),
+    'mailgun' => array(
+        'key' => 'fake',
+        'pubkey' => 'fake',
+        'domain' => "fake",
+        'salt' => 'abc123'
+    ),
     'google' => array(),
     'cookies.lifetime' => '1 minutes',
     'cookies.encrypt' => true,

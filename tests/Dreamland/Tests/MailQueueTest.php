@@ -68,11 +68,21 @@ class MailQueueTest extends \PHPUnit_Framework_TestCase {
         self::cleanupDatabase();
     }
 
+    public function tearDown(){
+        self::cleanupDatabase();
+    }
+
     private static function cleanupDatabase() {
         R::nuke(); //CLEAN DB
     }
 
     /* <!-- MAIL -->  */
+
+    protected function addValidateMail($email){
+        $mailcheck = R::dispense('mailcheck');
+        $mailcheck->email = $email;
+        R::store($mailcheck);
+    }
 
     // api calls
     protected function cleanMessages()
@@ -155,10 +165,46 @@ class MailQueueTest extends \PHPUnit_Framework_TestCase {
         $this->assertCount(1,$emails);
 
         $spooler = new Spooler($this->logger,$this->config);
-        $this->assertEquals(1,$spooler->flushQueue());
+        $this->assertEquals(1,$spooler->flushQueue(),'una sola mail inviata');
 
         $eventi = EventManager::getEvents($codCens);
-        $this->assertCount(2,$eventi);
+
+//        trigger_error(var_export($eventi,true),E_USER_ERROR);
+
+        // sono 4 perchè ci sono anche gli errori di MAILGUN che ovviamente fallisce
+        // ACCODO , ONLY KNOW(NO) => MAILGUN (fallisce) , MAILGUN (fallisce) , SMTP (ok)
+        $this->assertCount(4,$eventi,'eventi relativi alle email');
+
+        $mail = $this->getLastMessage();
+        $this->assertNotNull($mail);
+
+        $this->assertEmailSubjectEquals($subject,$mail,'Check subject');
+
+    }
+
+    /**
+     * @group mailcatcher
+     * @slowThreshold 2000
+     */
+    public function testSendQueuedMailKnowMail(){
+
+        $this->addValidateMail('eg@test');
+
+        $messageTxt = 'test';
+        $subject = 'Test Accodamento Mail';
+        $codCens = 123456789;
+        $this->assertTrue($this->mail->send($codCens, array('eg@test' => 'EG'), $subject, $messageTxt));
+        $emails = R::findAll('mailqueue');
+        $this->assertNotEmpty($emails);
+        $this->assertCount(1,$emails);
+
+        $spooler = new Spooler($this->logger,$this->config);
+        $this->assertEquals(1,$spooler->flushQueue(),'una sola mail inviata');
+
+        $eventi = EventManager::getEvents($codCens);
+
+        // ACCODO , ONLY KNOW(YES) => SMTP (ok)
+        $this->assertCount(2,$eventi,'eventi relativi alle email');
 
         $mail = $this->getLastMessage();
         $this->assertNotNull($mail);

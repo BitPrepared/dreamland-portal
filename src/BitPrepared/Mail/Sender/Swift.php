@@ -88,7 +88,7 @@ class Swift implements Sender
                 $this->lastId = $message->getHeaders()->get('Message-ID');
                 $this->logger->info('Mail correttamente invata');
 
-                EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::SPEDITO,array('subject' => $subject, 'mail-id' => $this->lastId)));
+                EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::SPEDITO,array('subject' => $subject, 'mail-id' => $this->lastId, 'loginvio' => $this->smtpLog->dump())));
 
                 return true;
             }
@@ -104,7 +104,7 @@ class Swift implements Sender
             $this->logger->error($this->smtpLog->dump());
         }
 
-        EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::FALLITA_SPEDIZIONE,array('subject' => $subject, 'mail-id' => $this->lastId)));
+        EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::FALLITA_SPEDIZIONE,array('subject' => $subject, 'mail-id' => $this->lastId, 'loginvio' => $this->smtpLog->dump())));
 
         return false;
 
