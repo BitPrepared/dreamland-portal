@@ -2,7 +2,7 @@
     "require": {
         "wp-api/client": "dev-master",
         "justinrainbow/json-schema": "1.4.*@dev",
-		"slim/slim": "2.*",
+	"slim/slim": "2.*",
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
         "raveren/kint": "0.9.*",
@@ -48,13 +48,13 @@
         "ext-posix": "*"
     },
     "autoload": {
-	    "psr-0": {
-	        "": "vendor/wp-api/client/library"
-	    },
-        "psr-4": { 
-            "Dreamland\\": "src/Dreamland/",
-            "BitPrepared\\": "src/BitPrepared/"
-        }
+		"psr-0": {
+			"": "vendor/wp-api/client/library"
+		},
+	        "psr-4": { 
+			"Dreamland\\": "src/Dreamland/",
+			"BitPrepared\\": "src/BitPrepared/"
+	        }
 	},
     "repositories": [
         {
