@@ -13,9 +13,6 @@ use RedBean_Facade as R;
 class EventManager {
 
     public static function addEvent($owner, $category,EventElement $event){
-
-        if ( EventType ::isValidValue($category) ) {
-
             $events = R::dispense('events');
             $events->owner = $owner;
             $events->type = $category;
@@ -23,10 +20,6 @@ class EventManager {
             $events->inserted = R::isoDateTime();
             $events->creator = Owner::SYSTEM;
             R::store($events);
-
-        } else {
-            throw new \Exception("category invalida, $category, non presente in EventType");
-        }
     }
 
     public static function getEvents($owner){
