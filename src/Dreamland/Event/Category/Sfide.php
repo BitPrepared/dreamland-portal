@@ -8,6 +8,7 @@
 
 namespace Dreamland\Event\Category;
 
+use BitPrepared\Commons\BasicEnum;
 
 class Sfide extends BasicEnum {
 

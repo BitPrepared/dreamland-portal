@@ -5,6 +5,7 @@ use Dreamland\Errori;
 use Dreamland\Event\Category\Sfide;
 use Dreamland\Event\EventType;
 use BitPrepared\Event\EventManager;
+use BitPrepared\Event\EventElement;
 
 function sfide($app) {
 
