@@ -15,7 +15,7 @@ use BitPrepared\Mail\Sender\Pipe;
 use BitPrepared\Mail\Sender\Conditional\OnlyKnow;
 use \Slim\Log;
 
-class Spooler {
+class Spool {
 
     /**
      * @var \BitPrepared\Mail\Pipe

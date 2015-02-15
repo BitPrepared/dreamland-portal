@@ -113,7 +113,7 @@ if ( DEBUG ) {
 
     $logger->info('Cron start send mail');
 
-    $spooler = new \BitPrepared\Mail\Spooler($logger,$config);
+    $spooler = new \BitPrepared\Mail\Spool($logger,$config);
 
     $spooler->flushQueue();
 

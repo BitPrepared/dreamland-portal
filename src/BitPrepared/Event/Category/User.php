@@ -9,6 +9,10 @@
 namespace BitPrepared\Event\Category;
 
 
-class User {
+class User extends BasicEnum {
+
+    const RICHIESTA_ISCRIZIONE = "RICHIESTA_ISCRIZIONE";
+    const ISCRITTO = "ISCRITTO";
+    const VALIDATO = "VALIDATO";
 
 }

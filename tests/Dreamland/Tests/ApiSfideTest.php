@@ -10,6 +10,7 @@ namespace Dreamland\Tests;
 
 use RedBean_Facade as R;
 use Dreamland\Integration\IntegrationCase;
+use BitPrepared\Event\EventManager;
 
 class ApiSfideCase extends IntegrationCase
 {
@@ -85,6 +86,11 @@ class ApiSfideCase extends IntegrationCase
         $this->assertEmailRecipientsContain('cc@localhost', $email);
         $this->assertEmailSubjectEquals('Iscrizione Sfida', $email);
         $this->assertEmailTextContains('tipo impresa',$email);
+
+        $eventi = EventManager::getEvents(123123);
+
+        // ACCODO , ONLY KNOW(YES) => SMTP (ok)
+        $this->assertCount(1,$eventi,'eventi relativi alla iscrizione sfida');
     }
 
     public function testIscriviGrandeSfidaMissione()

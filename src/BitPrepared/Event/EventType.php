@@ -18,6 +18,4 @@ class EventType extends BasicEnum {
     const WORDPRESS = "WORDPRESS";
     const API = "API";
 
-
-
 }

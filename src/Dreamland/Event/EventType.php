@@ -9,6 +9,8 @@
 namespace Dreamland\Event;
 
 
-class EventType {
+class EventType extends \BitPrepared\Event\EventType {
+
+    const SFIDE = "SFIDE";
 
 }

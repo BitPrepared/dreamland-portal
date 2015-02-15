@@ -2,6 +2,8 @@
 
 use RedBean_Facade as R;
 use Dreamland\Errori;
+use Dreamland\Event\Category\Sfide;
+use Dreamland\Event\EventType;
 
 function sfide($app) {
 
@@ -294,6 +296,8 @@ function sfide($app) {
                         'sfidaid' => $sfida_id
                     )
                 );
+
+                EventManager::addEvent($codicecensimento,EventType::SFIDE,new EventElement(Sfide::ISCRITTO,array()));
 
                 $app->response->setBody("");
                 $app->response->setStatus(204);
