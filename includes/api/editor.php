@@ -169,6 +169,8 @@ function editor($app)
 
                 }
 
+                $app->log->info('Creato nuovo utente '.json_encode($user));
+
                 $app->response->setBody( json_encode($user) );
                 $app->response->setStatus(201);
 
