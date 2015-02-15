@@ -132,6 +132,7 @@ function editor($app)
                 if ( null == $find ){
                     throw new Exception('Gruppo inesistente',Errori::GRUPPO_NON_VALIDO);
                 }
+
                 while(true){
                     $faker = Faker\Factory::create();
                     $user = new \stdClass();
@@ -145,6 +146,8 @@ function editor($app)
                     $user->codicecensimento = $faker->randomNumber(5); //codicecensimento
                     $user->datanascita = $faker->date($format = 'Ymd', $max = 'now');
                     $user->email = $faker->email();
+
+                    $app->log->info('Generato nuovo codice censimento '.$user->codicecensimento);
 
                     if ( null == findDatiRagazzo($user->codicecensimento) ) {
 
