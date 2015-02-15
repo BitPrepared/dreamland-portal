@@ -4,6 +4,7 @@ use RedBean_Facade as R;
 use Dreamland\Errori;
 use Dreamland\Event\Category\Sfide;
 use Dreamland\Event\EventType;
+use BitPrepared\Event\EventManager;
 
 function sfide($app) {
 
