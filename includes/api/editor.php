@@ -145,7 +145,7 @@ function editor($app)
 
                     $user->codicecensimento = $faker->randomNumber(5); //codicecensimento
                     $user->datanascita = $faker->date($format = 'Ymd', $max = 'now');
-                    $user->email = $faker->email();
+                    $user->email = $faker->email;
 
                     $app->log->info('Generato nuovo codice censimento '.$user->codicecensimento);
 
