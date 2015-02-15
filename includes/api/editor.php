@@ -134,7 +134,7 @@ function editor($app)
                 }
 
                 while(true){
-                    $faker = Faker\Factory::create();
+                    $faker = Faker\Factory::create('it_IT');
                     $user = new \stdClass();
                     $user->nome = $faker->firstName; // 'Lucy'
                     $user->cognome = $faker->lastName; // 'Curry'
