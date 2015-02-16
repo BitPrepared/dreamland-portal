@@ -152,18 +152,18 @@ function editor($app)
                     if ( null == findDatiRagazzo($user->codicecensimento) ) {
 
                         R::$f->begin()->addSQL('
-                            INSERT INTO asa_capireparto_ruolo(Id, creg, ord, cun, prog, codicesocio, fnz)
-                            VALUES(1,"'.$user->codRegione.'","'.$user->codGruppo.'","O",1,'.$user->codicecensimento.',1);
+                            INSERT INTO asa_capireparto_ruolo(creg, ord, cun, prog, codicesocio, fnz)
+                            VALUES("'.$user->codRegione.'","'.$user->codGruppo.'","O",1,'.$user->codicecensimento.',1);
                         ')->get();
 
                         R::$f->begin()->addSQL('
-                            INSERT INTO asa_anagrafica_capireparto(Id, codicesocio, cognome, nome, status, czona)
-                            VALUES(1,'.$user->codicecensimento.',"'.$user->cognome.'","'.$user->nome.'","S","'.$user->codZona.'");
+                            INSERT INTO asa_anagrafica_capireparto(codicesocio, cognome, nome, status, czona)
+                            VALUES('.$user->codicecensimento.',"'.$user->cognome.'","'.$user->nome.'","S","'.$user->codZona.'");
                         ')->get();
 
                         R::$f->begin()->addSQL('
-                            INSERT INTO asa_capireparto_email(Id, recapito, tipo, codicesocio)
-                            VALUES(1,"'.$user->email.'","E",'.$user->codicecensimento.');
+                            INSERT INTO asa_capireparto_email(recapito, tipo, codicesocio)
+                            VALUES("'.$user->email.'","E",'.$user->codicecensimento.');
                         ')->get();
 
                         break;
