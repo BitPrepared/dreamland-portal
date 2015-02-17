@@ -90,7 +90,8 @@ class ApiSfideCase extends IntegrationCase
         $eventi = EventManager::getEvents(123123);
 
         // ACCODO , ONLY KNOW(YES) => SMTP (ok)
-        $this->assertCount(1,$eventi,'eventi relativi alla iscrizione sfida');
+        // SFIDA ISCRITTO
+        $this->assertCount(2,$eventi,'eventi relativi alla iscrizione sfida');
     }
 
     public function testIscriviGrandeSfidaMissione()

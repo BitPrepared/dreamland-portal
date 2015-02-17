@@ -38,17 +38,4 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase {
 
     }
 
-    public function testManagerAddNotValid()
-    {
-
-        try {
-            EventManager::addEvent('pippo','pony',new EventElement(Mail::ACCODATO,'prova'));
-        } catch ( \Exception $e){
-            return;
-        }
-
-        $this->assertTrue(false);
-
-    }
-
 }
