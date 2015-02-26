@@ -68,7 +68,6 @@ $app->configureMode('development', function () use ($app) {
     ));
 });
 
-
 //// Define log resource
 //$app->container->singleton('log', function () {
 //    return new \My\Custom\Log();

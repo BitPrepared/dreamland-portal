@@ -79,6 +79,69 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 			$app->log->warn('Nome e Cognome non trovati per '.$codicecensimento);
 		}
 	}
+
 	$app->render($pagename.'.html', $dati);
+});
+
+$app->get('/sfide', 'authenticate', function () use ($app) {
+
+    $elencoGrandiSfide = array(226);
+
+    $grandiSfide = join(',',$elencoGrandiSfide);
+
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento where cu.idsfida IN('.$grandiSfide.') and cu.conferma = 1 group by cu.codicecensimento' );
+
+    $livelloAssoc = array();
+    foreach($elenco as $eA) {
+        $codCens = $eA['codicecensimento'];
+        $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
+        $livello = $eA['livello'];
+        $livelloAssoc[$livello][$codCens] = $nome;
+    }
+
+    /* divisione in 3 colonne */
+
+    $dati['livelloAssocA'] = array();
+    $dati['livelloAssocB'] = array();
+    $dati['livelloAssocC'] = array();
+
+    foreach($livelloAssoc as $livello => $gruppo) {
+
+        $dati['livelloAssocA'][$livello] = array();
+        $dati['livelloAssocB'][$livello] = array();
+        $dati['livelloAssocC'][$livello] = array();
+
+        $pos = 0;
+        foreach($gruppo as $codCens => $nome) {
+            if ( $pos == 0 ) {
+                $dati['livelloAssocA'][$livello][$codCens] = $nome;
+                $pos++;
+            }
+            elseif ( $pos == 1 ) {
+                $dati['livelloAssocB'][$livello][$codCens] = $nome;
+                $pos++;
+            }
+            elseif ( $pos == 2 ) {
+                $dati['livelloAssocC'][$livello][$codCens] = $nome;
+                $pos = 0;
+            }
+
+        }
+
+    }
+
+    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle from chiusurasfida cu join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.idsfida NOT IN('.$grandiSfide.') and cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
+
+    $stelleAssoc = array();
+    foreach($stelleArray as $sA) {
+        $codCens = $sA['codicecensimento'];
+        $stelle = $sA['stelle'];
+        $stelleAssoc[$codCens] = $stelle;
+    }
+
+    $dati['stelleAssoc'] = $stelleAssoc;
+
+    $app->render('sfide/sfide.php', $dati);
+
 });
 
