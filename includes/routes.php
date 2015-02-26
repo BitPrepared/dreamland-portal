@@ -83,7 +83,7 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 	$app->render($pagename.'.html', $dati);
 });
 
-$app->get('/sfide', 'authenticate', function () use ($app) {
+$app->get('/ordini', 'authenticate', function () use ($app) {
 
     $elencoGrandiSfide = array(226);
 
@@ -141,7 +141,7 @@ $app->get('/sfide', 'authenticate', function () use ($app) {
 
     $dati['stelleAssoc'] = $stelleAssoc;
 
-    $app->render('sfide/sfide.php', $dati);
+    $app->render('ordini/dream.php', $dati);
 
 });
 
