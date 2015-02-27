@@ -85,11 +85,11 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 
 $app->get('/ordini', 'authenticate', function () use ($app) {
 
-    $elencoGrandiSfide = array(226);
+//    $elencoGrandiSfide = array(226);
+//
+//    $grandiSfide = join(',',$elencoGrandiSfide);
 
-    $grandiSfide = join(',',$elencoGrandiSfide);
-
-    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento where cu.idsfida IN('.$grandiSfide.') and cu.conferma = 1 group by cu.codicecensimento' );
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento' );
 
     $livelloAssoc = array();
     foreach($elenco as $eA) {
@@ -130,7 +130,7 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
 
     }
 
-    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle from chiusurasfida cu join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.idsfida NOT IN('.$grandiSfide.') and cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
+    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle from chiusurasfida cu join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
 
     $stelleAssoc = array();
     foreach($stelleArray as $sA) {

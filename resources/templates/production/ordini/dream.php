@@ -13,57 +13,59 @@
 
 <h1>Ordini di Dreamland</h1>
 
-
 <?php
 //$livelloAssocC['1']
 function livello($livelloArrayA,$livelloArrayB,$livelloArrayC,$stelleAssoc) {
 ?>
+<div class="container">
 
-<div class="col-md-4">
-    <ul>
-        <?php
-        foreach($livelloArrayA as $codCens => $l) {
-            $num = 0;
-            if ( isset ($stelleAssoc[$codCens])){
-                $num = $stelleAssoc[$codCens];
+    <div class="col-md-4">
+        <ul>
+            <?php
+            foreach($livelloArrayA as $codCens => $l) {
+                $num = 0;
+                if ( isset ($stelleAssoc[$codCens])){
+                    $num = $stelleAssoc[$codCens];
+                }
+                echo '<li>'.$l. appenStelle($num). '</li>';
             }
-            echo '<li>'.$l. appenStelle($num). '</li>';
-        }
-        ?>
-    </ul>
+            ?>
+        </ul>
+
+    </div>
+
+
+    <div class="col-md-4">
+        <ul>
+            <?php
+            foreach($livelloArrayB as $codCens => $l) {
+                $num = 0;
+                if ( isset ($stelleAssoc[$codCens])){
+                    $num = $stelleAssoc[$codCens];
+                }
+                echo '<li>'.$l. appenStelle($num). '</li>';
+            }
+            ?>
+        </ul>
+
+    </div>
+
+    <div class="col-md-4">
+        <ul>
+            <?php
+            foreach($livelloArrayC as $codCens => $l) {
+                $num = 0;
+                if ( isset ($stelleAssoc[$codCens])){
+                    $num = $stelleAssoc[$codCens];
+                }
+                echo '<li>'.$l. appenStelle($num). '</li>';
+            }
+            ?>
+        </ul>
 
 </div>
 
-
-<div class="col-md-4">
-    <ul>
-        <?php
-        foreach($livelloArrayB as $codCens => $l) {
-            $num = 0;
-            if ( isset ($stelleAssoc[$codCens])){
-                $num = $stelleAssoc[$codCens];
-            }
-            echo '<li>'.$l. appenStelle($num). '</li>';
-        }
-        ?>
-    </ul>
-
-</div>
-
-<div class="col-md-4">
-    <ul>
-        <?php
-        foreach($livelloArrayC as $codCens => $l) {
-            $num = 0;
-            if ( isset ($stelleAssoc[$codCens])){
-                $num = $stelleAssoc[$codCens];
-            }
-            echo '<li>'.$l. appenStelle($num). '</li>';
-        }
-        ?>
-    </ul>
-
-</div>
+</div><!-- /.container -->
 
 <?php
 }
