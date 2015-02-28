@@ -1,24 +1,26 @@
 'use strict';
 
+var $baseUrl = window.baseUrl;
+
 require.config({
-    baseUrl: 'app/',
+    baseUrl: $baseUrl+'app/',
     paths: {
-      'angular': '../assets/js/dist/angular.min',
-      'moment' : '../assets/js/dist/moment-with-locales.min',
-      'underscore': '../assets/js/dist/underscore-min',
+      'angular': $baseUrl+'assets/js/dist/angular.min',
+      'moment' : $baseUrl+'assets/js/dist/moment-with-locales.min',
+      'underscore': $baseUrl+'assets/js/dist/underscore-min',
 
       //JQUERY
-      'jquery' : '../assets/js/dist/jquery.min',
-      'jquery-ui' : '../assets/js/dist/jquery-ui.min',
+      'jquery' : $baseUrl+'assets/js/dist/jquery.min',
+      'jquery-ui' : $baseUrl+'assets/js/dist/jquery-ui.min',
 
       // ANGULARJS
-      'ngDialog': '../assets/js/dist/ngDialog.min',
-      'angular-ui-router': '../assets/js/dist/angular-ui-router.min',
-      'angular-sanitize': '../assets/js/dist/angular-sanitize.min',
-      'ui-bootstrap': '../assets/js/dist/ui-bootstrap.min',
-      'angular-locale-it': '../assets/js/dist/locale/angular-locale_it-it',
-      'angular-animate': '../assets/js/dist/angular-animate.min',
-      'angular-date': '../assets/js/dist/angular-date',
+      'ngDialog': $baseUrl+'assets/js/dist/ngDialog.min',
+      'angular-ui-router': $baseUrl+'assets/js/dist/angular-ui-router.min',
+      'angular-sanitize': $baseUrl+'assets/js/dist/angular-sanitize.min',
+      'ui-bootstrap': $baseUrl+'assets/js/dist/ui-bootstrap.min',
+      'angular-locale-it': $baseUrl+'assets/js/dist/locale/angular-locale_it-it',
+      'angular-animate': $baseUrl+'assets/js/dist/angular-animate.min',
+      'angular-date': $baseUrl+'assets/js/dist/angular-date',
 
       // SERVICE 
       'spinnerService': 'Spinner/SpinnerService',

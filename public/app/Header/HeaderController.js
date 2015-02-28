@@ -20,6 +20,7 @@ define(['angular','dreamApp'], function(angular,dreamApp){
 		};
 
 		$scope.wordpressUrl = WORDPRESS_URL;
+        $scope.baseUrl = window.baseUrl;
 
 	});
 

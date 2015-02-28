@@ -19,6 +19,28 @@
             <a href="{{wordpressUrl}}">Home</a>
           </li>
 
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle"> Ordini <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li>
+                    <a ng-href="{{baseUrl}}ordini">Sommario</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a ng-href="{{baseUrl}}ordini/master">Master</a>
+                </li>
+                <li>
+                    <a ng-href="{{baseUrl}}ordini/sernior">Senior</a>
+                </li>
+                <li>
+                    <a ng-href="{{baseUrl}}ordini/apprendice">Apprendice</a>
+                </li>
+                <li>
+                    <a ng-href="{{baseUrl}}ordini/junior">Junior</a>
+                </li>
+            </ul>
+         </li>
+
           <li ng-show="isAuthenticated() && !isGuest()">
             <a href="{{wordpressUrl}}wp-admin/">Bacheca</a>
           </li>

@@ -38,10 +38,14 @@ $app->hook('slim.before.dispatch', function () use ($app) {
             $dati['gaAnalyticsCode'] = null;
         }
 
-		$wordpress = $app->config('wordpress');
+
+//      1 solo livello di context-path
+        $uri  = explode('/', trim($app->request->getRootUri(), '/'));
+
+        $wordpress = $app->config('wordpress');
 		$dati = array_merge($dati,array(
 			'title' => $app->config('title'),
-			'baseUrl' => $app->request->getRootUri().'/',
+			'baseUrl' => '/'.$uri[0].'/',
 			'wordpressUrl' => $wordpress['url'],
 			'footerText' => '&copy;2014 Return To Dreamland | AGESCI',
 			'wordpress' => $app->config('wordpress')

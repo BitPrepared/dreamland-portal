@@ -85,19 +85,38 @@ $app->get('/page/:pagename', 'authenticate', function ($pagename) use ($app) {
 
 $app->get('/ordini', 'authenticate', function () use ($app) {
 
-//    $elencoGrandiSfide = array(226);
-//
-//    $grandiSfide = join(',',$elencoGrandiSfide);
+    $livellato = array();
 
-    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento' );
+    // SELECT col1 FROM tbl WHERE RAND()<=0.0006 limit 100; <- piu performante se si hanno tante righe > 100k
+    // ORDER BY RAND() LIMIT 10;
+
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento ORDER BY RAND() LIMIT 15' );
 
     $livelloAssoc = array();
     foreach($elenco as $eA) {
         $codCens = $eA['codicecensimento'];
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
+        $livellato[$codCens] = $livello;
         $livelloAssoc[$livello][$codCens] = $nome;
     }
+
+    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle, sq.nomesquadriglia, sq.gruppo from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ORDER BY RAND()');
+
+    $stelleAssoc = array();
+    foreach($stelleArray as $sA) {
+        $codCens = $sA['codicecensimento'];
+        $stelle = $sA['stelle'];
+        $stelleAssoc[$codCens] = $stelle;
+
+        if ( count($livelloAssoc[0]) < 16 && !isset($livellato[$codCens]) ){
+            $livelloAssoc[0][$codCens] = 'Sq. '.ucfirst(strtolower($sA['nomesquadriglia'])).' - ' .$sA['gruppo'];
+        }
+
+    }
+
+    $dati['stelleAssoc'] = $stelleAssoc;
+
 
     /* divisione in 3 colonne */
 
@@ -130,18 +149,90 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
 
     }
 
-    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle from chiusurasfida cu join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
+    $app->render('ordini/dream.php', $dati);
+
+});
+
+$app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
+
+    switch($level){
+        case 'master':
+            $dati['role'] = 'Master';
+            $livelloScelto = 3;
+            break;
+        case 'senior':
+            $dati['role'] = 'Senior';
+            $livelloScelto = 2;
+            break;
+        case 'apprendice':
+            $dati['role'] = 'Apprendice';
+            $livelloScelto = 1;
+            break;
+        default:
+            $dati['role'] = 'Junior';
+            $livelloScelto = 0;
+            break;
+    }
+
+    $livellato = array();
+
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento' );
+
+    $livelloAssoc = array();
+    foreach($elenco as $eA) {
+        $codCens = $eA['codicecensimento'];
+        $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
+        $livello = $eA['livello'];
+        if ( $livello == $livelloScelto ) {
+            $livelloAssoc[$codCens] = $nome;
+        }
+        $livellato[$codCens] = $livello;
+    }
+
+    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle, sq.nomesquadriglia, sq.gruppo from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
 
     $stelleAssoc = array();
     foreach($stelleArray as $sA) {
         $codCens = $sA['codicecensimento'];
         $stelle = $sA['stelle'];
         $stelleAssoc[$codCens] = $stelle;
+
+        if ( !isset($livellato[$codCens]) ){
+            $livelloAssoc[0][$codCens] = 'Sq. '.ucfirst(strtolower($sA['nomesquadriglia'])).' - ' .$sA['gruppo'];
+        }
+
     }
 
     $dati['stelleAssoc'] = $stelleAssoc;
 
-    $app->render('ordini/dream.php', $dati);
+
+    /* divisione in 3 colonne */
+
+    $dati['livelloAssocA'] = array();
+    $dati['livelloAssocB'] = array();
+    $dati['livelloAssocC'] = array();
+
+
+    $pos = 0;
+    foreach($livelloAssoc as $codCens => $nome) {
+        if ( $pos == 0 ) {
+            $dati['livelloAssocA'][$codCens] = $nome;
+            $pos++;
+        }
+        elseif ( $pos == 1 ) {
+            $dati['livelloAssocB'][$codCens] = $nome;
+            $pos++;
+        }
+        elseif ( $pos == 2 ) {
+            $dati['livelloAssocC'][$codCens] = $nome;
+            $pos = 0;
+        }
+
+    }
+
+    $app->render('ordini/list.php', $dati);
+
+
 
 });
 
