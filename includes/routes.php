@@ -90,7 +90,7 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
     // SELECT col1 FROM tbl WHERE RAND()<=0.0006 limit 100; <- piu performante se si hanno tante righe > 100k
     // ORDER BY RAND() LIMIT 10;
 
-    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento ORDER BY RAND() LIMIT 15' );
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento ORDER BY livello DESC, RAND() LIMIT 1000' );
 
     $livelloAssoc = array();
     foreach($elenco as $eA) {
@@ -98,6 +98,7 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
         $livellato[$codCens] = $livello;
+        if ( isset($livelloAssoc[$livello]) && count($livelloAssoc[$livello]) > 10 ) continue;
         $livelloAssoc[$livello][$codCens] = $nome;
     }
 
