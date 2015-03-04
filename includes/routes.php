@@ -198,7 +198,7 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
         $stelle = $sA['stelle'];
         $stelleAssoc[$codCens] = $stelle;
 
-        if ( !isset($livellato[$codCens]) ){
+        if ( !isset($livellato[$codCens]) && $livelloScelto == 0 ){
             $livelloAssoc[$codCens] = 'Sq. '.ucfirst(strtolower($sA['nomesquadriglia'])).' - ' .$sA['gruppo'];
         }
 
