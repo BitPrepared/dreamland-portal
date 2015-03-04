@@ -219,7 +219,10 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
     $pos = 0;
     foreach($livelloAssoc as $codCens => $nome) {
 
-        if ( $i == $limit ) $pos++;
+        if ( $i == $limit ) {
+            $pos++;
+            $i = 0;
+        }
 
         if ( $pos == 0 ) {
             $dati['livelloAssocA'][$codCens] = $nome;
