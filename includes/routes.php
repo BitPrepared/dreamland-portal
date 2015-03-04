@@ -213,21 +213,25 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
     $dati['livelloAssocB'] = array();
     $dati['livelloAssocC'] = array();
 
+    $limit = count($livelloAssoc) / 3;
 
+    $i = 0;
     $pos = 0;
     foreach($livelloAssoc as $codCens => $nome) {
+
+        if ( $i == $limit ) $pos++;
+
         if ( $pos == 0 ) {
             $dati['livelloAssocA'][$codCens] = $nome;
-            $pos++;
         }
         elseif ( $pos == 1 ) {
             $dati['livelloAssocB'][$codCens] = $nome;
-            $pos++;
         }
         elseif ( $pos == 2 ) {
             $dati['livelloAssocC'][$codCens] = $nome;
-            $pos = 0;
         }
+
+        $i++;
 
     }
 
