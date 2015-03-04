@@ -177,7 +177,7 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
 
     $livellato = array();
 
-    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento ORDER BY livello DESC' );
+    $elenco = R::getAll( 'select sq.codicecensimento, sq.nomesquadriglia ,sq.gruppo, count(sq.codicecensimento) as livello from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 group by cu.codicecensimento ORDER BY livello DESC, sq.nomesquadriglia ASC' );
 
     $livelloAssoc = array();
     foreach($elenco as $eA) {
