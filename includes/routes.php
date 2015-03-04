@@ -190,7 +190,7 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
         $livellato[$codCens] = $livello;
     }
 
-    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle, sq.nomesquadriglia, sq.gruppo from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento ');
+    $stelleArray = R::getAll(' select cu.codicecensimento, count(cu.codicecensimento) as stelle, sq.nomesquadriglia, sq.gruppo from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and cu.idsfida = iss.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 1 group by cu.codicecensimento order by sq.nomesquadriglia ASC, sq.gruppo ASC');
 
     $stelleAssoc = array();
     foreach($stelleArray as $sA) {
