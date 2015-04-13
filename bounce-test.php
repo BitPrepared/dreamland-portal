@@ -89,7 +89,7 @@ $domain = 'returntodreamland.it';
 //    'pretty'       => 'yes',
 //    'subject'      => 'test'
 //);
-$queryString = array('message-id' => '20150201132945.96068.97390@returntodreamland.it','begin' => 'Fri, 3 May 2013 09:00:00 -0000','ascending' => 'yes');
+$queryString = array('message-id' => '20150201132945.96068.97390@returntodreamland.it','tags' => 'portal','begin' => 'Fri, 3 May 2013 09:00:00 -0000','ascending' => 'yes');
 
 # Make the call to the client.
 $result = $mgClient->get("$domain/events", $queryString);

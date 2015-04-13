@@ -196,6 +196,8 @@ function findDatiCapoReparto($regione,$gruppo,$legame = null) {
                     $i++;
                 }
             }
+        } else {
+            throw new \Exception('Legame '.$legame.' non valido');
         }
     } else {
         $findCCs = R::findAll('asa_capireparto_ruolo','creg = ? and ord = ? ',array($regione,$gruppo));
@@ -219,6 +221,8 @@ function findDatiCapoReparto($regione,$gruppo,$legame = null) {
                 $info_cc[$i] = $cc;
                 $i++;
             }
+        } else {
+            throw new \Exception('Capo reparto per  '.$regione.' e '.$gruppo.' non trovato');
         }
     }
 	return $info_cc;

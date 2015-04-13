@@ -252,10 +252,10 @@ function sfide($app) {
                     throw new Exception('Utente '.$codicecensimento.' errato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
                 }
 
-                $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
-
-                if ( empty($capoRepartoArray) ){
-                    throw new Exception('Capo del ragazzo '.$codicecensimento.' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
+                try {
+                    $capoRepartoArray = findDatiCapoReparto($ragazzo->regione,$ragazzo->gruppo,$codicecensimento);
+                } catch( Exception $e ){
+                    throw new Exception('Capo del ragazzo '.$codicecensimento.' non trovato -> '.$e->getMessage(), Errori::CODICE_CENSIMENTO_NOT_FOUND);
                 }
 
                 $capoReparto = $capoRepartoArray[0];

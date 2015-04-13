@@ -97,6 +97,25 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
         $codCens = $eA['codicecensimento'];
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
+
+        if ( $livello == 3 ){
+
+            //FIXME: Terzo elemento : Blu Si conquista realizzando una Grande Sfida che porti la Squadriglia ad aver realizzato con le tre Grandi Sfide almeno 2 imprese (1239673)
+            $sfide = R::getAll('select iss.tipo, count(iss.idsfida) as counter from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 and iss.codicecensimento = ? group by iss.tipo',$codCens);
+            foreach($sfide as $sfideRaggruppate){
+                if ( $sfideRaggruppate['tipo'] == 'impresa' ) {
+                    if ( $sfideRaggruppate['counter'] == 2 ) {
+                        break; //tutto ok)
+                    } else {
+                        $livello = 2;
+                        $app->log->info($nome.' associata a '.$codCens.' non ha i requisiti di 2 imprese');
+                    }
+                }
+            }
+
+        }
+
+
         $livellato[$codCens] = $livello;
         if ( isset($livelloAssoc[$livello]) && count($livelloAssoc[$livello]) > 10 ) continue;
         $livelloAssoc[$livello][$codCens] = $nome;
@@ -185,7 +204,25 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
         if ( $livello == $livelloScelto ) {
-            $livelloAssoc[$codCens] = $nome;
+
+            if ( $livello == 3 ){
+
+                $sfide = R::getAll('select iss.tipo, count(iss.idsfida) as counter from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 and iss.codicecensimento = ? group by iss.tipo',$codCens);
+                foreach($sfide as $sfideRaggruppate){
+                    if ( $sfideRaggruppate['tipo'] == 'impresa' ) {
+                        if ( $sfideRaggruppate['counter'] == 2 ) {
+                            $livelloAssoc[$codCens] = $nome;
+                            break; //tutto ok
+                        } else {
+                            $app->log->info($nome.' associata a '.$codCens.' non ha i requisiti di 2 imprese');
+                        }
+                    }
+                }
+
+            } else {
+                $livelloAssoc[$codCens] = $nome;
+            }
+
         }
         $livellato[$codCens] = $livello;
     }

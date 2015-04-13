@@ -48,6 +48,11 @@ class Async implements Sender
 
             $emails = array_keys($toEmailAddress);
             $receivers = array_values($toEmailAddress);
+
+            if ( empty($emails[0]) ) {
+                throw new \Exception('Mail destinatario vuota');
+            }
+
             $mailqueue->toEmailAddress = $emails[0];
             $mailqueue->toNameReceiver = $receivers[0];
 
