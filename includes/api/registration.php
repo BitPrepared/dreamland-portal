@@ -325,7 +325,13 @@ function registration($app){
                 }
 
                 $app->log->debug('Iscrizione capo reparto');
-                $capoRepartoAttualeArray = findDatiCapoReparto($regione,$gruppo,$codicecensimento);
+                $capoRepartoAttualeArray = array();
+                try {
+                    $capoRepartoAttualeArray = findDatiCapoReparto($regione,$gruppo,$codicecensimento);
+                } catch (Exception $e){
+                    //legame non valido
+                    $app->log->warn('Capo reparto non trovato');
+                }
 
                 if ( count($capoRepartoAttualeArray) > 0 ) {
                     $app->log->warn('Capo reparto gia presente per questo ragazzo '.$codicecensimento);
