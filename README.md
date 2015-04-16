@@ -75,3 +75,12 @@ sendmail_path = /usr/bin/env catchmail -f from@example.com
 ```
 php vendor/clue/graph-composer/bin/graph-composer export . --format=png export.png
 ```
+
+### Php Enviroment
+
+assicurarsi di usare curl,sqlite e le varie dipendenze di homebrew correttamente linkate da homebrew (brew link ??)
+
+```
+phpbrew -d install 5.3.29 +mbstring +imap +ctype +pdo +mysql +pcntl +posix +readline +json +intl +cgi +sqlite +openssl +zip +gd +ipc +bz2 +mcrypt +cli +dom +filter +pcre +inifile +fileinfo +mhash +zlib -- --with-curl=/usr/local/
+```
+
