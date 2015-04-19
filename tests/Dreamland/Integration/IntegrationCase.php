@@ -51,6 +51,23 @@ abstract class IntegrationCase extends WebTestCase {
         R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_capireparto_email;')->get();
         R::$f->begin()->addSQL('DROP TABLE IF EXISTS asa_gruppi;')->get();
 
+//        R::$f->begin()->addSQL('
+//          CREATE TABLE registration (
+//              id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+//              token varchar(255) NOT NULL DEFAULT "",
+//              codicecensimento integer,
+//              \'type\' varchar(255),
+//              email varchar(255) NOT NULL DEFAULT "",
+//              nome varchar(255),
+//              cognome varchar(255),
+//              regione varchar(255),
+//              zona char(3),
+//              gruppo integer,
+//              legame char(1),
+//              completato char(1)
+//          );
+//        ')->get();
+
         R::$f->begin()->addSQL('
                 CREATE TABLE asa_anagrafica_eg (
                   id integer PRIMARY KEY NOT NULL,

@@ -29,7 +29,7 @@ function validate_email($app,$email){
             }
         }
 	} catch (Exception $e) {
-		$app->log->error('Code: '.$e->getCode());
+		$app->log->error('Errore verifica mail con mailgun - code: '.$e->getCode());
 		$app->log->error($e->getTraceAsString());
 	}
 }

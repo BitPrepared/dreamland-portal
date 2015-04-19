@@ -87,11 +87,11 @@ function registration($app){
 
 				} else {
 
-					//19990324 - Ricerca ASA E/G
-					$egAsa = R::findOne('asa_anagrafica_eg',' codicesocio = ? and datanascita = ?',array($codicecensimento,$datanascita));
-					if ( $egAsa == null ) {
-						throw new Exception('Codice censimento '.$codicecensimento.' e Data Nascita : '.$datanascita .' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
-					}
+                    //19990324 - Ricerca ASA E/G
+                    $egAsa = R::findOne('asa_anagrafica_eg', ' codicesocio = ? and datanascita = ?', array($codicecensimento, $datanascita));
+                    if ($egAsa == null) {
+                        throw new Exception('Codice censimento ' . $codicecensimento . ' e Data Nascita : ' . $datanascita . ' non trovato', Errori::CODICE_CENSIMENTO_NOT_FOUND);
+                    }
 
 //                    if (!DEBUG) {
 //                        $mailgun = $app->config('mailgun');
