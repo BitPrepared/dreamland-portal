@@ -98,6 +98,8 @@ $app->get('/ordini', 'authenticate', function () use ($app) {
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
 
+        if ($livello > 3) $livello = 3;
+
         if ( $livello == 3 ){
 
             $isOk = false;
@@ -205,6 +207,8 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
         $codCens = $eA['codicecensimento'];
         $nome = 'Sq. '.ucfirst(strtolower($eA['nomesquadriglia'])).' - ' .$eA['gruppo'];
         $livello = $eA['livello'];
+        if ($livello > 3) $livello = 3;
+
         if ( $livello == $livelloScelto ) {
 
             if ( $livello == 3 ){
