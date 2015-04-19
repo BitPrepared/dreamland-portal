@@ -209,27 +209,30 @@ $app->get('/ordini/:level', 'authenticate', function ($level) use ($app) {
         $livello = $eA['livello'];
         if ($livello > 3) $livello = 3;
 
-        if ( $livello == $livelloScelto ) {
+        if ( $livello == 3 ){
 
-            if ( $livello == 3 ){
-
-                $sfide = R::getAll('select iss.tipo, count(iss.idsfida) as counter from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 and iss.codicecensimento = ? group by iss.tipo',array($codCens));
-                foreach($sfide as $sfideRaggruppate){
-                    if ( $sfideRaggruppate['tipo'] == 'impresa' ) {
-                        if ( $sfideRaggruppate['counter'] == 2 ) {
-                            $livelloAssoc[$codCens] = $nome;
-                            break; //tutto ok
-                        } else {
-                            $app->log->info($nome.' associata a '.$codCens.' non ha i requisiti di 2 imprese');
-                        }
+            $isOk = false;
+            $sfide = R::getAll('select iss.tipo, count(iss.idsfida) as counter from chiusurasfida cu join squadriglia sq on cu.codicecensimento = sq.codicecensimento join iscrizionesfida iss on cu.codicecensimento = iss.codicecensimento and iss.idsfida = cu.idsfida where cu.conferma = 1 and iss.sfidaspeciale = 0 and iss.codicecensimento = ? group by iss.tipo',array($codCens));
+            foreach($sfide as $sfideRaggruppate){
+                if ( $sfideRaggruppate['tipo'] == 'impresa' ) {
+                    if ( $sfideRaggruppate['counter'] == 2 ) {
+                        $isOk = true;
+                        break; //tutto ok
                     }
                 }
+            }
 
-            } else {
-                $livelloAssoc[$codCens] = $nome;
+            if(!$isOk) {
+                $livello = 2;
+                $app->log->info($nome.' associata a '.$codCens.' non ha i requisiti di 2 imprese');
             }
 
         }
+
+        if ( $livello == $livelloScelto ) {
+            $livelloAssoc[$codCens] = $nome;
+        }
+        
         $livellato[$codCens] = $livello;
     }
 
