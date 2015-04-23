@@ -2,7 +2,7 @@
     "require": {
         "wp-api/client": "dev-master",
         "justinrainbow/json-schema": "1.4.*@dev",
-	    "slim/slim": "2.*",
+	"slim/slim": "2.*",
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
         "raveren/kint": "0.9.*",
@@ -33,7 +33,7 @@
 
         "pdepend/pdepend": "~2.0",
         "phpmd/phpmd": "~2.0",
-        "squizlabs/php_codesniffer": "2.*",
+        "squizlabs/php_codesniffer": "2.3.*",
 
         "codeclimate/php-test-reporter": "dev-master",
         "satooshi/php-coveralls": "0.6.1",
