@@ -6,8 +6,7 @@
  * 
  */
 
-use \stdClass;
-use RedBean_Facade as R;
+//use RedBean_Facade as R;
 
 function cron($app){
 

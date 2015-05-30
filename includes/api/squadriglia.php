@@ -1,6 +1,5 @@
 <?php
 
-use \stdClass;
 use RedBean_Facade as R;
 use Dreamland\Errori;
 
