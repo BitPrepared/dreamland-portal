@@ -30,6 +30,7 @@ class Errori extends BasicEnum {
 
     // ISCRIZIONE
     const ISCRIZIONE_GIA_ATTIVA = 41;
+    const ISCRIZIONI_CHIUSE = 42;
 
     // MAIL
     const INVIO_MAIL_FALLITO = 51;

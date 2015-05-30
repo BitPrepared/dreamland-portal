@@ -1,5 +1,7 @@
 <?php
 define('DEBUG',true);
+if  (!defined('DEBUG')) define('DEBUG',true);
+if  (!defined('MAINTENANCE')) define('MAINTENANCE',false);
 $config = array(
     'enviroment' => 'production', //production
     //'enviroment' => 'development'
@@ -13,7 +15,12 @@ $config = array(
             'bubble' => true, //Whether the messages that are handled can bubble up the stack or not
             'useSSL' => true
         ),
-        'level' => 'DEBUG'
+        'filenameQuery' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'-query.log',
+        'filenameCron' => realpath(BASE_DIR.'/resources/logs/').'/'.date('Y-m-d').'-cron.log',
+        'level' => 'DEBUG',
+        'loggy' => array(
+            'token' => ''
+        )
     ),
     'db' => array(
         'type' => 'mysql', //pgsql
@@ -43,11 +50,16 @@ $config = array(
     'mailgun' => array(
         'key' => '',
         'pubkey' => '',
-        'domain' => ""
+        'domain' => '',
+        'salt' => ''
     ),
     'sfide' => array(
         'secret' => ''
     ),
+    'google' => array(
+        'analytics' => ''
+    ),
+    'data_chiusura' => '2005-06-01T00:01:00+0000',
     'cookies.lifetime' => '20 minutes',
     'cookies.encrypt' => true,
     'cookies.secure' => true,

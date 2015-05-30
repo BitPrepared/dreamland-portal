@@ -71,6 +71,17 @@ function registration($app){
             $app->response->headers->set('Content-Type', 'application/json');
         	try{
 
+                //check date
+                $data_chiusura_str = $app->config('data_chiusura'); //'2005-06-01T00:01:00+0000';
+                if ( null != $data_chiusura_str ) {
+                    $data_chiusura = new DateTime($data_chiusura_str);
+                    $data_attuale = new DateTime('NOW');
+
+                    if ( $data_attuale > $data_chiusura ) {
+                        throw new Exception('Le iscrizioni sono chiuse dal ' . $data_chiusura->format('d-m-Y'), Errori::ISCRIZIONI_CHIUSE);
+                    }
+                }
+
 				$body = $app->request->getBody();
 				$obj_request = json_decode($body);
 				$email = $obj_request->email;
@@ -82,9 +93,7 @@ function registration($app){
 				if ( strcmp($codicecensimento,'SANMARINO') == 0 ) {
 					$app->log->info('Ragazzo di san marino : '.$email);
 					$app->response->setBody( json_encode(array('message' => 'verrai contattato quanto prima all\'email '.$email)) );
-
 					//FIXME DA FARE
-
 				} else {
 
                     //19990324 - Ricerca ASA E/G
@@ -194,6 +203,10 @@ function registration($app){
                         $testo = 'Invio mail fallito';
                         $status = 500;
                         $warn = false;
+                        break;
+                    case Errori::ISCRIZIONI_CHIUSE:
+                        $testo = $e->getMessage();
+                        $warn = true;
                         break;
                 }
                 if ( !$warn ) {

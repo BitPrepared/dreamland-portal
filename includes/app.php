@@ -48,7 +48,8 @@ $app->config(array(
     'email_sender' => $config['email_sender'],
     'smtp' => isset($config['smtp']) ? $config['smtp'] : null,
     'sfide' => $config['sfide'],
-    'google' => $config['google']
+    'google' => $config['google'],
+    'data_chiusura' => $config['data_chiusura']
 ));
 
 // Only invoked if mode is "production"

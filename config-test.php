@@ -39,6 +39,7 @@ $config = array(
         'domain' => "fake",
         'salt' => 'abc123'
     ),
+    'data_chiusura' => 'NOW',
     'google' => array(),
     'cookies.lifetime' => '1 minutes',
     'cookies.encrypt' => true,
