@@ -5,13 +5,13 @@
 	"slim/slim": "2.*",
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
-        "raveren/kint": "0.9.*",
+        "raveren/kint": "1.0.*",
         "swiftmailer/swiftmailer": "5.4.0",
         "egulias/email-validator": "1.2.7",
         "doctrine/lexer": "1.0.*@dev",
         "flynsarmy/slim-monolog": "dev-master",
-        "google/apiclient": "1.1.2",
-        "mailgun/mailgun-php": "1.7.2",
+        "google/apiclient": "1.1.4",
+        "mailgun/mailgun-php": "1.8.*",
         "wp-cli/php-cli-tools": "0.10.4",
         "fzaninotto/faker": "dev-master",
         "php": ">=5.3.7"
@@ -38,7 +38,7 @@
         "codeclimate/php-test-reporter": "dev-master",
         "satooshi/php-coveralls": "0.6.1",
 
-        "fabpot/php-cs-fixer": "1.7.*",
+        "fabpot/php-cs-fixer": "1.8.*",
         "sensiolabs/security-checker": "~2.0",
 
         "clue/graph-composer": "dev-master",
