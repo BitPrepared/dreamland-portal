@@ -6,7 +6,7 @@
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
         "raveren/kint": "1.0.*",
-        "swiftmailer/swiftmailer": "5.4.0",
+        "swiftmailer/swiftmailer": "5.4.1",
         "egulias/email-validator": "1.2.8",
         "doctrine/lexer": "1.0.*@dev",
         "flynsarmy/slim-monolog": "dev-master",
