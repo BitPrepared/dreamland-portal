@@ -38,7 +38,7 @@
         "codeclimate/php-test-reporter": "dev-master",
         "satooshi/php-coveralls": "0.6.1",
 
-        "fabpot/php-cs-fixer": "1.8.*",
+        "fabpot/php-cs-fixer": "1.9.*",
         "sensiolabs/security-checker": "~2.0",
 
         "clue/graph-composer": "dev-master",
