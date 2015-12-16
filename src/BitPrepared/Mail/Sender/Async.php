@@ -2,26 +2,25 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 01/02/15 - 19:40
- * 
+ * Date: 01/02/15 - 19:40.
  */
-
 namespace BitPrepared\Mail\Sender;
-use RedBean_Facade as R;
+
+use BitPrepared\Event\Category\Mail;
+use BitPrepared\Event\EventElement;
+use BitPrepared\Event\EventManager;
 use BitPrepared\Event\EventType;
 use BitPrepared\Mail\Sender;
-use BitPrepared\Event\EventManager;
-use BitPrepared\Event\EventElement;
-use BitPrepared\Event\Category\Mail;
+use RedBean_Facade as R;
 
 class Async implements Sender
 {
-
     private $log;
     private $from;
     private $lastId;
 
-    public function __construct($logger,$from){
+    public function __construct($logger, $from)
+    {
         $this->log = $logger;
         $this->from = $from;
     }
@@ -32,12 +31,11 @@ class Async implements Sender
      * @param $txtMessage
      * @param null $htmlMessage
      * @param null $attachment
-     * @return bool
      *
+     * @return bool
      */
     public function send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null)
     {
-
         try {
             $mailqueue = R::dispense('mailqueue');
 
@@ -49,7 +47,7 @@ class Async implements Sender
             $emails = array_keys($toEmailAddress);
             $receivers = array_values($toEmailAddress);
 
-            if ( empty($emails[0]) ) {
+            if (empty($emails[0])) {
                 throw new \Exception('Mail destinatario vuota');
             }
 
@@ -77,14 +75,14 @@ class Async implements Sender
 
             $this->lastId = R::store($mailqueue);
 
-            EventManager::addEvent($referenceCode,EventType::EMAIL,new EventElement(Mail::ACCODATO ,array('subject' => $subject, 'email' => $email)));
+            EventManager::addEvent($referenceCode, EventType::EMAIL, new EventElement(Mail::ACCODATO, ['subject' => $subject, 'email' => $email]));
 
             return true;
-        } catch (\Exception $e ){
+        } catch (\Exception $e) {
             $this->log->error('Errore accodamento messaggio mail: '.$e->getMessage().' '.$e->getTraceAsString());
+
             return false;
         }
-
     }
 
     /**

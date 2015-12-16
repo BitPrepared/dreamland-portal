@@ -2,10 +2,10 @@
 
 namespace BitPrepared\Mail\Transport;
 
-use Swift_Transport_AbstractSmtpTransport;
-use Swift_Transport_IoBuffer;
 use Swift_Events_EventDispatcher;
 use Swift_Mime_Message;
+use Swift_Transport_AbstractSmtpTransport;
+use Swift_Transport_IoBuffer;
 
 class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
 {
@@ -14,12 +14,12 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
      *
      * @var array
      */
-    private $_params = array(
-        'timeout' => 30,
+    private $_params = [
+        'timeout'  => 30,
         'blocking' => 1,
-        'command' => 'catchmail',
-        'type' => Swift_Transport_IoBuffer::TYPE_PROCESS,
-        );
+        'command'  => 'catchmail',
+        'type'     => Swift_Transport_IoBuffer::TYPE_PROCESS,
+        ];
 
     /**
      * Create a new SendmailTransport with $buf for I/O.
@@ -40,6 +40,7 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
     public function setCommand($command)
     {
         $this->_params['command'] = $command;
+
         return $this;
     }
 
@@ -55,19 +56,17 @@ class Transport_Mailcatcher extends Swift_Transport_AbstractSmtpTransport
 
     public function send(Swift_Mime_Message $message, &$failedRecipients = null)
     {
-    	
         $failedRecipients = (array) $failedRecipients;
 
         mb_language('uni');
         mb_internal_encoding('UTF-8');
 
-        if ( is_array($message->getTo()) ) {
-
-            $m = array();
-            foreach($message->getTo() as $address => $nome) {
+        if (is_array($message->getTo())) {
+            $m = [];
+            foreach ($message->getTo() as $address => $nome) {
                 $m[] = $nome.' <'.$address.'>';
             }
-            $to = implode(",", $m);
+            $to = implode(',', $m);
         } else {
             $to = $message->getTo();
         }

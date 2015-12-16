@@ -21,11 +21,11 @@
         <p class="text-muted">
 	
 <?php 
-	if ( isset($_SESSION['wordpress']) ) {
-		echo '<a href="'.urldecode($_SESSION['wordpress']['logout_url']).'">Logout</a>';
-	} else {
-		echo '<a href="'.$wordpress['url'].'wp-login.php'.'">Login</a>';
-	}
+    if (isset($_SESSION['wordpress'])) {
+        echo '<a href="'.urldecode($_SESSION['wordpress']['logout_url']).'">Logout</a>';
+    } else {
+        echo '<a href="'.$wordpress['url'].'wp-login.php'.'">Login</a>';
+    }
 ?>
         | <?=$footerText?>
 		</p>

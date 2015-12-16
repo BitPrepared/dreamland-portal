@@ -2,34 +2,33 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 21/12/14 - 23:39
- * 
+ * Date: 21/12/14 - 23:39.
  */
-
 namespace BitPrepared\Wordpress;
 
-class WPAPI_Profiles_Mock {
-
+class WPAPI_Profiles_Mock
+{
     /**
-     * API object
+     * API object.
      *
      * @var WPAPI
      */
     protected $api;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param WPAPI $api API handler object
      */
-    public function __construct($api) {
+    public function __construct($api)
+    {
         $this->api = $api;
     }
 
-    public function get($id, $will_edit = false) {
-        $data = array();
+    public function get($id, $will_edit = false)
+    {
+        $data = [];
         throw new \Requests_Exception_HTTP_404();
 //        return new WPAPI_Profile( $this->api, $data );
     }
-
-} 
+}

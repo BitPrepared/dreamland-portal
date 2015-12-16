@@ -2,24 +2,24 @@
 
 namespace Dreamland;
 
-use \BitPrepared\Commons\BasicEnum;
+use BitPrepared\Commons\BasicEnum;
 
-class Errori extends BasicEnum {
-
-	// INPUT DATA VALIDATION
-	const FORMATO_MAIL_NON_VALIDO = 1;
-	const FORMATO_MAIL_NON_VALIDO_MAILGUN = 2;
-	const CODICE_CENSIMENTO_NOT_FOUND = 3;
-	const RUOLO_IN_SQUADRIGLIA_ERRATO = 4;
+class Errori extends BasicEnum
+{
+    // INPUT DATA VALIDATION
+    const FORMATO_MAIL_NON_VALIDO = 1;
+    const FORMATO_MAIL_NON_VALIDO_MAILGUN = 2;
+    const CODICE_CENSIMENTO_NOT_FOUND = 3;
+    const RUOLO_IN_SQUADRIGLIA_ERRATO = 4;
     const CAMPI_VUOTI = 5;
     const GRUPPO_NON_VALIDO = 6;
 
-	// PORTAL
-	const PORTAL_INVALID_TOKEN_STEP = 11;
+    // PORTAL
+    const PORTAL_INVALID_TOKEN_STEP = 11;
 
-	// WORDPRESS
-	const WORDPRESS_NOT_FOUND = 21;
-	const WORDPRESS_PROBLEMA_CREAZIONE_UTENTE = 22;
+    // WORDPRESS
+    const WORDPRESS_NOT_FOUND = 21;
+    const WORDPRESS_PROBLEMA_CREAZIONE_UTENTE = 22;
     const WORDPRESS_LOGIN_REQUIRED = 23;
     const WORDPRESS_UTENTE_GIA_PRESENTE = 24;
     const WORDPRESS_PROBLEMA_INTERNO = 25;
@@ -41,5 +41,4 @@ class Errori extends BasicEnum {
 
     //BETA
     const BETA_NON_ATTIVA = 101;
-
 }

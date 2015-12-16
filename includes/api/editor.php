@@ -2,13 +2,11 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 22/12/14 - 21:49
- * 
+ * Date: 22/12/14 - 21:49.
  */
-
-use RedBean_Facade as R;
 use Dreamland\Errori;
 use Faker\Factory;
+use RedBean_Facade as R;
 
 function editor($app)
 {
@@ -19,8 +17,7 @@ function editor($app)
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
             try {
-
-                if ( !isset($_SESSION['wordpress']) ) {
+                if (!isset($_SESSION['wordpress'])) {
                     throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
                 }
 
@@ -28,18 +25,18 @@ function editor($app)
                 $obj = json_decode($body);
                 $gruppoCode = $obj->gruppo;
 
-                if ( defined('BETA') and BETA ){
+                if (defined('BETA') and BETA) {
                     $app->log->info('Richiesta creazione nuovo utente eg per il gruppo '.$gruppoCode);
                 } else {
                     throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);
                 }
 
-                $find = R::findOne('asa_gruppi',' ord = ?',array($gruppoCode));
+                $find = R::findOne('asa_gruppi', ' ord = ?', [$gruppoCode]);
 
-                if ( null == $find ){
-                    throw new Exception('Gruppo inesistente',Errori::GRUPPO_NON_VALIDO);
+                if (null == $find) {
+                    throw new Exception('Gruppo inesistente', Errori::GRUPPO_NON_VALIDO);
                 }
-                while(true){
+                while (true) {
                     $faker = Factory::create();
                     $user = new \stdClass();
                     $user->nome = $faker->firstName; // 'Lucy'
@@ -56,24 +53,19 @@ function editor($app)
                     $user->codicecensimento = $faker->randomNumber(5); //codicecensimento
                     $user->datanascita = $faker->date($format = 'Ymd', $max = 'now');
 
-                    if ( null == findDatiRagazzo($user->codicecensimento) ) {
-
+                    if (null == findDatiRagazzo($user->codicecensimento)) {
                         R::$f->begin()->addSQL('
                             INSERT INTO asa_anagrafica_eg(Id, creg, ord, cun, prog, codicesocio, cognome, nome, datanascita, status, czona)
                             VALUES(1,"'.$user->codRegione.'","'.$user->codGruppo.'","O",1,'.$user->codicecensimento.',"'.$user->cognome.'","'.$user->nome.'","'.$user->datanascita.'","S",'.$user->codZona.');
                         ')->get();
 
                         break;
-
                     }
-
                 }
 
-                $app->response->setBody( json_encode($user) );
+                $app->response->setBody(json_encode($user));
                 $app->response->setStatus(201);
-
-            } catch ( Exception $e ) {
-
+            } catch (Exception $e) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
@@ -96,15 +88,14 @@ function editor($app)
                         $warn = true;
                         break;
                 }
-                if ( !$warn ) {
+                if (!$warn) {
                     $app->log->error($e->getMessage());
                     $app->log->error($e->getTraceAsString());
                 } else {
                     $app->log->warn($e->getMessage());
                 }
-                $app->response->setBody( json_encode($testo) );
+                $app->response->setBody(json_encode($testo));
                 $app->response->setStatus($status);
-
             }
         });
 
@@ -112,8 +103,7 @@ function editor($app)
             $app->response->setStatus(500);
             $app->response->headers->set('Content-Type', 'application/json');
             try {
-
-                if ( !isset($_SESSION['wordpress']) ) {
+                if (!isset($_SESSION['wordpress'])) {
                     throw new Exception('Wordpress login not found', Errori::WORDPRESS_LOGIN_REQUIRED);
                 }
 
@@ -121,19 +111,19 @@ function editor($app)
                 $obj = json_decode($body);
                 $gruppoCode = $obj->gruppo;
 
-                if ( defined('BETA') and BETA ){
+                if (defined('BETA') and BETA) {
                     $app->log->info('Richiesta creazione nuovo utente cc per il gruppo '.$gruppoCode);
                 } else {
                     throw new Exception('Beta non attiva', Errori::BETA_NON_ATTIVA);
                 }
 
-                $find = R::findOne('asa_gruppi',' ord = ?',array($gruppoCode));
+                $find = R::findOne('asa_gruppi', ' ord = ?', [$gruppoCode]);
 
-                if ( null == $find ){
-                    throw new Exception('Gruppo inesistente',Errori::GRUPPO_NON_VALIDO);
+                if (null == $find) {
+                    throw new Exception('Gruppo inesistente', Errori::GRUPPO_NON_VALIDO);
                 }
 
-                while(true){
+                while (true) {
                     $faker = Faker\Factory::create('it_IT');
                     $user = new \stdClass();
                     $user->nome = $faker->firstName; // 'Lucy'
@@ -149,8 +139,7 @@ function editor($app)
 
                     $app->log->info('Generato nuovo codice censimento '.$user->codicecensimento);
 
-                    if ( null == findDatiRagazzo($user->codicecensimento) ) {
-
+                    if (null == findDatiRagazzo($user->codicecensimento)) {
                         R::$f->begin()->addSQL('
                             INSERT INTO asa_capireparto_ruolo(creg, ord, cun, prog, codicesocio, fnz)
                             VALUES("'.$user->codRegione.'","'.$user->codGruppo.'","O",1,'.$user->codicecensimento.',1);
@@ -167,18 +156,14 @@ function editor($app)
                         ')->get();
 
                         break;
-
                     }
-
                 }
 
                 $app->log->info('Creato nuovo utente '.json_encode($user));
 
-                $app->response->setBody( json_encode($user) );
+                $app->response->setBody(json_encode($user));
                 $app->response->setStatus(201);
-
-            } catch ( Exception $e ) {
-
+            } catch (Exception $e) {
                 $testo = 'Internal Error';
                 $warn = false;
                 $status = 500;
@@ -201,19 +186,16 @@ function editor($app)
                         $warn = true;
                         break;
                 }
-                if ( !$warn ) {
+                if (!$warn) {
                     $app->log->error($e->getMessage());
                     $app->log->error($e->getTraceAsString());
                 } else {
                     $app->log->warn($e->getMessage());
                 }
-                $app->response->setBody( json_encode($testo) );
+                $app->response->setBody(json_encode($testo));
                 $app->response->setStatus($status);
-
             }
         });
 
-
     });
-
 }

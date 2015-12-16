@@ -2,17 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 12/02/15 - 23:36
- * 
+ * Date: 12/02/15 - 23:36.
  */
-
 namespace BitPrepared\Mail\Sender\Conditional;
 
 use BitPrepared\Mail\Sender;
 use RedBean_Facade as R;
 
-class OnlyKnow  implements Sender {
-
+class OnlyKnow implements Sender
+{
     private $log;
     private $senderA;
     private $senderB;
@@ -22,32 +20,30 @@ class OnlyKnow  implements Sender {
      */
     private $currentSender;
 
-    public function __construct($logger, Sender $sender, Sender $senderFalse){
+    public function __construct($logger, Sender $sender, Sender $senderFalse)
+    {
         $this->log = $logger;
         $this->senderA = $sender;
         $this->senderB = $senderFalse;
     }
-
 
     /**
      * @param $toEmailAddress 1 sola mail di destinazione mail => nome destinatario
      * @param $subject
      * @param $txtMessage
      * @param string $htmlMessage
-     * @param null $attachment ??
-     * @return bool
+     * @param null   $attachment  ??
      *
+     * @return bool
      */
     public function send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage = null, $attachment = null)
     {
         try {
-
-
             $emailS = array_keys($toEmailAddress);
             $email = $emailS[0];
 
-            $res = R::findOne('mailcheck','email = ?',array($email));
-            if ( is_null($res) ){
+            $res = R::findOne('mailcheck', 'email = ?', [$email]);
+            if (is_null($res)) {
                 $this->currentSender = $this->senderB;
                 $this->log->info('Mail '.$email.' ancora non convalidata');
             } else {
@@ -58,8 +54,9 @@ class OnlyKnow  implements Sender {
             return $this->currentSender->send($referenceCode, $toEmailAddress, $subject, $txtMessage, $htmlMessage, $attachment);
 
             return true;
-        } catch (\Exception $e ){
+        } catch (\Exception $e) {
             $this->log->error('Errore check conferma validita mail: '.$e->getMessage().' '.$e->getTraceAsString());
+
             return false;
         }
     }

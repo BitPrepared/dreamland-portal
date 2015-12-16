@@ -2,20 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 21/12/14 - 12:10
- * 
+ * Date: 21/12/14 - 12:10.
  */
-
 namespace Dreamland\Tests;
 
 use Dreamland\Integration\IntegrationCase;
 
-class ApiAsaCase extends IntegrationCase
+class ApiAsaTest extends IntegrationCase
 {
-
     public function testProfileAttivo()
     {
-        $this->login('utente_eg',12212312);
+        $this->login('utente_eg', 12212312);
         $this->ajaxGet('/api/asa/user/current');
         $this->assertEquals(200, $this->client->response->status());
         $this->assertSame('{"id":"1","username":"test","email":"test@test","roles":["utente_eg"],"codicecensimento":12212312}', $this->client->response->body());
@@ -33,7 +30,6 @@ class ApiAsaCase extends IntegrationCase
         $this->ajaxGet('/api/asa/user/4000');
         $this->assertEquals(500, $this->client->response->status());
     }
-
 }
 /* End of file GetMethodTest.php */
 

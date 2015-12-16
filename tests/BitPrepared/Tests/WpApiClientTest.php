@@ -2,17 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 02/12/14 - 00:52
- *
+ * Date: 02/12/14 - 00:52.
  */
-
 namespace BitPrepared\Tests;
 
 use BitPrepared\Wordpress\ApiClient;
 
 class WpApiClientTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $wapi;
 
     protected function setUp()
@@ -23,7 +20,7 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * ATTENZIONE I TEST MARCATI remoteTasks vanno eseguiti con --group remoteTasks
+     * ATTENZIONE I TEST MARCATI remoteTasks vanno eseguiti con --group remoteTasks.
      */
 
     /**
@@ -31,27 +28,23 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoteUsersList()
     {
-
         echo 'Elenco Utenti: '."\n";
 
         try {
-
             $this->wapi->setRequestOption('timeout', 30);
             $res = $this->wapi->users->getAll();
 
             $this->assertTrue(count($res) > 0);
 
-            foreach ( $res as $u ) {
-               echo $u->username."\n";
+            foreach ($res as $u) {
+                echo $u->username."\n";
             }
-
         } catch (\Exception $e) {
             echo $e->getMessage()."\n";
             echo $e->getCode()."\n";
             echo $e->getTraceAsString()."\n";
-            $this->assertTrue(FALSE);
+            $this->assertTrue(false);
         }
-
     }
 
     /**
@@ -59,25 +52,21 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoteUserProfile()
     {
-
         echo 'Elenco Profili: '."\n";
 
         try {
-
             $this->wapi->setRequestOption('timeout', 30);
             $res = $this->wapi->profiles->get('56789123');
             $data = $res->getRawData();
             echo 'user id: '.$res->user_id."\n";
             echo 'meta count : '.count($res->meta)."\n";
-            $this->assertTrue( !empty($data) );
-
+            $this->assertTrue(!empty($data));
         } catch (\Exception $e) {
             echo $e->getMessage()."\n";
             echo $e->getCode()."\n";
             echo $e->getTraceAsString()."\n";
-            $this->assertTrue(FALSE);
+            $this->assertTrue(false);
         }
-
     }
 
     /**
@@ -85,22 +74,17 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testRemoteUserProfileNotExistList()
     {
-
         try {
-
             $this->wapi->setRequestOption('timeout', 30);
             $res = $this->wapi->profiles->get('11');
-            $this->assertTrue(FALSE);
-        } catch ( \Requests_Exception_HTTP_404 $e ) {
+            $this->assertTrue(false);
+        } catch (\Requests_Exception_HTTP_404 $e) {
             echo $e->getMessage();
-            $this->assertTrue(TRUE);
+            $this->assertTrue(true);
         } catch (\Exception $e) {
-            $this->assertTrue(FALSE);
+            $this->assertTrue(false);
         }
-
     }
-
-
 
 //    public function testRemoteCreate()
 //    {
@@ -148,5 +132,4 @@ class WpApiClientTest extends \PHPUnit_Framework_TestCase
 //        }
 //
 //    }
-
 }
