@@ -1,7 +1,7 @@
 {
     "require": {
         "wp-api/client": "dev-master",
-        "justinrainbow/json-schema": "1.5.0",
+        "justinrainbow/json-schema": "1.4.*@dev",
 	"slim/slim": "2.*",
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
