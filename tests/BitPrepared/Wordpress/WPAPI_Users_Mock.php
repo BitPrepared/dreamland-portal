@@ -2,40 +2,38 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 21/12/14 - 23:43
- * 
+ * Date: 21/12/14 - 23:43.
  */
-
 namespace BitPrepared\Wordpress;
 
-class WPAPI_Users_Mock {
-
+class WPAPI_Users_Mock
+{
     /**
-     * API object
+     * API object.
      *
      * @var WPAPI
      */
     protected $api;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param WPAPI $api API handler object
      */
-    public function __construct($api) {
+    public function __construct($api)
+    {
         $this->api = $api;
     }
 
-    public function create( $data ) {
+    public function create($data)
+    {
 
 //        FIXME: IF DATA MANCANO ALCUNI OBBLIGATORI
 //        throw new \Requests_Exception_HTTP_500();
 
-        return new \WPAPI_User( $this->api, $data );
+        return new \WPAPI_User($this->api, $data);
     }
-
 }
-
 
 //array (-__|   /\_/\
 //'username' => '123123',

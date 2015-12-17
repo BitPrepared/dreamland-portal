@@ -2,70 +2,77 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 02/12/14 - 00:31
- *
+ * Date: 02/12/14 - 00:31.
  */
-
 namespace BitPrepared\Wordpress;
 
-class ApiClient extends \WPAPI {
-
-    protected $options = array();
+class ApiClient extends \WPAPI
+{
+    protected $options = [];
 
     /**
-     * Constructor
-     * @param string $base Base URL for the API
+     * Constructor.
+     *
+     * @param string      $base     Base URL for the API
      * @param string|null $username Username to connect as, empty to skip authentication
      * @param string|null $password Password for the user
      */
-    public function __construct($base, $username = null, $password = null) {
-        parent::__construct($base,$username,$password);
+    public function __construct($base, $username = null, $password = null)
+    {
+        parent::__construct($base, $username, $password);
     }
 
     /**
-     * Get the default Requests options
+     * Get the default Requests options.
      *
      * @return array Options to pass to Requests
      */
-    public function getDefaultOptions() {
-        $options = array();
-        if ( ! empty( $this->auth ) )
+    public function getDefaultOptions()
+    {
+        $options = [];
+        if (!empty($this->auth)) {
             $options['auth'] = $this->auth;
+        }
 
-        return array_merge($this->options,$options);
+        return array_merge($this->options, $options);
     }
 
     /**
-     * Setting Request Options
+     * Setting Request Options.
      *
      * @param $key option
      * @param $value option value
+     *
      * @return old option value or NULL
      */
-    public function setRequestOption($key,$value){
+    public function setRequestOption($key, $value)
+    {
         $old = null;
-        if ( isset($this->options[$key]) ) {
+        if (isset($this->options[$key])) {
             $old = $this->options[$key];
         }
         $this->options[$key] = $value;
+
         return $old;
     }
 
-
     /**
-     * Get a collection (OVERRIDE)
+     * Get a collection (OVERRIDE).
+     *
+     * @param string $key Key of the collection to get
      *
      * @throws OutOfRangeException Invalid key
-     * @param string $key Key of the collection to get
+     *
      * @return mixed Collection object
      */
-    public function __get($key) {
-        $classes = array(
-            'index' => 'WPAPI_Index',
-            'posts' => 'WPAPI_Posts',
-            'users' => 'WPAPI_Users',
-            'profiles' => 'BitPrepared\Wordpress\WPAPI_Profiles'
-        );
+    public function __get($key)
+    {
+        $classes = [
+            'index'    => 'WPAPI_Index',
+            'posts'    => 'WPAPI_Posts',
+            'users'    => 'WPAPI_Users',
+            'profiles' => 'BitPrepared\Wordpress\WPAPI_Profiles',
+        ];
 
         if (!isset($classes[$key])) {
             throw new OutOfRangeException('Key not found');
@@ -77,5 +84,4 @@ class ApiClient extends \WPAPI {
 
         return $this->collections[$key];
     }
-
 }

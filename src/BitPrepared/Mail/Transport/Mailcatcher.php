@@ -2,8 +2,6 @@
 
 namespace BitPrepared\Mail\Transport;
 
-use Swift_Transport_SendmailTransport;
-use BitPrepared\Mail\Transport\Transport_Mailcatcher;
 use Swift_DependencyContainer;
 
 class Mailcatcher extends Transport_Mailcatcher
@@ -18,14 +16,13 @@ class Mailcatcher extends Transport_Mailcatcher
         \Swift_DependencyContainer::getInstance()
             ->register('transport.mailcatcher')
             ->asNewInstanceOf('Transport_Mailcatcher')
-            ->withDependencies(array(
+            ->withDependencies([
                 'transport.buffer',
                 'transport.eventdispatcher',
-            ));
-
+            ]);
 
         call_user_func_array(
-            array($this, 'BitPrepared\Mail\Transport\Transport_Mailcatcher::__construct'),
+            [$this, 'BitPrepared\Mail\Transport\Transport_Mailcatcher::__construct'],
             Swift_DependencyContainer::getInstance()
                 ->createDependenciesFor('transport.mailcatcher')
             );

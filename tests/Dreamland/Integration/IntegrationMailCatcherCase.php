@@ -2,44 +2,43 @@
 /**
  * Created by PhpStorm.
  * User: Stefano "Yoghi" Tamagnini
- * Date: 21/12/14 - 14:50
- * 
+ * Date: 21/12/14 - 14:50.
  */
-
 namespace Dreamland\Integration;
 
-use There4\Slim\Test\WebTestCase;
-use RedBean_Facade as R;
 use BitPrepared\Wordpress\ApiClientMock;
+use RedBean_Facade as R;
+use There4\Slim\Test\WebTestCase;
 
-
-abstract class IntegrationMailCatcherCase extends WebTestCase {
-
+abstract class IntegrationMailCatcherCase extends WebTestCase
+{
     protected $mailcatcher;
 
-    public function getSlimInstance() {
-        require APPLICATION_PATH . '/config-test.php';
+    public function getSlimInstance()
+    {
+        require APPLICATION_PATH.'/config-test.php';
         extract(configure_slim($config), EXTR_SKIP);
 
-        require APPLICATION_PATH . '/includes/app.php';
+        require APPLICATION_PATH.'/includes/app.php';
 
         // Define wapi resource
-        $app->container->singleton('wapi', function () use ($app,$config) {
+        $app->container->singleton('wapi', function () use ($app, $config) {
             return new ApiClientMock();
         });
 
-        require APPLICATION_PATH . '/includes/hooks.php';
-        require APPLICATION_PATH . '/includes/routes.php';
-        require APPLICATION_PATH . '/includes/api.php';
+        require APPLICATION_PATH.'/includes/hooks.php';
+        require APPLICATION_PATH.'/includes/routes.php';
+        require APPLICATION_PATH.'/includes/api.php';
 
-        if ( DEBUG ) {
-            require BASE_DIR . 'includes/development.php';
+        if (DEBUG) {
+            require BASE_DIR.'includes/development.php';
         }
 
         return $app;
     }
 
-    public function setUp(){
+    public function setUp()
+    {
         parent::setUp();
         $this->mailcatcher = new \Guzzle\Http\Client('http://127.0.0.1:1080');
 
@@ -109,46 +108,54 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
             ')->get();
     }
 
-    protected function formPost($path,$data){
-        $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'CONTENT_TYPE' => 'application/x-www-form-urlencoded'); //,'SCRIPT_NAME' => 'index.php'
-        $this->client->get($path,$data,$headers);
+    protected function formPost($path, $data)
+    {
+        $headers = ['HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost', 'CONTENT_TYPE' => 'application/x-www-form-urlencoded']; //,'SCRIPT_NAME' => 'index.php'
+        $this->client->get($path, $data, $headers);
     }
 
-    protected function ajaxGet($path,$data = array()) {
-        $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
-        $this->client->get($path,$data,$headers);
+    protected function ajaxGet($path, $data = [])
+    {
+        $headers = ['HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json']; //,'SCRIPT_NAME' => 'index.php'
+        $this->client->get($path, $data, $headers);
     }
 
-    protected function ajaxPost($path,$data) {
-        $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
-        $this->client->post($path,$data,$headers);
+    protected function ajaxPost($path, $data)
+    {
+        $headers = ['HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json']; //,'SCRIPT_NAME' => 'index.php'
+        $this->client->post($path, $data, $headers);
     }
 
-    protected function ajaxPut($path,$data) {
-        $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
-        $this->client->put($path,$data,$headers);
+    protected function ajaxPut($path, $data)
+    {
+        $headers = ['HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json']; //,'SCRIPT_NAME' => 'index.php'
+        $this->client->put($path, $data, $headers);
     }
 
-    protected function ajaxDelete($path,$data) {
-        $headers = array('HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost' , 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json'); //,'SCRIPT_NAME' => 'index.php'
-        $this->client->delete($path,$data,$headers);
+    protected function ajaxDelete($path, $data)
+    {
+        $headers = ['HTTP_USER_AGENT' => 'WebTest', 'HTTP_HOST' => 'localhost', 'X_REQUESTED_WITH' => 'XMLHttpRequest', 'CONTENT_TYPE' => 'application/json']; //,'SCRIPT_NAME' => 'index.php'
+        $this->client->delete($path, $data, $headers);
     }
 
-    protected function creaAsaGruppo($codRegione,$codZona,$codGruppo,$nome){
+    protected function creaAsaGruppo($codRegione, $codZona, $codGruppo, $nome)
+    {
         R::$f->begin()->addSQL('
             INSERT INTO asa_gruppi(Id, creg, ord, czona,status, nome)
             VALUES(1,"'.$codRegione.'","'.$codGruppo.'",'.$codZona.',"S","'.$nome.'");
         ')->get();
     }
 
-    protected function creaAsaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
+    protected function creaAsaRagazzo($codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email)
+    {
         R::$f->begin()->addSQL('
             INSERT INTO asa_anagrafica_eg(Id, creg, ord, cun, prog, codicesocio, cognome, nome, datanascita, status, czona)
             VALUES(1,"'.$codRegione.'","'.$codGruppo.'","O",1,'.$codicecensimento.',"'.$cognome.'","'.$nome.'","20141219","S",'.$codZona.');
         ')->get();
     }
 
-    protected function creaAsaCapoReparto($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
+    protected function creaAsaCapoReparto($codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email)
+    {
         R::$f->begin()->addSQL('
             INSERT INTO asa_capireparto_ruolo(Id, creg, ord, cun, prog, codicesocio, fnz)
             VALUES(1,"'.$codRegione.'","'.$codGruppo.'","O",1,'.$codicecensimento.',1);
@@ -163,19 +170,21 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
             INSERT INTO asa_capireparto_email(Id, recapito, tipo, codicesocio)
             VALUES(1,"'.$email.'","E",'.$codicecensimento.');
         ')->get();
-
     }
 
-    protected function creaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
-        $this->createPersona('EG',$codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
-        $this->creaAsaRagazzo($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
+    protected function creaRagazzo($codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email)
+    {
+        $this->createPersona('EG', $codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email);
+        $this->creaAsaRagazzo($codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email);
     }
 
-    protected function creaCapoReparto($codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
-        $this->createPersona('CC',$codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email);
+    protected function creaCapoReparto($codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email)
+    {
+        $this->createPersona('CC', $codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email);
     }
 
-    private function createPersona($tipo,$codicecensimento,$nome,$cognome,$codRegione,$codZona,$codGruppo,$email){
+    private function createPersona($tipo, $codicecensimento, $nome, $cognome, $codRegione, $codZona, $codGruppo, $email)
+    {
         $drm_registration = R::dispense('registration');
         $drm_registration->token = md5(uniqid(rand(), true));
         $drm_registration->codicecensimento = $codicecensimento;
@@ -191,7 +200,8 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
         R::store($drm_registration);
     }
 
-    protected function creaSquadriglia($codicecensimento,$ncomponenti,$nspecialita,$nbrevetti,$specialitadisquadriglia,$rinnovospecialitadisquadriglia,$nomesquadriglia,$gruppoNome){
+    protected function creaSquadriglia($codicecensimento, $ncomponenti, $nspecialita, $nbrevetti, $specialitadisquadriglia, $rinnovospecialitadisquadriglia, $nomesquadriglia, $gruppoNome)
+    {
         $squadriglia = R::dispense('squadriglia');
         $squadriglia->codicecensimento = $codicecensimento;
         $squadriglia->componenti = intval($ncomponenti);
@@ -204,27 +214,30 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
         R::store($squadriglia);
     }
 
-    protected function login($ruolo,$codicecensimento){
-        $_SESSION['wordpress'] = array(
-            'user_id' => '1',
-            'user_info' => array(
-                'user_login' => 'test',
-                'user_registered' => '12212312',
-                'roles' => array($ruolo),
-                'email' => 'test@test',
-                'codicecensimento' => $codicecensimento
-            ),
-            'logout_url' => 'http://remoteurl/logout'
-        );
+    protected function login($ruolo, $codicecensimento)
+    {
+        $_SESSION['wordpress'] = [
+            'user_id'   => '1',
+            'user_info' => [
+                'user_login'       => 'test',
+                'user_registered'  => '12212312',
+                'roles'            => [$ruolo],
+                'email'            => 'test@test',
+                'codicecensimento' => $codicecensimento,
+            ],
+            'logout_url' => 'http://remoteurl/logout',
+        ];
     }
 
-    protected function logout(){
+    protected function logout()
+    {
         unset($_SESSION['wordpress']);
     }
 
     /* <!-- MAIL -->  */
 
     // api calls
+
     protected function cleanMessages()
     {
         $this->mailcatcher->delete('/messages')->send();
@@ -234,21 +247,22 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
     {
         $messages = $this->getMessages();
         if (empty($messages)) {
-            $this->fail("No messages received");
+            $this->fail('No messages received');
         }
         // messages are in descending order
 
         return array_pop($messages);
-
     }
 
     public function getMessages()
     {
         $jsonResponse = $this->mailcatcher->get('/messages')->send();
+
         return json_decode($jsonResponse->getBody());
     }
 
     // assertions
+
     public function assertEmailIsSent($description = '')
     {
         $this->assertNotEmpty($this->getMessages(), $description);
@@ -267,13 +281,13 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
     public function assertEmailHtmlContains($needle, $email, $description = '')
     {
         $response = $this->mailcatcher->get("/messages/{$email->id}.html")->send();
-        $this->assertContains($needle, (string)$response->getBody(), $description);
+        $this->assertContains($needle, (string) $response->getBody(), $description);
     }
 
     public function assertEmailTextContains($needle, $email, $description = '')
     {
         $response = $this->mailcatcher->get("/messages/{$email->id}.plain")->send();
-        $this->assertContains($needle, (string)$response->getBody(), $description);
+        $this->assertContains($needle, (string) $response->getBody(), $description);
     }
 
     public function assertEmailSenderEquals($expected, $email, $description = '')
@@ -290,21 +304,22 @@ abstract class IntegrationMailCatcherCase extends WebTestCase {
 
     /* <!-- MAIL -->  */
 
-    public static function setUpBeforeClass() {
+    public static function setUpBeforeClass()
+    {
         try {
             $i = 0;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw $e;  // so the tests will be skipped
         }
     }
 
-    public static function tearDownAfterClass() {
+    public static function tearDownAfterClass()
+    {
         self::cleanupDatabase();
     }
 
-    private static function cleanupDatabase() {
+    private static function cleanupDatabase()
+    {
         R::nuke(); //CLEAN DB
     }
-
 }
