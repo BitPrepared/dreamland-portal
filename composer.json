@@ -43,7 +43,7 @@
 
         "clue/graph-composer": "dev-master",
 
-        "symfony/process": "3.0.*",
+        "symfony/process": "2.7.7",
         "ext-pcntl": "*",
         "ext-posix": "*"
     },
