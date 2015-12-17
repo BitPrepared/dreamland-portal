@@ -1,18 +1,18 @@
 {
     "require": {
         "wp-api/client": "dev-master",
-        "justinrainbow/json-schema": "1.4.*@dev",
+        "justinrainbow/json-schema": "1.5.*@dev",
 	"slim/slim": "2.*",
         "gabordemooij/redbean": "3.5.1",
         "daviddeutsch/redbean-prefix": "dev-master",
         "raveren/kint": "1.0.*",
         "swiftmailer/swiftmailer": "5.4.1",
-        "egulias/email-validator": "1.2.8",
+        "egulias/email-validator": "1.2.11",
         "doctrine/lexer": "1.0.*@dev",
         "flynsarmy/slim-monolog": "dev-master",
-        "google/apiclient": "1.1.4",
+        "google/apiclient": "1.1.6",
         "mailgun/mailgun-php": "1.8.*",
-        "wp-cli/php-cli-tools": "0.10.4",
+        "wp-cli/php-cli-tools": "0.10.5",
         "fzaninotto/faker": "dev-master",
         "php": ">=5.4.37"
     },
@@ -20,7 +20,7 @@
         "phpunit/phpunit": "4.7.*",
         "whatthejeff/nyancat-phpunit-resultprinter": "v1.2.0",
         "guzzle/guzzle": "~3.8",
-        "mikey179/vfsStream": "1.5.*",
+        "mikey179/vfsStream": "1.6.*",
         "there4/slim-test-helpers": "dev-master",
 
         "phpunit/php-invoker": "~1.1",
@@ -38,12 +38,12 @@
         "codeclimate/php-test-reporter": "dev-master",
         "satooshi/php-coveralls": "0.6.1",
 
-        "fabpot/php-cs-fixer": "1.9.*",
+        "fabpot/php-cs-fixer": "1.11.*",
         "sensiolabs/security-checker": "~2.0",
 
         "clue/graph-composer": "dev-master",
 
-        "symfony/process": "2.7.*",
+        "symfony/process": "3.0.*",
         "ext-pcntl": "*",
         "ext-posix": "*"
     },
